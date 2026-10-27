@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Lucia Liao — UX researcher, product designer, and front-end prototyper turning complex evidence into usable interfaces.">
   <meta name="theme-color" content="#f3f0e8">
-  <title>Lucia Liao — Research, Interface, Code</title>
+  <title>Lucia Liao — UX research and product design</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151512'/%3E%3Ctext x='5' y='23' font-family='Arial' font-weight='700' font-size='18' fill='%23f3f0e8'%3ELL%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="style.css?v=8">
   <link rel="stylesheet" href="portfolio.css?v=9">
   <link rel="stylesheet" href="cinema.css?v=6">
   <link rel="stylesheet" href="highlights.css?v=4">
   <link rel="stylesheet" href="polish.css?v=3">
-  <link rel="stylesheet" href="instrument.css?v=5">
+  <link rel="stylesheet" href="instrument.css?v=7">
+  <link rel="stylesheet" href="restraint.css?v=7">
 </head>
 <body class="portfolio-home">
   <a class="skip" href="#work">Skip to work</a>
@@ -23,8 +24,8 @@
     <a class="brand" href="index.html" aria-label="Lucia Liao home">LL<span>Lucia Liao<small>RESEARCH · INTERFACE · CODE</small></span></a>
     <nav aria-label="Main navigation">
       <a href="#highlights">Work <sup>05</sup></a>
-      <a href="#strengths">Strengths</a>
-      <a href="#build">Code</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#build">Prototypes</a>
       <a href="#about">About</a>
       <a class="nav-contact" href="mailto:luciala@umich.edu">Let’s talk <span>↗</span></a>
     </nav>
@@ -32,73 +33,50 @@
 
   <main>
     <section class="portfolio-hero" data-scene="00 — OPENING">
-      <div class="hero-signal" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="hero-field-wrap" aria-hidden="true"><canvas id="field"></canvas><span class="field-label" id="field-label">01 / OBSERVE</span></div>
       <div class="hero-left">
-        <div class="hero-meta mono"><span><i class="live-dot"></i> OPEN TO FULL-TIME ROLES · 2027</span><span>ANN ARBOR, MI</span></div>
-        <p class="eyebrow">UX RESEARCHER · PRODUCT DESIGNER · PROTOTYPER</p>
-        <h1>Evidence,<br>made <em>interactive.</em></h1>
-        <p class="hero-intro">I study complex decisions, design the interface around them, and build the interaction far enough to test.</p>
+        <div class="hero-meta"><span><i class="live-dot"></i> Open to full-time roles · 2027</span><span>Ann Arbor, Michigan</span></div>
+        <p class="eyebrow">UX research · product design · prototyping</p>
+        <h1>Lucia Liao</h1>
+        <p class="hero-intro">I’m a UX researcher and product designer finishing my MS in Design Science at the University of Michigan. I study how people make decisions, design the interface around them, and build working prototypes.</p>
         <div class="hero-actions">
-          <a class="button dark" href="#highlights">Explore five projects <span>↓</span></a>
-          <a class="text-link" href="#build">See how I build ↗</a>
+          <a class="button dark" href="#highlights">See the projects <span>↓</span></a>
+          <a class="text-link" href="mailto:luciala@umich.edu">luciala@umich.edu</a>
         </div>
       </div>
-
-      <div class="hero-workbench interactive-surface" aria-label="Interactive front-end workbench">
-        <div class="window-bar"><span><i></i><i></i><i></i></span><b>portfolio / interaction.js</b><small>LIVE</small></div>
-        <div class="workbench-tabs" role="tablist" aria-label="Code examples">
-          <button class="active" data-code="interface" role="tab" aria-selected="true">interface.js</button>
-          <button data-code="measurement" role="tab" aria-selected="false">measurement.js</button>
-          <button data-code="sequence" role="tab" aria-selected="false">sequence.js</button>
-        </div>
-        <div class="workbench-body">
-          <pre class="code-view"><code id="hero-code"></code></pre>
-          <div class="live-output" aria-hidden="true">
-            <div class="output-label mono">LIVE OUTPUT / SIGNAL → DECISION</div>
-            <div class="output-orbit"><span></span><span></span><span></span><b>01</b></div>
-            <div class="output-bars"><i style="--v:32%"></i><i style="--v:58%"></i><i style="--v:76%"></i><i style="--v:94%"></i></div>
-            <p id="code-output">Priority surfaced<br><strong>Review first</strong></p>
-          </div>
-        </div>
-        <div class="window-status mono"><span>JAVASCRIPT</span><span>ACCESSIBLE · RESPONSIVE · TESTABLE</span></div>
-      </div>
-
-      <div class="hero-foot mono"><span>MS DESIGN SCIENCE · UNIVERSITY OF MICHIGAN</span><span>SCROLL TO ENTER THE WORK ↓</span></div>
+      <figure class="hero-shot">
+        <img src="assets/hero-cockpit.webp" alt="Silverado concept: instrument cluster in Tow Mode and center display showing trailer status" width="1800" height="1110" fetchpriority="high">
+        <figcaption><span>Silverado RST · towing concept · Figma, 2026</span><span>With Ashita Nichanametla</span></figcaption>
+      </figure>
+      <div class="hero-foot"><span>MS Design Science · University of Michigan</span><span>Scroll ↓</span></div>
     </section>
 
-
-    <section class="strengths" id="strengths" aria-labelledby="strengths-title" data-scene="01 — WHAT I BRING" data-tone="dark">
-      <div class="strengths-sticky">
-        <div class="strengths-head"><p class="eyebrow" id="strengths-title">01 / WHAT I BRING</p><span>FOUR STRENGTHS · EACH WITH EVIDENCE</span></div>
-        <ol class="strength-list">
-          <li class="strength active">
-            <span class="mono">01 / RESEARCH</span>
-            <h3>Research that questions its <em>own tools.</em></h3>
-            <p>I interview the people who make the decision, map where their information really lives, and test whether my own measurements hold up.</p>
-            <div class="proofs"><a href="case.html?id=northern"><span><b>90</b>blinded readings, 45 repeat comparisons</span><small>NORTHERN ↗</small></a><a href="case.html?id=gear"><span><b>4</b>decision-maker interviews mapped to source files</span><small>ZHONGQING GEAR ↗</small></a></div>
-          </li>
-          <li class="strength">
-            <span class="mono">02 / INTERFACE</span>
-            <h3>Interfaces for the moment <em>that matters.</em></h3>
-            <p>From a truck cockpit to a factory dashboard, I design around what a person has to decide right now, and quiet everything else.</p>
-            <div class="proofs"><a href="case.html?id=silverado"><span><b>GM</b>concept presented to design leadership</span><small>SILVERADO ↗</small></a><a href="case.html?id=gear"><span><b>8</b>linked views around one selected project</span><small>ZHONGQING GEAR ↗</small></a></div>
-          </li>
-          <li class="strength">
-            <span class="mono">03 / CODE</span>
-            <h3>Prototypes that <em>actually run.</em></h3>
-            <p>I build in HTML, CSS, JavaScript, and Python, so an interaction can be tried and tested before anyone writes a spec for it.</p>
-            <div class="proofs"><a href="#work"><span><b>5</b>working browser demos in this portfolio</span><small>SELECTED WORK ↓</small></a><a href="demos/oxylus.html"><span><b>7</b>linked views in the synthetic Oxylus explorer</span><small>OXYLUS ↗</small></a></div>
-          </li>
-          <li class="strength">
-            <span class="mono">04 / RIGOR</span>
-            <h3>Honest about what the <em>evidence says.</em></h3>
-            <p>I keep findings apart from hypotheses, and private data stays private, even in a portfolio.</p>
-            <div class="proofs"><a href="case.html?id=oxylus"><span><b>0</b>company data points in the public demo</span><small>OXYLUS ↗</small></a><a href="case.html?id=northern"><span><b>1</b>reader, one X-ray: stated, not hidden</span><small>NORTHERN ↗</small></a></div>
-          </li>
-        </ol>
-        <div class="strength-stage" aria-hidden="true"><canvas id="strength-field"></canvas><span class="strength-count">01</span></div>
-        <div class="strength-progress" aria-hidden="true"><i></i></div>
+    <section class="evidence section" id="evidence" aria-labelledby="evidence-title">
+      <div class="evidence-heading">
+        <p class="eyebrow">How I work</p>
+        <h2 id="evidence-title">Research, interface, and code—shown in the work.</h2>
+      </div>
+      <div class="evidence-grid">
+        <article>
+          <img src="assets/p19-0.webp" alt="Northern dental X-ray measurement study" loading="lazy">
+          <p class="evidence-type">Research</p>
+          <h3>Test the tool, not only the idea.</h3>
+          <p>I built a dental X-ray measurement tool, then ran a blind repeat study to see where its readings held up and where they changed.</p>
+          <a href="case.html?id=northern"><strong>90</strong> blinded readings · View Northern ↗</a>
+        </article>
+        <article>
+          <img src="assets/hl/center-trailer.webp" alt="Silverado center display showing trailer status" loading="lazy">
+          <p class="evidence-type">Interface</p>
+          <h3>Design around the next decision.</h3>
+          <p>The Silverado screens change with the driver’s context, while Gear keeps one selected project in focus across linked views.</p>
+          <a href="case.html?id=silverado"><strong>5</strong> driving contexts · View Silverado ↗</a>
+        </article>
+        <article>
+          <img src="assets/hl/gear-portfolio.webp" alt="Zhongqing Gear working dashboard prototype" loading="lazy">
+          <p class="evidence-type">Prototyping</p>
+          <h3>Build enough to try it.</h3>
+          <p>I use HTML, CSS, JavaScript, and Python when behavior is part of the design question. Every public demo uses approved or synthetic material.</p>
+          <a href="#work"><strong>5</strong> working browser demos · Explore the work ↓</a>
+        </article>
       </div>
     </section>
 
@@ -106,46 +84,41 @@
       <div class="hl-sticky">
         <canvas id="hl-canvas" aria-hidden="true"></canvas>
         <div class="hl-fade" aria-hidden="true"></div>
-        <div class="hl-head"><p class="eyebrow" id="hl-title">02 / SELECTED WORK</p><span>KEEP SCROLLING · FIVE SCENES</span></div>
+        <div class="hl-head"><p class="eyebrow" id="hl-title">Selected work</p><span>Scroll to explore five projects</span></div>
         <div class="hl-chapters">
           <article class="hl-chapter active">
-            <span class="mono">01 / SILVERADO RST 1500 · AUTOMOTIVE HMI</span>
-            <h3>Step inside <em>the cockpit.</em></h3>
-            <p>A context-aware truck interface concept, designed with Ashita Nichanametla. Keep scrolling into the cab: the cluster and center display follow the guided towing flow.</p>
-            <div class="hl-proof"><span>5 driving contexts</span><span>Cluster + center display</span><span>Presented to GM design leadership</span></div>
+            <span class="mono">01 / Silverado RST 1500 · Automotive HMI</span>
+            <h3>Towing, from the driver’s seat</h3>
+            <p>A truck interface concept designed with Ashita Nichanametla. Scroll into the cab to see the cluster and center display change as a trailer is detected, checked, and towed.</p>
             <a class="hl-link" href="case.html?id=silverado">Open case study <span>↗</span></a>
             <small>Stylized 3D model for illustration only. Screens are the original Figma concept. Detection and assistance are proposed behavior, not deployed capability.</small>
             <img class="hl-fallback" src="assets/hl/center-trailer.webp" alt="Silverado center display concept showing trailer status" loading="lazy">
           </article>
           <article class="hl-chapter">
-            <span class="mono">02 / FABLAB · SERVICE &amp; MOBILE UX</span>
-            <h3>Design the <em>moment before.</em></h3>
-            <p>A calmer preparation journey for a university fabrication lab: find a machine, check what it requires, and arrive with training done.</p>
-            <div class="hl-proof"><span>Field observation</span><span>QOC framework</span><span>Mobile prototype</span></div>
+            <span class="mono">02 / FABLab · Service &amp; mobile UX</span>
+            <h3>Booking a machine, training first</h3>
+            <p>A mobile app for a university fabrication lab: find a machine, book a slot, and finish its safety training before you arrive.</p>
             <a class="hl-link" href="demos/fablab.html">Try the prototype <span>↗</span></a> <a class="hl-link hl-link-ghost" href="case.html?id=fablab">Case study <span>↗</span></a>
             <img class="hl-fallback" src="assets/hl/phone-0.webp" alt="FABLab app machine list" loading="lazy">
           </article>
           <article class="hl-chapter">
-            <span class="mono">03 / ZHONGQING GEAR · ENTERPRISE UX</span>
-            <h3>One decision. <em>Eight views.</em></h3>
+            <span class="mono">03 / Zhongqing Gear · Enterprise UX</span>
+            <h3>One project, eight linked views</h3>
             <p>A research-led dashboard where priorities, risk, and evidence stay linked to the selected project. Client codes and specifications are masked.</p>
-            <div class="hl-proof"><span>4 stakeholder interviews</span><span>8 linked views</span><span>Working prototype</span></div>
             <a class="hl-link" href="case.html?id=gear">Open case study <span>↗</span></a>
             <img class="hl-fallback" src="assets/hl/gear-portfolio.webp" alt="Zhongqing Gear dashboard prototype" loading="lazy">
           </article>
           <article class="hl-chapter">
-            <span class="mono">04 / NORTHERN · UX RESEARCH</span>
-            <h3>Question the <em>measurement.</em></h3>
+            <span class="mono">04 / Northern · UX research</span>
+            <h3>Reading the same X-ray twice</h3>
             <p>90 blinded readings. The averages held steady, and 8 of 45 repeat comparisons still changed stage. This is a research demonstration, not clinical validation.</p>
-            <div class="hl-proof"><span>Blind repeat study</span><span>Signed-axis geometry</span><span>Browser tool</span></div>
             <a class="hl-link" href="case.html?id=northern">Open case study <span>↗</span></a>
             <img class="hl-fallback" src="assets/p19-0.webp" alt="Annotated dental X-ray measurement" loading="lazy">
           </article>
           <article class="hl-chapter">
-            <span class="mono">05 / OXYLUS ENERGY · DATA &amp; SYSTEMS</span>
-            <h3>See the sequence, <em>not just the result.</em></h3>
+            <span class="mono">05 / Oxylus Energy · Data &amp; systems</span>
+            <h3>Which signal moved first</h3>
             <p>330 synthetic runs you can rotate, filter, and open: which signal moved first, and how long before the outcome.</p>
-            <div class="hl-proof"><span>7 linked views</span><span>3D run space</span><span>Synthetic data only</span></div>
             <a class="hl-link" href="case.html?id=oxylus">Open case study <span>↗</span></a>
           </article>
         </div>
@@ -156,18 +129,18 @@
     </section>
 
     <section id="work" class="section work-section" data-scene="03 — INDEX">
-      <div class="section-top"><p class="eyebrow">03 / INDEX</p><p class="section-note">Five projects across automotive, healthcare,<br>manufacturing, energy, and service design.</p></div>
-      <div class="work-heading"><h2>Different systems.<br><em>One way of thinking.</em></h2><div class="filters" aria-label="Filter projects"><button class="active" data-filter="all" aria-pressed="true">All work <sup>05</sup></button><button data-filter="product" aria-pressed="false">Product design</button><button data-filter="research" aria-pressed="false">Research</button></div></div>
+      <div class="section-top"><p class="eyebrow">All projects</p><p class="section-note">Five projects across automotive, healthcare,<br>manufacturing, energy, and service design.</p></div>
+      <div class="work-heading"><h2>All projects</h2><div class="filters" aria-label="Filter projects"><button class="active" data-filter="all" aria-pressed="true">All work <sup>05</sup></button><button data-filter="product" aria-pressed="false">Product design</button><button data-filter="research" aria-pressed="false">Research</button></div></div>
       <div id="projects" class="project-grid"></div>
       <p id="filter-status" class="sr-only" aria-live="polite"></p>
     </section>
 
     <section class="code-lab section" id="build" data-scene="04 — DESIGN THAT RUNS">
       <div class="code-copy">
-        <p class="eyebrow">04 / DESIGN THAT RUNS</p>
-        <h2>I don’t stop<br>at the frame.</h2>
+        <p class="eyebrow">Working prototypes</p>
+        <h2>Code behind<br>the demos</h2>
         <p>I use HTML, CSS, JavaScript, and Python to turn design decisions into working behavior. These public excerpts power portfolio prototypes; company code and private data stay out.</p>
-        <div class="code-facts mono"><span>05 WORKING DEMOS</span><span>3D + CANVAS</span><span>ZERO PRIVATE DATA</span><span>KEYBOARD + MOBILE</span></div>
+        
       </div>
       <div class="code-console interactive-surface">
         <div class="console-top"><div class="code-tabs" role="tablist"><button class="active" data-code="interface" role="tab">interface.js</button><button data-code="measurement" role="tab">measurement.js</button><button data-code="sequence" role="tab">sequence.js</button></div><button id="copy-code" type="button">Copy excerpt</button></div>
@@ -178,20 +151,19 @@
 
 
     <section id="about" class="section about" data-scene="05 — THE PERSON">
-      <div class="about-monogram" aria-hidden="true"><span>L<span>L</span></span><small class="mono">HUMAN QUESTIONS.<br>SYSTEMS THINKING.</small></div>
-      <div><p class="eyebrow">05 / THE PERSON BEHIND THE PROCESS</p><h2>Hi, I’m Lucia.<br><em>Curious by design.</em></h2><p>I’m finishing my MS in Design Science at the University of Michigan. I work across UX research and product design, from manufacturing decisions and automotive interfaces to measurement tools and lab preparation.</p><p>I build prototypes to clarify the rules behind an idea and to make research testable sooner.</p><div class="about-details"><div><span class="mono">LOOKING AHEAD</span><p>Full-time roles from 2027<br>Open to relocation</p></div><div><span class="mono">MY TOOLKIT</span><p>Figma · Python · HTML / CSS / JS<br>Interviews · Observation · Prototyping</p></div></div><div class="how"><p class="eyebrow">HOW I WORK · CONTEXT → EVIDENCE → INTERFACE → TEST</p><p class="how-lead">The information usually exists. It lives in another file, another screen, or someone else’s head. My work connects those fragments to the decision in front of a person.</p><div class="steps"><article><span class="mono">01 / LISTEN</span><h3>Start with the moment.</h3><p>Interview, observe, and review the records people actually use.</p></article><article><span class="mono">02 / CONNECT</span><h3>Make structure visible.</h3><p>Map sources, dependencies, and uncertainty.</p></article><article><span class="mono">03 / BUILD</span><h3>Make it testable.</h3><p>Turn the interface into behavior, not just a screen.</p></article><article><span class="mono">04 / QUESTION</span><h3>Stay honest.</h3><p>Separate evidence, hypotheses, and what remains unknown.</p></article></div></div></div>
+      <div class="about-monogram" aria-hidden="true"><span>L<span>L</span></span><small class="mono">ANN ARBOR, MI</small></div>
+      <div><p class="eyebrow">About</p><h2>About me</h2><p>I’m finishing my MS in Design Science at the University of Michigan. I work across UX research and product design, from manufacturing decisions and automotive interfaces to measurement tools and lab preparation.</p><p>I build prototypes to clarify the rules behind an idea and to make research testable sooner.</p><div class="about-details"><div><span>Looking ahead</span><p>Full-time roles from 2027<br>Open to relocation</p></div><div><span>My toolkit</span><p>Figma · Python · HTML / CSS / JS<br>Interviews · Observation · Prototyping</p></div></div><div class="how"><p class="eyebrow">How I work</p><p class="how-lead">The information usually exists. It lives in another file, another screen, or someone else’s head. My work connects those fragments to the decision in front of a person.</p><div class="steps"><article><span class="mono">01</span><h3>Listen</h3><p>Interviews, observation, and the files and records people actually use.</p></article><article><span class="mono">02</span><h3>Map</h3><p>Where each piece of information comes from, and what depends on it.</p></article><article><span class="mono">03</span><h3>Build</h3><p>A working prototype, so people react to behavior instead of a static screen.</p></article><article><span class="mono">04</span><h3>Check</h3><p>What the results show, what they don’t, and what is still a hypothesis.</p></article></div></div></div>
     </section>
 
-    <section class="contact section" id="contact" data-scene="06 — NEXT CONVERSATION"><p class="eyebrow">06 / NEXT CONVERSATION</p><h2>Let’s make<br>the complex <em>clear.</em></h2><a class="contact-link" href="mailto:luciala@umich.edu">luciala@umich.edu <span>↗</span></a><div class="contact-bottom mono"><span>UX RESEARCH · PRODUCT DESIGN · FRONT-END PROTOTYPING</span><a href="#">BACK TO TOP ↑</a></div></section>
+    <section class="contact section" id="contact"><p class="eyebrow">Contact</p><h2>Get in touch</h2><a class="contact-link" href="mailto:luciala@umich.edu">luciala@umich.edu <span>↗</span></a><div class="contact-bottom"><span>UX research · product design · front-end prototyping</span><a href="#">Back to top ↑</a></div></section>
   </main>
-  <footer><span>© 2026 Lucia Liao</span><span>Research-led. Systems-minded. Built to be used.</span><span>PORTFOLIO / V.03</span></footer>
-  <script src="projects.js?v=10"></script>
-  <script src="app.js?v=11"></script>
-  <script src="portfolio.js?v=10"></script>
+  <footer><span>© 2026 Lucia Liao</span><span>Designed and built by Lucia Liao</span><span>PORTFOLIO / V.03</span></footer>
+  <script src="projects.js?v=130"></script>
+  <script src="app.js?v=130"></script>
+  <script src="portfolio.js?v=11"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script src="smooth.js?v=1"></script>
-  <script src="cinema.js?v=8"></script>
+  <script src="cinema.js?v=10"></script>
   <script src="highlights.js?v=10"></script>
-  <script src="instrument.js?v=2"></script>
 </body>
 </html>

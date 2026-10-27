@@ -1,0 +1,116 @@
+/* Restraint pass: keep the real work and one immersive moment. */
+:root{
+  --paper:#f1f0eb;--paper-2:#e5e3dc;--ink:#11130f;--ink-2:#484b45;
+  --muted:#767970;--line:#c9c8c1;--night:#0d0f12;--blue:#d9532d;--acid:#e66a43;
+  --font-display:'DM Sans','Helvetica Neue',Arial,sans-serif;
+  --font-serif:var(--font-display);
+  --font-mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+body.portfolio-home,body.case-page{font-family:var(--font-display);font-feature-settings:normal}
+body.portfolio-home::after,body.case-page::after,.curtain,.scene-hud,.scroll-progress,.ruler{display:none!important}
+body.has-ruler :is(.portfolio-hero,.section,.hl-head,.strengths-head){padding-right:3.2vw}
+
+/* Ordinary language for navigation and labels. Mono is reserved for data and code. */
+.portfolio-home .site-header nav,.case-page>header nav,
+.eyebrow,.hero-meta,.hero-foot,.hero-shot figcaption,.section-note,
+.evidence-type,.evidence-grid a,.about-details span,.contact-bottom,footer,
+.portfolio-home .filters button,.hl-head span,.hl-chapter a.hl-link,
+.case-page .back,.case-page .case-meta label,.case-page .story-row>.eyebrow,
+.case-page .case-tags span,.case-page .next-project small{
+  font-family:var(--font-display)!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+}
+.portfolio-home .site-header nav,.case-page>header nav{font-size:13px;font-weight:500}
+.eyebrow{font-size:12px;font-weight:500;color:var(--muted)}
+.portfolio-home .brand,.case-page .brand{text-transform:none}
+.portfolio-home .brand small,.case-page .brand small{display:none}
+.button,.text-link{font-family:var(--font-display);font-size:13px;letter-spacing:0;text-transform:none}
+
+/* Hero: one sentence, one real image. */
+.portfolio-hero{min-height:calc(100svh - 82px);padding-top:5vh;gap:clamp(34px,4vw,68px)}
+.portfolio-home .hero-left>*,.hero-shot{transition:none!important}
+body.portfolio-home:not(.is-ready) .hero-left>*,body.portfolio-home:not(.is-ready) .hero-shot{opacity:1!important;transform:none!important}
+.portfolio-hero .hero-meta{margin-bottom:clamp(36px,5vh,64px);font-size:12px;color:var(--muted)}
+.portfolio-hero h1{font-family:var(--font-display)!important;font-size:clamp(66px,7.6vw,126px)!important;font-weight:500!important;letter-spacing:-.065em!important}
+.portfolio-hero .hero-intro{max-width:520px;font-size:18px;line-height:1.58;color:var(--ink-2);margin-bottom:32px}
+.hero-shot img{border-radius:0;box-shadow:none}
+.hero-shot figcaption{font-size:11px;line-height:1.4;color:var(--muted)}
+.hero-foot{font-size:11px;color:var(--muted)}
+
+/* Three concise proof cards replace the pinned strengths sequence. */
+.evidence{background:#e4e1d9!important;border-top:1px solid var(--line)}
+.evidence-heading{display:grid;grid-template-columns:.55fr 1.45fr;gap:40px;align-items:start;margin-bottom:54px}
+.evidence-heading .eyebrow{margin:8px 0 0}
+.evidence-heading h2{font-size:clamp(42px,5vw,76px)!important;line-height:1;max-width:900px}
+.evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.evidence-grid article{background:var(--paper);border-top:3px solid var(--ink);padding:14px 18px 22px;display:flex;flex-direction:column;min-width:0}
+.evidence-grid img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#d5d3cc;margin-bottom:22px}
+.evidence-grid article:nth-child(2) img,.evidence-grid article:nth-child(3) img{background:#151918;padding:8%}
+.evidence-type{margin:0 0 18px;color:var(--muted);font-size:12px}
+.evidence-grid h3{font-size:clamp(25px,2.3vw,34px)!important;line-height:1.08;letter-spacing:-.035em;margin:0 0 16px}
+.evidence-grid article>p:not(.evidence-type){font-size:15px;line-height:1.65;color:var(--ink-2);margin:0 0 28px}
+.evidence-grid a{display:block;border-top:1px solid var(--line);padding-top:15px;margin-top:auto;font-size:12px;color:var(--ink-2)}
+.evidence-grid a strong{font:500 20px var(--font-mono);color:var(--ink);margin-right:3px}
+
+/* The Silverado scroll remains the single cinematic chapter. */
+.hl-head .eyebrow{color:var(--acid)}
+.hl-head span{font-size:12px;color:#aeb2b8}
+.hl-chapter .mono{letter-spacing:.04em;text-transform:none}
+.hl-chapter h3{font-family:var(--font-display)!important;font-weight:500!important}
+.hl-chapter a.hl-link{font-size:12px}
+.hl-index button{letter-spacing:.04em}
+
+/* Project index and prototype proof, without terminal theatrics taking over. */
+.portfolio-home .project:before{content:'0' counter(proj)}
+.portfolio-home .project-category{font-family:var(--font-display)!important;text-transform:none;letter-spacing:0;font-size:11px}
+.portfolio-home .project-info p{font-family:var(--font-display)!important;font-style:normal;font-size:17px}
+.code-lab{grid-template-columns:.9fr 1.1fr;background:#e4e1d9!important}
+.code-copy h2{font-size:clamp(48px,5.5vw,84px)!important}
+.code-console{min-height:410px;box-shadow:none!important;border-radius:0}
+.code-console pre{height:300px;padding:26px;font-size:11px;background:#0d0f12}
+.console-top{height:54px}.console-foot{height:52px}
+
+/* Personal section, without blueprint styling. */
+.portfolio-home .about-monogram{background:#d8d3c8!important;background-image:none!important}
+.portfolio-home .about-monogram>span{color:var(--ink)!important;-webkit-text-stroke:0!important;font-family:var(--font-serif)!important;font-style:italic!important;font-weight:400!important;font-size:clamp(190px,20vw,300px)!important}
+.portfolio-home .about-monogram>span>span{color:var(--blue)!important;-webkit-text-stroke:0!important;transform:translate(-.12em,.1em)}
+.portfolio-home .about-monogram small{font-family:var(--font-display)!important;letter-spacing:0;text-transform:none}
+.about-details span{font-size:12px;color:var(--muted)}
+.how-lead{font-family:var(--font-serif)!important;font-style:italic!important;font-weight:400;font-size:24px!important}
+.portfolio-home .contact{background:#171916!important;color:#f0eee7}
+.portfolio-home .contact .eyebrow{color:#aaaDA6}.portfolio-home .contact-link:hover{color:var(--acid)}
+
+/* Case studies use the same quieter hierarchy. */
+.case-page .case-hero{background:var(--paper)!important}
+.case-page .case-hero h1{font-family:var(--font-display)!important;font-weight:500!important}
+.case-page .case-intro{font-size:20px;line-height:1.55}
+.case-page .case-hero-media,.case-page .case-gallery figure{overflow:hidden;margin-bottom:0;border-radius:0}
+.case-page .case-hero-media{box-shadow:none}
+.case-page .case-gallery{row-gap:25px}
+.case-page .case-tags span{border-radius:2px!important}
+.case-page .next-project{border-radius:0}
+
+@media(max-width:980px){
+  .portfolio-hero{display:flex!important;flex-direction:column;align-items:stretch!important;min-height:auto;padding-top:56px}
+  .hero-left{order:1;width:100%;max-width:100%!important;min-width:0}.hero-shot{order:2;width:100%;max-width:100%;min-width:0}.hero-foot{order:3;width:100%}
+  .portfolio-hero .hero-intro{width:100%;max-width:calc(100vw - 36px)!important;overflow-wrap:anywhere}
+  .evidence-heading{grid-template-columns:1fr;gap:12px}
+  .evidence-grid{grid-template-columns:1fr 1fr}.evidence-grid article:last-child{grid-column:1/-1}
+}
+@media(max-width:900px){
+  .no-webgl .hl-chapter .hl-fallback{
+    position:absolute!important;left:0!important;right:0!important;top:-31vh!important;
+    width:100%!important;max-height:27vh!important;transform:none!important;object-fit:contain;
+  }
+}
+@media(max-width:720px){
+  .portfolio-home .site-header nav a[href="#evidence"],.portfolio-home .site-header nav a[href="#build"]{display:none!important}
+  .portfolio-hero h1{font-size:17vw!important;white-space:normal}.portfolio-hero .hero-intro{font-size:16px}
+  .evidence-grid{grid-template-columns:1fr}.evidence-grid article:last-child{grid-column:auto}
+  .evidence-grid h3{font-size:30px!important}.code-console{margin-right:0}
+}
+
+/* No italic serif: it reads as the warm "AI company" look Lucia moved away from. */
+.portfolio-home .about-monogram>span{font-family:var(--font-display)!important;font-style:normal!important;font-weight:600!important;letter-spacing:-.07em}
+.how-lead{font-family:var(--font-display)!important;font-style:normal!important;font-weight:500;font-size:22px!important;line-height:1.45}

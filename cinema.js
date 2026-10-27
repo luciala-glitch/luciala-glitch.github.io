@@ -5,8 +5,7 @@ const finePointer = matchMedia('(pointer: fine)').matches;
 const body = document.body;
 
 // ---------- intro curtain (once per session) ----------
-let seen = false;
-try { seen = sessionStorage.getItem('ll-intro') === '1'; sessionStorage.setItem('ll-intro', '1'); } catch {}
+const seen = true;
 if (body.classList.contains('portfolio-home') && !seen && !reduced) {
   const curtain = document.createElement('div');
   curtain.className = 'curtain';
@@ -103,13 +102,13 @@ const strengths = document.querySelector('.strengths');
 if (strengths) {
   const items = [...strengths.querySelectorAll('.strength')];
   const canvas = strengths.querySelector('#strength-field');
-  const field = new Field(canvas, {shapes: ['rings', 'wave', 'lattice', 'helix'], cx: .5, cy: .5, scale: .38, dot: 1.7, alpha: 1.15, speed: .003,
+  const field = canvas && new Field(canvas, {shapes: ['rings', 'wave', 'lattice', 'helix'], cx: .5, cy: .5, scale: .38, dot: 1.7, alpha: 1.15, speed: .003,
     colorFor: i => i % 4 === 0 ? '#6f7bff' : i % 3 === 0 ? '#ff5b1f' : '#e9ebf0'});
-  field.start();
+  field?.start();
   const bar = strengths.querySelector('.strength-progress i'), count = strengths.querySelector('.strength-count');
   const setStep = idx => {
     items.forEach((el, j) => el.classList.toggle('active', j === idx));
-    field.morph(idx);
+    field?.morph(idx);
     if (count) count.textContent = `0${idx + 1}`;
   };
   setStep(0);

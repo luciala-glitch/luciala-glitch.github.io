@@ -20,14 +20,24 @@ if (heroTitle) {
   wait();
 } else settle();
 
-// ---------- hero: coordinates + live cursor readout ----------
-const meta = document.querySelector('.hero-meta span:last-child');
-if (meta) { meta.classList.add('coords'); meta.textContent = 'ANN ARBOR, MI · 42.2808° N, 83.7430° W'; }
-const foot = document.querySelector('.hero-foot span:last-child');
-if (foot) {
-  foot.innerHTML = '<span class="readout">X 0000 · Y 0000</span> · SCROLL ↓';
-  const out = foot.querySelector('.readout');
-  if (fine) addEventListener('pointermove', e => { out.textContent = `X ${pad(e.clientX)} · Y ${pad(e.clientY + scrollY)}`; }, {passive: true});
+// ---------- strengths: one real project image per strength ----------
+const stage = document.querySelector('.strength-stage');
+const strengthItems = [...document.querySelectorAll('.strength')];
+if (stage && strengthItems.length) {
+  const prints = [
+    ['assets/p19-0.webp', 'NORTHERN · LANDMARKS ON A PUBLIC X-RAY'],
+    ['assets/hl/center-trailer.webp', 'SILVERADO · CENTER DISPLAY, TRAILER STATUS'],
+    ['assets/hl/gear-portfolio.webp', 'ZHONGQING GEAR · PROTOTYPE, CLIENT DETAILS MASKED'],
+    ['assets/p28-0.webp', 'FABLAB · STORYBOARDS FOR CONCEPTS WE REJECTED'],
+  ];
+  const wrap = document.createElement('div');
+  wrap.className = 'strength-prints';
+  wrap.innerHTML = prints.map(([src, cap]) => `<figure class="marked on-dark"><img src="${src}" alt="" loading="lazy" decoding="async"><figcaption>${cap}</figcaption></figure>`).join('');
+  stage.prepend(wrap);
+  const figs = [...wrap.children];
+  const sync = () => { const i = Math.max(0, strengthItems.findIndex(li => li.classList.contains('active'))); figs.forEach((f, j) => f.classList.toggle('on', j === i)); };
+  strengthItems.forEach(li => new MutationObserver(sync).observe(li, {attributes: true, attributeFilter: ['class']}));
+  sync();
 }
 
 // ---------- registration marks + figure labels ----------
