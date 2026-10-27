@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="FABLab — an interactive mobile prototype by Lucia Liao: find a machine, book time, and finish safety training before arriving.">
+  <title>FABLab — Interactive Mobile Prototype</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234db8e3'/%3E%3Ctext x='6' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white'%3EFL%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="fablab.css?v=4">
+</head>
+<body>
+  <header class="fl-nav">
+    <a href="../case.html?id=fablab">← Case study</a>
+    <span>Lucia Liao · FABLab · Mobile prototype</span>
+    <button type="button" id="reset">Reset demo ↺</button>
+  </header>
+
+  <main class="fl-stage">
+    <aside class="fl-side fl-tasks" aria-labelledby="tasks-title">
+      <p class="fl-label">TRY THE JOURNEY</p>
+      <h1 id="tasks-title">Arrive <em>ready.</em></h1>
+      <p class="fl-copy">Students finished their safety modules but still felt unsure at the machine. This prototype moves preparation before the visit: find the machine, book it, and complete its training.</p>
+      <ol class="fl-checklist" id="tasks"></ol>
+      <p class="fl-progress mono" id="task-progress"></p>
+      <p class="fl-fine">Rebuilt in HTML, CSS, and JavaScript from my Figma prototype. Availability is simulated. Details for the laser cutter and 3D printer follow the prototype, and the other machines use placeholder notes.</p>
+    </aside>
+
+    <div class="fl-device-wrap">
+      <div class="fl-device" id="device">
+        <div class="fl-island" aria-hidden="true"></div>
+        <div class="app" id="app" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <aside class="fl-side fl-sketch" aria-labelledby="sketch-title">
+      <div class="fl-sketch-head"><p class="fl-label" id="sketch-title">PAPER → PIXEL</p><label class="fl-switch"><input type="checkbox" id="sketch-toggle" checked><span></span>Show sketch</label></div>
+      <figure id="sketch-fig"><img id="sketch-img" alt=""><figcaption id="sketch-cap"></figcaption></figure>
+    </aside>
+  </main>
+  <div class="fl-toast" id="toast" role="status" hidden></div>
+  <script src="fablab.js?v=2"></script>
+</body>
+</html>

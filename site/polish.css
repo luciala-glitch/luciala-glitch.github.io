@@ -1,0 +1,143 @@
+/* Visual system pass — type, color tokens, rhythm. Loaded last. */
+:root{
+  --paper:#f4f1ea;--paper-2:#e9e5db;--line:#c9c5b8;
+  --ink:#121311;--ink-2:#4b4c46;--muted:#7a7b73;
+  --night:#0b0c10;--night-2:#15171c;--night-line:#262a33;
+  --blue:#ff5b1f;--blue-ink:#d9480f;--acid:#ff5b1f;--coral:#ff5b1f;--violet:#8a8a85;
+  --font-display:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+  --font-serif:'Instrument Serif',Georgia,serif;
+  --font-mono:'Geist Mono','SFMono-Regular',Consolas,monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+/* ---------- typography ---------- */
+html,body.portfolio-home,body.case-page{background:var(--paper)}
+body.portfolio-home,body.case-page{font-family:var(--font-display);color:var(--ink);font-feature-settings:'ss01','cv11'}
+.portfolio-home :is(h1,h2,h3),.case-page :is(h1,h2,h3),.strength h3,.hl-chapter h3,.curtain-copy span,.case-page .next-project strong,.contact-link{font-family:var(--font-display)!important}
+.portfolio-home :is(h1,h2,h3) em,.case-page :is(h1,h2,h3) em,.strength h3 em,.hl-chapter h3 em{font-family:var(--font-serif)!important;font-style:italic;font-weight:400;letter-spacing:-.02em}
+.mono,.eyebrow,code,pre,.window-bar,.window-status,.workbench-tabs button,.code-tabs button,.console-top>button,.console-foot,.output-label,.live-output>p,.hero-meta,.hero-foot,.project-number,.project-category,.project-tags span,.code-facts span,.strength .mono,.proofs small,.strengths-head span,.hl-head span,.hl-chapter .mono,.hl-proof span,.hl-chapter small,.hl-caption,.hl-index button,.curtain-copy b,.curtain-copy em,.theater-bar,.case-meta label,.metrics small,.back,.code-proof-copy small,.case-tags span,.case-page .next-project small,.contact-bottom,footer,.filters button,.about-monogram small,.steps article>span,.index-preview .project-number,nav sup{font-family:var(--font-mono)!important}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.portfolio-home h2,.case-page h2{letter-spacing:-.045em}
+
+/* ---------- color discipline: blue on paper, acid on night ---------- */
+.portfolio-home .work-heading h2 em,.portfolio-home .about h2 em,.portfolio-home .code-copy h2 em,.case-page .story-row h2 em{color:var(--blue)}
+.portfolio-home .filters button.active,.portfolio-home .filters button:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.button.dark{background:var(--ink)}
+.button.dark:hover{background:var(--blue)}
+body.portfolio-home::after,body.case-page::after{opacity:.04}
+
+/* ---------- header ---------- */
+.portfolio-home .brand small,.case-page .brand small{display:none}
+.portfolio-home .site-header nav a,.case-page>header nav a{position:relative}
+.portfolio-home .site-header nav a:not(.nav-contact):after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease-out)}
+.portfolio-home .site-header nav a:not(.nav-contact):hover:after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- hero ---------- */
+.portfolio-hero h1{font-weight:500;font-size:clamp(72px,8.5vw,148px)!important;line-height:.88!important;letter-spacing:-.05em!important}
+.portfolio-hero h1 em{color:var(--blue)}
+.portfolio-hero h1.split .line{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.portfolio-hero h1.split .line>span{display:block;transform:translateY(105%);transition:transform 1.1s var(--ease-out) calc(var(--i) * 90ms + .05s)}
+body.is-ready .portfolio-hero h1.split .line>span{transform:none}
+body.portfolio-home:not(.is-ready) .hero-left>h1.split{opacity:1;transform:none}
+.portfolio-hero .hero-intro{font-size:17px;line-height:1.6;color:var(--ink-2)}
+.hero-workbench,.hero-workbench:hover{transform:none!important}
+.hero-workbench{transition:transform .6s var(--ease-out),opacity .9s .35s,box-shadow .6s!important;box-shadow:0 40px 100px -30px #2a1a3d80,0 0 0 1px #00000014}
+.hero-workbench:hover{transform:translateY(-4px)!important}
+body.portfolio-home:not(.is-ready) .hero-workbench{opacity:0;transform:translateY(24px)!important}
+.hero-field-wrap{left:auto;right:-4%;top:-4%;width:min(52vw,760px);opacity:.45;z-index:1}
+.field-label{display:none}
+
+/* ---------- strengths + highlights chapter timing ---------- */
+.strengths{height:320vh}
+.strength:not(.active),.hl-chapter:not(.active){transition:opacity .18s,transform .25s,visibility 0s .25s!important}
+.strength.active,.hl-chapter.active{transition:opacity .45s .05s,transform .8s .05s var(--ease-out),visibility 0s!important}
+.strength p,.hl-chapter p{color:#b9bfc8}
+
+/* ---------- index (formerly the card grid) ---------- */
+.portfolio-home .work-heading{margin:44px 0 36px}
+.portfolio-home .work-heading h2{font-size:clamp(44px,5.6vw,92px)!important;line-height:.92}
+.portfolio-home .project-grid{display:block;counter-reset:proj;border-top:1px solid var(--ink)}
+.portfolio-home .project{display:grid;grid-template-columns:72px minmax(0,1fr) 240px;align-items:center;gap:24px;padding:30px 0;border-bottom:1px solid var(--line);counter-increment:proj;position:relative;isolation:isolate}
+.portfolio-home .project:before{content:'0' counter(proj);font:11px var(--font-mono);letter-spacing:.12em;color:var(--muted)}
+.portfolio-home .project:after{content:'';position:absolute;inset:0;z-index:-1;background:var(--paper-2);transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease-out)}
+.portfolio-home .project:hover:after{transform:scaleY(1)}
+.portfolio-home .project-art{display:none}
+.portfolio-home .project-info{display:contents;padding:0}
+.portfolio-home .project-info>div{min-width:0}
+.portfolio-home .project h3,.portfolio-home .project:first-child h3{font-size:clamp(32px,3.6vw,56px)!important;font-weight:500;letter-spacing:-.045em;line-height:1;margin:0 0 6px;transition:transform .5s var(--ease-out),color .3s}
+.portfolio-home .project:hover h3{transform:translateX(14px);color:var(--blue)}
+.portfolio-home .project-info p{font:italic 21px/1.3 var(--font-serif);color:var(--ink-2);transition:transform .5s var(--ease-out) .03s}
+.portfolio-home .project:hover .project-info p{transform:translateX(14px)}
+.portfolio-home .project .project-tags{display:none}
+.portfolio-home .project-category{font-size:10px;letter-spacing:.12em;line-height:1.9;color:var(--muted);text-align:right}
+.portfolio-home .project:first-child{grid-column:auto}
+.index-preview{position:fixed;left:0;top:0;z-index:50;width:min(30vw,380px);aspect-ratio:4/3;pointer-events:none;opacity:0;scale:.82;transition:opacity .3s,scale .5s var(--ease-out);background:var(--night);border-radius:6px;overflow:hidden;display:flex;gap:10px;align-items:center;justify-content:center;padding:20px;box-shadow:0 40px 90px -30px #000a}
+.index-preview.on{opacity:1;scale:1}
+.index-preview img{max-width:100%;max-height:100%;object-fit:contain;min-width:0}
+.index-preview.project-fablab img{max-width:46%}
+.index-preview .project-number{display:none}
+.index-preview .signal-art{width:100%}
+.index-preview .signal-art svg{width:100%;height:auto}
+.index-preview.project-northern,.index-preview.project-fablab{background:var(--paper-2)}
+
+/* ---------- design that runs ---------- */
+.code-lab{background:var(--paper)!important;border-top:1px solid var(--line)}
+.code-console{box-shadow:0 40px 90px -30px #00000066!important;border:1px solid #1d1f24;border-radius:6px}
+.code-copy h2{font-size:clamp(56px,6.4vw,104px)!important}
+
+/* ---------- about + how I work ---------- */
+.portfolio-home .about{align-items:start}
+.portfolio-home .about-monogram{position:sticky;top:110px;height:min(560px,70vh);min-height:0}
+.portfolio-home .about-monogram>span{font-family:var(--font-serif)!important;font-style:italic;font-size:clamp(220px,24vw,340px)}
+.portfolio-home .section-note{font-size:15px;line-height:1.5;color:var(--ink-2)}
+.how{margin-top:56px;padding-top:28px;border-top:1px solid var(--line)}
+.how-lead{font:italic 24px/1.4 var(--font-serif)!important;color:var(--ink)!important;max-width:34ch!important;margin:14px 0 30px}
+.how .steps{grid-template-columns:repeat(2,1fr);gap:22px 28px}
+.how .steps article{border-top:1px solid var(--line);padding-top:16px}
+.how .steps article>span{color:var(--blue);font-size:10px}
+.how .steps h3{font-size:19px;font-weight:500;letter-spacing:-.02em;margin:10px 0 6px;color:var(--ink)}
+.how .steps p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+
+/* ---------- case pages ---------- */
+.case-page .case-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:5vw;align-items:center;min-height:auto;padding:64px 5vw 70px}
+.case-page .case-hero h1{font-size:clamp(48px,6vw,96px)!important;line-height:.92;letter-spacing:-.05em;font-weight:500}
+.case-page .case-intro{font-size:19px;line-height:1.55;max-width:46ch}
+.case-page .case-meta{grid-template-columns:repeat(3,minmax(0,1fr));font-size:13px}
+.case-hero-media{margin:0;aspect-ratio:4/3;background:radial-gradient(circle at 70% 25%,#ff5b1f2e,transparent 45%),var(--night);border-radius:6px;display:grid;place-items:center;padding:clamp(18px,3vw,40px);overflow:hidden;box-shadow:0 40px 90px -40px #000a}
+.case-hero-media img{max-width:100%;max-height:100%;object-fit:contain;border-radius:3px}
+.case-hero-media.northern,.case-hero-media.fablab{background:var(--paper-2)}
+.case-hero-media .signal-art{width:100%}
+.case-hero-media .signal-art svg{width:100%;height:auto}
+.case-page .case-body{padding-top:20px}
+.case-page .metrics{padding:36px 0 44px;border-top:1px solid var(--ink)}
+.case-page .metrics strong{font-family:var(--font-display);font-weight:500;color:var(--blue);font-size:clamp(40px,4.4vw,64px);letter-spacing:-.05em}
+.case-page .story-row{grid-template-columns:200px minmax(0,1fr);gap:40px;margin:80px 0}
+.case-page .story-row>.eyebrow{font-size:11px!important;line-height:1.6;color:var(--muted)}
+.case-page .story-row h2{font-size:clamp(36px,4vw,60px)!important;line-height:1;margin:0 0 22px}
+.case-page .story-row p{font-size:19px;line-height:1.6;max-width:62ch;color:var(--ink-2)}
+.case-page .case-gallery figure{background:var(--paper-2);border-radius:4px}
+
+/* ---------- mobile ---------- */
+@media(max-width:900px){
+  .case-page .case-hero{grid-template-columns:1fr;padding:40px 18px 50px;gap:32px}
+  .case-page .case-meta{grid-template-columns:1fr 1fr}
+  .case-page .story-row{display:block;margin:56px 0}
+  .case-page .story-row>.eyebrow{margin-bottom:14px}
+  .case-page .story-row p{font-size:17px}
+  .portfolio-home .project{grid-template-columns:44px minmax(0,1fr);gap:4px 12px;padding:22px 0}
+  .portfolio-home .project-category{grid-column:2;text-align:left}
+  .how .steps{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+  .hero-field-wrap{display:none}
+  .portfolio-hero h1{font-size:17vw!important}
+  .portfolio-home .site-header nav{gap:16px}
+  .portfolio-home .site-header nav a:not(.nav-contact){display:inline-block!important;font-size:12px}
+  .portfolio-home .site-header nav a[href="#strengths"],.portfolio-home .site-header nav a[href="#build"]{display:none!important}
+  .portfolio-home .site-header nav sup{display:none}
+  .proofs a{flex-direction:column;align-items:flex-start;gap:4px}
+  .proofs small{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .portfolio-hero h1.split .line>span{transform:none;transition:none}
+}

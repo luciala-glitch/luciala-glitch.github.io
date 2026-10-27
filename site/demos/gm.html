@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070a0f">
+  <title>Silverado — A Context-Aware Cockpit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="gm.css?v=8">
+</head>
+<body>
+  <main class="gm-page">
+    <header class="gm-nav">
+      <a href="../case.html?id=silverado">← Case study</a>
+      <span>Lucia Liao · Automotive HMI</span>
+      <a href="#prototype">Skip to prototype ↓</a>
+    </header>
+
+    <section class="gm-intro" aria-labelledby="gm-title">
+      <p class="gm-kicker">SILVERADO RST 1500 / 2026</p>
+      <h1 id="gm-title">The right signal.<br><em>At the right moment.</em></h1>
+      <div class="intro-bottom">
+        <p>A context-aware interface concept connecting the cluster and center display around what the driver is doing.</p>
+        <p class="scroll-cue">Scroll to enter the cockpit <span>↓</span></p>
+      </div>
+    </section>
+
+    <section class="cinematic" id="journey" aria-label="Scroll journey into the Silverado cockpit">
+      <div class="cinematic-sticky">
+        <img id="journey-image" src="../assets/gm/cockpit-home.png" alt="Silverado cockpit concept showing Lucia's original cluster and center display design">
+        <div class="cinematic-shade"></div>
+        <div class="journey-copy">
+          <span>01 / ENVIRONMENT</span>
+          <h2>One cockpit.<br>Two connected surfaces.</h2>
+          <p>Scroll to move from the full driving environment into the interaction.</p>
+        </div>
+        <div class="journey-destination">
+          <span>02 / INTERACTION</span>
+          <strong>Center display</strong>
+        </div>
+        <div class="journey-progress"><i></i></div>
+      </div>
+    </section>
+
+    <section class="prototype" id="prototype">
+      <div class="prototype-heading">
+        <div>
+          <p class="gm-kicker">GUIDED PROTOTYPE / ORIGINAL FIGMA UI</p>
+          <h2>Prepare to tow.</h2>
+        </div>
+        <p>Follow one focused task through the cluster and center display. Each highlighted target is part of the original design.</p>
+      </div>
+
+      <div class="lab">
+        <div class="lab-toolbar">
+          <div class="lab-status"><i></i><span>Interactive</span></div>
+          <div class="step-count"><span id="step-current">01</span> / 04</div>
+          <button id="fullscreen" type="button">Full screen ↗</button>
+        </div>
+
+        <div class="cockpit-stage" id="cockpit-stage">
+          <img class="cockpit-state active" data-state="0" src="../assets/gm/cockpit-home.png" alt="Home screen in the Silverado cockpit">
+          <img class="cockpit-state" data-state="1" src="../assets/gm/cockpit-detected.png" alt="Trailer detected notification across the cluster and center display">
+          <img class="cockpit-state" data-state="2" src="../assets/gm/cockpit-trailer.png" alt="Trailer status and active trailer profile">
+          <img class="cockpit-state" data-state="3" src="../assets/gm/cockpit-tow.png" alt="Tow Mode active in the instrument cluster">
+          <button class="hotspot" id="hotspot" type="button" aria-label="Select Drive mode">
+            <span></span><b id="hotspot-label">Select Drive mode</b>
+          </button>
+          <div class="complete-stamp" id="complete-stamp" hidden>
+            <span>FLOW COMPLETE</span>
+            <strong>Tow Mode active</strong>
+          </div>
+        </div>
+
+        <div class="lab-footer">
+          <div class="step-copy" aria-live="polite">
+            <p id="step-label">STEP 01 · HOME</p>
+            <h3 id="step-title">Begin with the driver’s intent.</h3>
+            <p id="step-body">Choose Drive mode on the center display. The system starts from an action the driver already understands.</p>
+          </div>
+          <div class="step-controls">
+            <button id="previous" type="button" disabled>← Previous</button>
+            <div class="step-dots" aria-label="Prototype steps">
+              <button class="active" data-step="0" aria-label="Go to step 1"></button>
+              <button data-step="1" aria-label="Go to step 2"></button>
+              <button data-step="2" aria-label="Go to step 3"></button>
+              <button data-step="3" aria-label="Go to step 4"></button>
+            </div>
+            <button id="next" type="button">Next step →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="design-notes">
+      <div class="note-intro">
+        <p class="gm-kicker">WHY THIS FLOW</p>
+        <h2>Quiet what passed.<br>Surface what needs action.</h2>
+      </div>
+      <div class="note-grid">
+        <article><span>01</span><h3>Detect</h3><p>The interface recognizes the trailer and offers the next relevant action without taking control away.</p></article>
+        <article><span>02</span><h3>Prioritize</h3><p>Completed checks stay visible but quiet. The unresolved brake adjustment receives the strongest emphasis.</p></article>
+        <article><span>03</span><h3>Confirm</h3><p>Once towing starts, Tow Mode moves into the cluster, where it remains legible in the driving context.</p></article>
+      </div>
+    </section>
+
+    <footer class="gm-footer">
+      <p>Original interface by Lucia Liao & Ashita Nichanametla. Concept work presented to GM design leadership. Proposed system behavior is illustrative.</p>
+      <a href="https://www.figma.com/proto/LNBSTNzs4WnUQJ52XbVkB1/Assignment--5---Client-Presentation?node-id=14-5516&starting-point-node-id=14%3A5516" target="_blank" rel="noopener">Open original Figma prototype ↗</a>
+    </footer>
+  </main>
+  <script src="gm.js?v=6"></script>
+</body>
+</html>

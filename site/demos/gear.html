@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zhongqing Gear | Project Management Dashboard</title>
+<style>
+
+:root{
+  --bg:#f2f5f9; --panel:#ffffff; --text:#1c2b3f; --muted:#66768c; --line:#e2e8f0; --line-2:#cfd8e3;
+  --deep:#0e1c2e; --blue:#1f61c0; --blue-h:#174f9f; --blue-2:#2f7de0; --blue-bg:#ecf3fc;
+  --done:#12946a; --done-bg:#e6f5ee; --norisk:#1f61c0; --norisk-bg:#ecf3fc;
+  --mid:#c97e0a; --mid-bg:#fbf2e0; --high:#cd3f3f; --high-bg:#fbecec;
+  --grey:#77828f; --grey-bg:#f0f3f7;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,Menlo,monospace;
+  --shadow-hover:0 8px 22px rgba(16,42,77,.10);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);font-variant-numeric:tabular-nums}
+button,input,select{font:inherit}
+button{border:0;cursor:pointer;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue-2);outline-offset:2px}
+/* ===== 框架 ===== */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:24px 16px 20px;color:#c9d6e6;background:var(--deep);z-index:4;display:flex;flex-direction:column}
+.brand{display:flex;gap:11px;align-items:center;margin-bottom:24px;padding:0 6px}
+.mark{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;color:#fff;background:var(--blue-2);font-weight:800;font-size:15px;font-family:var(--mono)}
+.brand h1{margin:0;font-size:17px;font-weight:700;color:#f2f7fd}
+.eyebrow{margin:0 0 5px;color:var(--muted);font-weight:600;letter-spacing:.14em;font-size:11px}
+.sidebar .eyebrow{color:#7f93ab;margin-bottom:2px}
+.nav{display:grid;gap:2px}
+.nav button{width:100%;padding:11px 13px;text-align:left;border-radius:9px;background:transparent;color:#b4c4d8;font-weight:500;font-size:13.5px;transition:background .14s,color .14s;box-shadow:inset 3px 0 0 transparent}
+.nav button:hover{background:rgba(255,255,255,.06);color:#e8f0f9}
+.nav button.active{background:rgba(47,125,224,.16);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--blue-2)}
+.side-note{margin-top:auto;padding:13px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);line-height:1.7;color:#a8bad0;font-size:12.5px}
+.side-note strong{color:#dce8f5;font-weight:600}
+.main{padding:24px 30px 40px;overflow:hidden;min-width:0}
+/* ===== 顶栏 ===== */
+.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:18px;flex-wrap:wrap}
+.topbar h2{margin:0;font-size:23px;font-weight:700;color:#13233b}
+.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:8px;height:40px;min-width:300px;padding:0 13px;background:#fff;border:1px solid var(--line-2);border-radius:10px}
+.search:focus-within{border-color:var(--blue-2);box-shadow:0 0 0 3px rgba(47,125,224,.14)}
+.search span{color:var(--muted);font-size:16px}
+.search input{border:0;outline:0;width:100%;background:transparent;font-size:13.5px}
+.primary,.secondary,.ghost{border-radius:9px;font-weight:600;transition:background .14s,border-color .14s,color .14s}
+.primary{padding:10px 17px;color:#fff;background:var(--blue)}
+.primary:hover{background:var(--blue-h)}
+.secondary{padding:9px 14px;background:#fff;color:var(--blue);border:1px solid var(--line-2)}
+.secondary:hover{border-color:var(--blue-2);background:var(--blue-bg)}
+.ghost{padding:8px 12px;background:transparent;color:var(--muted);border:1px solid transparent}
+.ghost:hover{background:var(--grey-bg);color:var(--text)}
+/* ===== 面板 ===== */
+.section{display:none}
+.section.active{display:block}
+.panel{position:relative;margin-bottom:14px;padding:20px 22px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 1px 2px rgba(16,42,77,.04)}
+.panel h3,.section-header h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
+.section-header>div>h3::before,.panel>.section-header h3::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--blue-2);flex:none}
+.section-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.muted{color:var(--muted);line-height:1.7}
+.small-note{color:var(--muted);font-weight:500;font-size:12.5px}
+/* ===== 状态标签 ===== */
+.chip,.pill{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;line-height:1.4}
+.chip{color:var(--done);background:var(--done-bg)}
+.pill.done{color:var(--done);background:var(--done-bg)}
+.pill.norisk{color:var(--norisk);background:var(--norisk-bg)}
+.pill.mid{color:#8f5a05;background:var(--mid-bg)}
+.pill.high{color:#a92f2f;background:var(--high-bg)}
+.pill.info{color:var(--blue);background:var(--blue-bg)}
+.pill.wait{color:#8f5a05;background:var(--mid-bg)}
+.pill.grey{color:#5b6674;background:var(--grey-bg)}
+/* ===== KPI ===== */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 4px}
+.kpi{padding:14px 16px;border-radius:11px;background:#fbfcfe;border:1px solid var(--line)}
+.kpi strong{display:block;font-size:26px;line-height:1.25;color:var(--text);font-family:var(--mono);font-weight:700}
+.kpi span{color:var(--muted);font-weight:500;font-size:12.5px}
+/* ===== 今日重点风险 ===== */
+.focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.focus-block{padding:13px 14px 10px;border-radius:11px;background:#fbfcfe;border:1px solid var(--line);border-top:3px solid var(--blue-2)}
+.focus-block.high{border-top-color:var(--high)}
+.focus-block.mid{border-top-color:var(--mid)}
+.focus-block h4{margin:0 0 8px;font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:8px;color:#33445c}
+.focus-block h4 .count{font-size:12px;min-width:24px;padding:1px 8px;border-radius:99px;background:var(--grey-bg);color:#4d5c70;font-family:var(--mono);font-weight:700}
+.focus-item{display:grid;gap:2px;padding:8px 9px;border-radius:8px;cursor:pointer;transition:background .13s}
+.focus-item:hover{background:var(--blue-bg)}
+.focus-item strong{font-size:13.5px;font-weight:600}
+.focus-item small{color:var(--muted);font-weight:400;font-size:12.5px;line-height:1.6}
+.focus-empty{color:var(--muted);font-size:13px;padding:6px 4px}
+/* ===== 筛选工具栏 ===== */
+.toolbar{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:14px 16px;border-radius:11px;background:#fbfcfe;border:1px solid var(--line)}
+.toolbar .field{display:grid;gap:5px}
+.toolbar .field label{font-size:12px;font-weight:600;color:var(--muted)}
+.toolbar select{height:36px;min-width:128px;max-width:172px;border-radius:8px;border:1px solid var(--line-2);background:#fff;padding:0 9px;color:var(--text);font-weight:500;font-size:13px}
+.toolbar .btn-all{height:36px;padding:0 15px;border-radius:8px;background:#fff;color:var(--blue);font-weight:600;border:1px solid var(--line-2)}
+.toolbar .btn-all:hover{border-color:var(--blue-2);background:var(--blue-bg)}
+.toolbar .btn-apply{height:36px;padding:0 18px;border-radius:8px;color:#fff;background:var(--blue);font-weight:600}
+.toolbar .btn-apply:hover{background:var(--blue-h)}
+.toolbar .btn-reset{height:36px;padding:0 14px;border-radius:8px;background:transparent;color:var(--muted);font-weight:600;border:1px solid transparent}
+.toolbar .btn-reset:hover{background:var(--grey-bg);color:var(--text)}
+.filter-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.filter-tag{display:inline-flex;align-items:center;gap:7px;padding:5px 5px 5px 11px;border-radius:99px;background:var(--blue-bg);border:1px solid #c8dcf6;color:var(--blue);font-weight:600;font-size:12.5px}
+.filter-tag b{cursor:pointer;width:18px;height:18px;border-radius:99px;display:grid;place-items:center;background:#d7e6f9;font-size:11px;font-weight:700}
+.filter-tag b:hover{background:#bcd6f4}
+.result-count{margin-top:10px;font-weight:500;color:var(--muted);font-size:13px}
+.empty-state{padding:38px;text-align:center;border-radius:11px;background:#fbfcfe;border:1px dashed var(--line-2);color:var(--muted)}
+/* ===== 项目卡片列表 ===== */
+.project-list{display:grid;gap:10px}
+.pcard{display:grid;grid-template-columns:1.15fr 1.25fr 1fr;gap:16px;padding:15px 18px 11px;border-radius:11px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--line-2);transition:border-color .14s,box-shadow .14s}
+.pcard:hover{box-shadow:var(--shadow-hover);border-color:#c4d5ec;border-left-color:var(--blue-2)}
+.pcard.b-high{border-left-color:var(--high)}
+.pcard.b-mid{border-left-color:var(--mid)}
+.pcard.b-norisk{border-left-color:var(--norisk)}
+.pcard.b-done{border-left-color:var(--done)}
+.pcard.b-high:hover{border-left-color:var(--high)}
+.pcard.b-mid:hover{border-left-color:var(--mid)}
+.pcard.b-done:hover{border-left-color:var(--done)}
+.pcard-left strong{display:block;font-size:15.5px;font-weight:700;margin-bottom:4px}
+.pcard-left .meta{color:var(--muted);font-weight:400;font-size:12.5px;line-height:1.8}
+.pcard-mid{display:grid;gap:8px;align-content:start}
+.pcard-mid .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted);font-weight:400;font-size:12.5px}
+.pcard-right{display:grid;gap:8px;justify-items:end;align-content:start}
+.pcard-right .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pcard-right .nums{color:var(--muted);font-weight:400;font-size:12px;text-align:right;line-height:1.7}
+.pcard-hint{grid-column:1/-1;display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:8px;margin-top:2px;color:var(--muted);font-weight:400;font-size:12.5px;line-height:1.6}
+.pcard-hint b{color:#3c4f68;font-weight:600}
+.progress{display:grid;gap:5px;min-width:150px}
+.track{height:6px;border-radius:999px;background:#e9eef5;overflow:hidden}
+.bar{height:100%;border-radius:999px}
+.bar.done{background:var(--done)}
+.bar.norisk{background:var(--blue-2)}
+.bar.mid{background:#e8a03a}
+.bar.high{background:#e05f5f}
+.bar.grey{background:#a6b1bf}
+.progress small{font-weight:500;color:var(--muted);font-size:12px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px}
+.legend span{display:inline-flex;gap:6px;align-items:center;color:var(--muted);font-weight:500;font-size:12.5px}
+.dot{width:9px;height:9px;border-radius:99px}
+.dot.high{background:var(--high)}.dot.mid{background:var(--mid)}.dot.norisk{background:var(--blue-2)}.dot.done{background:var(--done)}.dot.grey{background:#a6b1bf}
+/* ===== 详情页 ===== */
+.alert-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px}
+.alert-card{padding:13px 15px;border-radius:11px;background:#fbfcfe;border:1px solid var(--line)}
+.alert-card span{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-bottom:4px}
+.alert-card strong{font-size:15.5px;font-weight:700}
+.alert-lines{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:9px}
+.alert-line{padding:11px 13px;border-radius:9px;background:#f7fafd;border:1px solid var(--line);font-size:13px;line-height:1.65;color:#3c4f68;font-weight:400}
+.alert-line b{color:var(--blue);font-weight:600}
+.split{display:grid;grid-template-columns:1.25fr .95fr;gap:14px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px}
+.info-item{padding:10px 12px;border-radius:9px;background:#f7fafd;border:1px solid var(--line);font-size:13px}
+.info-item span{display:block;color:var(--muted);font-weight:500;font-size:11.5px;margin-bottom:2px}
+.info-item b{font-size:13.5px;font-weight:600}
+.stage-line{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.stage-step{flex:1;min-width:96px;padding:8px;border-radius:8px;background:#f2f5f9;border:1px solid var(--line);text-align:center;font-weight:600;font-size:12px;color:#8b98a9}
+.stage-step.past{background:var(--done-bg);border-color:#c4e6d7;color:var(--done)}
+.stage-step.now{background:var(--blue);border-color:var(--blue);color:#fff}
+.owner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px}
+.owner-card{padding:13px 14px;border-radius:10px;background:#fff;border:1px solid var(--line);cursor:pointer;transition:border-color .14s,box-shadow .14s}
+.owner-card:hover{box-shadow:var(--shadow-hover);border-color:#c4d5ec}
+.owner-card strong{display:block;margin-bottom:3px;font-weight:700;font-size:14px}
+.owner-card span{color:var(--muted);font-weight:400;font-size:12.5px;line-height:1.65}
+.mini-list{display:grid;gap:7px}
+.mini-item{padding:10px 12px;border-radius:9px;background:#fbfcfe;border:1px solid var(--line);font-size:13px;line-height:1.6}
+.mini-item strong{display:block;font-size:13.5px;font-weight:600;margin-bottom:1px}
+.mini-item span{color:var(--muted);font-weight:400;font-size:12.5px}
+/* ===== APQP ===== */
+.page-select-bar{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.page-select-bar .field{display:grid;gap:5px}
+.page-select-bar label{font-size:12px;font-weight:600;color:var(--muted)}
+.page-select-bar select{height:38px;min-width:230px;border-radius:8px;border:1px solid var(--line-2);background:#fff;padding:0 10px;font-weight:500;font-size:13.5px;color:var(--text)}
+.proj-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tab{padding:9px 15px 10px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);font-weight:600;font-size:13.5px;box-shadow:inset 0 -2px 0 transparent;transition:color .14s,box-shadow .14s}
+.tab:hover{color:var(--text);background:#f7fafd}
+.tab.active{color:var(--blue);box-shadow:inset 0 -2px 0 var(--blue)}
+.stage-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stage-kpi{padding:12px 14px;border-radius:11px;background:#fbfcfe;border:1px solid var(--line)}
+.stage-kpi strong{font-size:22px;line-height:1.3;color:var(--text);display:block;font-family:var(--mono);font-weight:700}
+.stage-kpi span{color:var(--muted);font-weight:500;font-size:12px}
+.gantt{display:grid;gap:9px;margin-bottom:14px}
+.gantt-row{display:grid;grid-template-columns:170px 1fr 150px;gap:12px;align-items:center;font-size:13px}
+.gantt-row strong{font-size:13px;font-weight:600}
+.gantt-row small{color:var(--muted);font-weight:400}
+/* 提交项：表格化 */
+.task-table{display:grid;gap:0;border:1px solid var(--line);border-radius:11px;background:#fff;overflow:hidden}
+.task-head,.task-row{display:grid;grid-template-columns:1.5fr .7fr .85fr .85fr .8fr .95fr .75fr .8fr;gap:12px;align-items:center}
+.task-head{padding:9px 16px;color:var(--muted);font-weight:600;font-size:12px;background:#f7fafd;border-bottom:1px solid var(--line)}
+.task-row{padding:12px 16px;border-bottom:1px solid var(--line);font-size:12.5px;transition:background .12s}
+.task-row:last-child{border-bottom:0}
+.task-row:hover{background:#fafcff}
+.task-row strong{display:block;font-size:13.5px;font-weight:600;margin-bottom:2px}
+.task-row span{color:var(--muted);font-weight:400;font-size:12px}
+/* ===== QTR ===== */
+.qtr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.qtr-card{padding:14px 15px;border-radius:10px;background:#fbfcfe;border:1px solid var(--line)}
+.qtr-card strong{display:block;margin-bottom:5px;font-size:13.5px;font-weight:700;color:var(--blue)}
+.qtr-card p{margin:0;color:#42556e;font-weight:400;font-size:13px;line-height:1.7}
+.conclusion{padding:15px 17px;border-radius:10px;background:var(--blue-bg);border:1px solid #c8dcf6;border-left:4px solid var(--blue);font-weight:500;color:#173d6b;line-height:1.7}
+/* ===== 图纸问题 ===== */
+.drawing-list{display:grid;gap:10px}
+.drawing-card{padding:14px 16px;border-radius:11px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--line-2)}
+.drawing-card.high{border-left-color:var(--high)}
+.drawing-card.mid{border-left-color:var(--mid)}
+.drawing-card.norisk{border-left-color:var(--norisk)}
+.drawing-card .dc-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px}
+.drawing-card .dc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:7px;font-size:12.5px;color:#42556e;font-weight:400;line-height:1.7}
+.drawing-card .dc-grid b{color:#173d6b;font-weight:600}
+/* ===== 文件中心 ===== */
+.file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.file-card{padding:14px 15px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;gap:7px;transition:border-color .14s,box-shadow .14s}
+.file-card:hover{border-color:#c4d5ec;box-shadow:var(--shadow-hover)}
+.file-card strong{font-size:14px;font-weight:700}
+.file-card .fmeta{color:var(--muted);font-weight:400;font-size:12.5px;line-height:1.7}
+.file-card .fbtns{display:flex;gap:7px;flex-wrap:wrap}
+.upload-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.upload-form label{display:grid;gap:5px;color:var(--muted);font-weight:600;font-size:12px}
+.upload-form input,.upload-form select{min-width:0;height:38px;border-radius:8px;border:1px solid var(--line-2);background:#fff;padding:0 10px;color:var(--text);font-weight:500}
+.upload-form input:focus,.upload-form select:focus{outline:0;border-color:var(--blue-2);box-shadow:0 0 0 3px rgba(47,125,224,.14)}
+.upload-form .check{display:flex;align-items:center;gap:8px;height:38px;color:#3c4f68;font-weight:500;font-size:13px}
+.upload-form .check input{width:16px;height:16px;accent-color:var(--blue)}
+.upload-form button{grid-column:span 2}
+.note-box{padding:12px 14px;border-radius:9px;background:#f7fafd;border:1px solid var(--line);color:#5a6b82;font-weight:400;line-height:1.7;font-size:12.5px}
+/* ===== 风险页 ===== */
+.risk-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.risk-col{padding:13px 14px;border-radius:11px;border:1px solid var(--line);border-top:3px solid var(--line-2);background:#fbfcfe;display:grid;gap:8px;align-content:start}
+.risk-col.high{border-top-color:var(--high)}
+.risk-col.mid{border-top-color:var(--mid)}
+.risk-col.norisk{border-top-color:var(--norisk)}
+.risk-col h4{margin:0;font-size:14px;font-weight:700;color:#33445c}
+.risk-entry{padding:10px 11px;border-radius:9px;background:#fff;border:1px solid var(--line);display:grid;gap:3px;cursor:pointer;transition:border-color .13s}
+.risk-entry:hover{border-color:#c4d5ec}
+.risk-entry strong{font-size:13px;font-weight:600}
+.risk-entry small{color:var(--muted);font-weight:400;line-height:1.6}
+.risk-entry .re-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:3px}
+/* ===== Drawer / Toast ===== */
+.drawer{position:fixed;top:12px;right:12px;bottom:12px;width:min(520px,calc(100vw - 24px));padding:20px 22px;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:0 24px 70px rgba(9,26,50,.28);z-index:30;transform:translateX(calc(100% + 30px));transition:transform .22s ease;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:13px}
+.drawer h3{margin:0;font-size:17px;font-weight:700}
+.drawer-body{display:grid;gap:9px;padding-top:14px}
+.preview-block{padding:12px 14px;border-radius:9px;background:#f7fafd;border:1px solid var(--line)}
+.preview-block h4{margin:0 0 5px;font-size:12.5px;font-weight:700;color:var(--blue)}
+.preview-block p{margin:0;color:#42556e;line-height:1.7;font-weight:400;font-size:13px}
+.overlay{position:fixed;inset:0;background:rgba(10,24,44,.34);z-index:20;opacity:0;pointer-events:none;transition:opacity .18s}
+.overlay.show{opacity:1;pointer-events:all}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(90px);padding:11px 20px;border-radius:10px;background:#132a47;color:#fff;font-weight:500;box-shadow:0 16px 40px rgba(7,26,51,.35);z-index:50;transition:transform .26s;font-size:13.5px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ===== 响应式 ===== */
+@media(max-width:1380px){.task-head{display:none}.task-table{border:0;background:transparent;overflow:visible;gap:9px}.task-row{grid-template-columns:1fr 1fr;gap:8px;border:1px solid var(--line);border-radius:10px;background:#fff}.task-row:last-child{border-bottom:1px solid var(--line)}}
+@media(max-width:1180px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.side-note{margin-top:18px}.split{grid-template-columns:1fr}.pcard{grid-template-columns:1fr}.pcard-right{justify-items:start}.pcard-right .pills{justify-content:flex-start}.pcard-right .nums{text-align:left}.alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr 1fr}.risk-cols{grid-template-columns:1fr}.search{min-width:100%}}
+@media(max-width:720px){.main{padding:16px}.alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr}.upload-form{grid-template-columns:1fr}.upload-form button{grid-column:span 1}.topbar h2{font-size:20px}.gantt-row{grid-template-columns:1fr}.toolbar select{max-width:100%;flex:1}}
+
+
+/* ===== 可读性优化：更大字号与更舒展的间距 ===== */
+body{
+  font-size:15px;
+  line-height:1.65;
+}
+.app{grid-template-columns:260px 1fr}
+.sidebar{padding:26px 18px 22px}
+.brand{margin-bottom:26px}
+.brand h1{font-size:18.5px}
+.eyebrow{font-size:12px}
+.nav button{padding:12px 14px;font-size:14.5px}
+.side-note{font-size:13.25px;line-height:1.75}
+.main{padding:26px 32px 44px}
+.topbar{margin-bottom:20px}
+.topbar h2{font-size:25px}
+.search{height:42px;min-width:320px}
+.search input{font-size:14.5px}
+.primary,.secondary,.ghost{font-size:14px}
+.panel{padding:22px 24px;margin-bottom:16px}
+.panel h3,.section-header h3{font-size:17px}
+.section-header{margin-bottom:16px}
+.muted{font-size:14px}
+.small-note{font-size:13.5px}
+.chip,.pill{font-size:12.75px;padding:5px 11px}
+.kpis{gap:12px;margin:16px 0 6px}
+.kpi{padding:16px 18px}
+.kpi strong{font-size:28px}
+.kpi span{font-size:13.5px}
+.focus-grid{gap:12px}
+.focus-block{padding:15px 16px 12px}
+.focus-block h4{font-size:14.5px}
+.focus-block h4 .count{font-size:12.5px}
+.focus-item{padding:9px 10px}
+.focus-item strong{font-size:14.5px}
+.focus-item small{font-size:13.25px}
+.focus-empty{font-size:13.5px}
+.toolbar{padding:16px 18px;gap:12px}
+.toolbar .field label{font-size:12.75px}
+.toolbar select{height:38px;font-size:14px}
+.toolbar .btn-all,.toolbar .btn-apply,.toolbar .btn-reset{height:38px;font-size:14px}
+.filter-tag{font-size:13px}
+.result-count{font-size:13.5px}
+.project-list{gap:12px}
+.pcard{gap:18px;padding:17px 20px 13px}
+.pcard-left strong{font-size:16.5px}
+.pcard-left .meta{font-size:13.25px}
+.pcard-mid .row{font-size:13.25px}
+.pcard-right .nums{font-size:13px}
+.pcard-hint{font-size:13px;padding-top:10px}
+.progress small{font-size:12.75px}
+.legend span{font-size:13px}
+.alert-cards{gap:12px}
+.alert-card{padding:15px 17px}
+.alert-card span{font-size:13px}
+.alert-card strong{font-size:16.5px}
+.alert-line{font-size:14px;padding:12px 14px}
+.split{gap:16px}
+.info-grid{gap:10px}
+.info-item{padding:11px 13px;font-size:14px}
+.info-item span{font-size:12.25px}
+.info-item b{font-size:14.5px}
+.stage-step{font-size:12.75px;padding:9px}
+.owner-grid{gap:10px}
+.owner-card{padding:14px 15px}
+.owner-card strong{font-size:15px}
+.owner-card span{font-size:13.25px}
+.mini-list{gap:8px}
+.mini-item{font-size:13.75px;padding:11px 13px}
+.mini-item strong{font-size:14.5px}
+.mini-item span{font-size:13.25px}
+.page-select-bar label{font-size:12.75px}
+.page-select-bar select{height:40px;font-size:14.5px}
+.tab{font-size:14.25px;padding:10px 16px 11px}
+.stage-kpis{gap:12px}
+.stage-kpi{padding:14px 16px}
+.stage-kpi strong{font-size:24px}
+.stage-kpi span{font-size:12.75px}
+.gantt-row{font-size:13.75px}
+.gantt-row strong{font-size:13.75px}
+.task-head{font-size:12.75px;padding:10px 16px}
+.task-row{font-size:13.25px;padding:13px 16px}
+.task-row strong{font-size:14.25px}
+.task-row span{font-size:12.75px}
+.qtr-grid{gap:12px}
+.qtr-card{padding:16px 17px}
+.qtr-card strong{font-size:14.5px}
+.qtr-card p{font-size:13.75px}
+.conclusion{font-size:14px;padding:16px 18px}
+.drawing-list{gap:12px}
+.drawing-card{padding:16px 18px}
+.drawing-card .dc-grid{font-size:13.25px}
+.file-grid{gap:12px}
+.file-card{padding:16px 17px}
+.file-card strong{font-size:15px}
+.file-card .fmeta{font-size:13.25px}
+.upload-form{gap:12px}
+.upload-form label{font-size:12.75px}
+.upload-form .check{font-size:13.75px}
+.note-box{font-size:13.25px;padding:13px 15px}
+.risk-cols{gap:12px}
+.risk-col{padding:15px 16px}
+.risk-col h4{font-size:15px}
+.risk-entry{padding:11px 12px}
+.risk-entry strong{font-size:14px}
+.risk-entry small{font-size:13px}
+.drawer{padding:22px 24px}
+.drawer h3{font-size:18px}
+.preview-block h4{font-size:13px}
+.preview-block p{font-size:13.75px}
+.toast{font-size:14px}
+
+@media(max-width:1180px){
+  .app{grid-template-columns:1fr}
+  .sidebar{padding:22px 18px}
+  .main{padding:22px 24px 38px}
+}
+@media(max-width:720px){
+  body{font-size:14.5px}
+  .main{padding:16px}
+  .panel{padding:18px}
+  .topbar h2{font-size:22px}
+  .search{min-width:100%;height:40px}
+  .pcard{padding:16px}
+}
+
+
+
+/* ===== English readability adjustments ===== */
+html{scroll-behavior:smooth}
+body{font-size:15px;line-height:1.65}
+.app{grid-template-columns:280px 1fr}
+.sidebar{padding:28px 20px 24px}
+.brand h1{font-size:19px}
+.nav button{font-size:14.5px;padding:12px 14px}
+.side-note{font-size:13px}
+.main{padding:28px 34px 46px}
+.topbar h2{font-size:27px}
+.search{min-width:350px}
+.panel{padding:23px 25px;margin-bottom:17px}
+.panel h3,.section-header h3{font-size:18px}
+.focus-grid{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:13px}
+.toolbar{gap:12px;padding:16px 18px}
+.toolbar select{min-width:145px;max-width:195px}
+.pcard{grid-template-columns:1.25fr 1fr 1fr;gap:20px;padding:18px 20px 14px}
+.pcard-left strong{font-size:16.5px}
+.pcard-left .meta,.pcard-mid .row,.pcard-hint{font-size:13px}
+.pcard-right .nums{font-size:13px}
+.alert-cards{grid-template-columns:repeat(5,minmax(150px,1fr))}
+.info-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.page-select-bar select{min-width:270px}
+.qtr-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.task-head,.task-row{grid-template-columns:1.65fr .8fr .85fr .8fr 1fr .85fr}
+.task-head,.task-row{gap:14px}
+.file-grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.preview-block p{font-size:14px}
+@media(max-width:1380px){
+  .task-head{display:none}
+  .task-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:1220px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto}
+  .side-note{margin-top:18px}
+  .split{grid-template-columns:1fr}
+  .pcard{grid-template-columns:1fr}
+  .pcard-right{justify-items:start}
+  .pcard-right .pills{justify-content:flex-start}
+  .pcard-right .nums{text-align:left}
+  .alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr 1fr}
+  .risk-cols{grid-template-columns:1fr}
+  .search{min-width:100%}
+}
+@media(max-width:760px){
+  .main{padding:16px}
+  .panel{padding:18px}
+  .alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr}
+  .upload-form{grid-template-columns:1fr}
+  .upload-form button{grid-column:span 1}
+  .topbar h2{font-size:23px}
+  .gantt-row{grid-template-columns:1fr}
+}
+
+
+
+/* ===== Extra-large report readability adjustments ===== */
+body{
+  font-size:16.5px;
+  line-height:1.72;
+}
+.app{grid-template-columns:300px 1fr}
+.sidebar{padding:30px 22px 26px}
+.brand{gap:13px;margin-bottom:29px}
+.mark{width:46px;height:46px;font-size:16px}
+.brand h1{font-size:21px}
+.eyebrow{font-size:13px}
+.nav{gap:4px}
+.nav button{font-size:16px;padding:14px 15px;line-height:1.45}
+.side-note{font-size:14.25px;line-height:1.78;padding:15px 16px}
+.main{padding:30px 38px 50px}
+.topbar{margin-bottom:23px}
+.topbar h2{font-size:30px}
+.search{height:46px;min-width:380px}
+.search input{font-size:16px}
+.primary,.secondary,.ghost{font-size:15.5px}
+.primary{padding:11px 18px}
+.secondary{padding:10px 15px}
+.ghost{padding:9px 13px}
+.panel{padding:26px 28px;margin-bottom:19px}
+.panel h3,.section-header h3{font-size:20px}
+.section-header{margin-bottom:18px}
+.muted{font-size:15.5px;line-height:1.75}
+.small-note{font-size:14.5px}
+.chip,.pill{font-size:14px;padding:6px 12px}
+.kpis{gap:14px;margin:18px 0 8px}
+.kpi{padding:18px 20px}
+.kpi strong{font-size:31px}
+.kpi span{font-size:14.5px}
+.focus-grid{grid-template-columns:repeat(auto-fit,minmax(370px,1fr));gap:14px}
+.focus-block{padding:17px 18px 14px}
+.focus-block h4{font-size:16px}
+.focus-block h4 .count{font-size:14px}
+.focus-item{padding:11px 12px}
+.focus-item strong{font-size:16px}
+.focus-item small{font-size:14.5px;line-height:1.72}
+.focus-empty{font-size:14.5px}
+.toolbar{padding:18px 20px;gap:14px}
+.toolbar .field label{font-size:14px}
+.toolbar select{height:42px;min-width:155px;max-width:215px;font-size:15.5px}
+.toolbar .btn-all,.toolbar .btn-apply,.toolbar .btn-reset{height:42px;font-size:15.5px;padding-left:17px;padding-right:17px}
+.filter-tag{font-size:14.5px}
+.result-count{font-size:15px}
+.project-list{gap:14px}
+.pcard{grid-template-columns:1.28fr 1fr 1fr;gap:22px;padding:20px 22px 16px}
+.pcard-left strong{font-size:18px}
+.pcard-left .meta,.pcard-mid .row,.pcard-hint{font-size:14.5px;line-height:1.75}
+.pcard-right .nums{font-size:14.5px}
+.progress small{font-size:14px}
+.legend span{font-size:14.5px}
+.alert-cards{gap:14px}
+.alert-card{padding:17px 19px}
+.alert-card span{font-size:14px}
+.alert-card strong{font-size:18px}
+.alert-line{font-size:15.5px;padding:14px 16px;line-height:1.72}
+.split{gap:18px}
+.info-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.info-item{padding:13px 15px;font-size:15.5px}
+.info-item span{font-size:13.75px}
+.info-item b{font-size:16px}
+.stage-step{min-width:112px;font-size:14px;padding:11px 10px}
+.owner-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.owner-card{padding:16px 17px}
+.owner-card strong{font-size:16.5px}
+.owner-card span{font-size:14.5px;line-height:1.72}
+.mini-list{gap:10px}
+.mini-item{font-size:15px;padding:13px 15px;line-height:1.7}
+.mini-item strong{font-size:16px}
+.mini-item span{font-size:14.5px}
+.page-select-bar{gap:14px;margin-bottom:15px}
+.page-select-bar label{font-size:14px}
+.page-select-bar select{height:44px;min-width:300px;font-size:16px}
+.tab{font-size:15.5px;padding:11px 17px 12px}
+.stage-kpis{gap:14px}
+.stage-kpi{padding:16px 18px}
+.stage-kpi strong{font-size:27px}
+.stage-kpi span{font-size:14px}
+.gantt-row{grid-template-columns:195px 1fr 165px;gap:14px;font-size:15px}
+.gantt-row strong{font-size:15px}
+.gantt-row small{font-size:14px}
+.task-head{font-size:14px;padding:12px 18px}
+.task-row{font-size:14.5px;padding:15px 18px}
+.task-row strong{font-size:15.75px}
+.task-row span{font-size:14px}
+.qtr-grid{grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:14px}
+.qtr-card{padding:18px 19px}
+.qtr-card strong{font-size:16px}
+.qtr-card p{font-size:15px;line-height:1.75}
+.conclusion{font-size:15.5px;padding:18px 20px}
+.drawing-list{gap:14px}
+.drawing-card{padding:18px 20px}
+.drawing-card .dc-grid{grid-template-columns:repeat(auto-fit,minmax(275px,1fr));font-size:14.5px;line-height:1.75}
+.file-grid{grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:14px}
+.file-card{padding:18px 19px}
+.file-card strong{font-size:16.5px}
+.file-card .fmeta{font-size:14.5px;line-height:1.75}
+.upload-form{gap:14px}
+.upload-form label{font-size:14px}
+.upload-form input,.upload-form select{height:43px;font-size:15px}
+.upload-form .check{font-size:15px;height:43px}
+.note-box{font-size:14.5px;padding:15px 17px;line-height:1.75}
+.risk-cols{gap:14px}
+.risk-col{padding:17px 18px}
+.risk-col h4{font-size:16.5px}
+.risk-entry{padding:13px 14px}
+.risk-entry strong{font-size:15.5px}
+.risk-entry small{font-size:14.25px;line-height:1.7}
+.drawer{width:min(570px,calc(100vw - 24px));padding:25px 27px}
+.drawer h3{font-size:20px}
+.preview-block{padding:14px 16px}
+.preview-block h4{font-size:14.5px}
+.preview-block p{font-size:15px;line-height:1.75}
+.toast{font-size:15.5px}
+
+@media(max-width:1450px){
+  .task-head{display:none}
+  .task-table{border:0;background:transparent;overflow:visible;gap:10px}
+  .task-row{grid-template-columns:1fr 1fr;gap:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+}
+@media(max-width:1260px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto}
+  .side-note{margin-top:20px}
+  .main{padding:24px 28px 42px}
+  .split{grid-template-columns:1fr}
+  .pcard{grid-template-columns:1fr}
+  .pcard-right{justify-items:start}
+  .pcard-right .pills{justify-content:flex-start}
+  .pcard-right .nums{text-align:left}
+  .alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr 1fr}
+  .risk-cols{grid-template-columns:1fr}
+  .search{min-width:100%}
+}
+@media(max-width:780px){
+  body{font-size:15.5px}
+  .main{padding:17px}
+  .panel{padding:20px}
+  .alert-cards,.kpis,.stage-kpis{grid-template-columns:1fr}
+  .upload-form{grid-template-columns:1fr}
+  .upload-form button{grid-column:span 1}
+  .topbar h2{font-size:25px}
+  .gantt-row{grid-template-columns:1fr}
+  .toolbar select{max-width:100%;width:100%}
+  .page-select-bar select{min-width:100%;width:100%}
+}
+
+
+
+/* ===== Compact portfolio landing layout ===== */
+.snapshot-panel{padding-bottom:20px}
+.priority-panel{padding-bottom:22px}
+.compact-header{margin-bottom:14px;align-items:center}
+.compact-kpis{margin:10px 0 8px;gap:12px}
+.compact-kpis .kpi{padding:14px 18px;min-height:86px;display:flex;flex-direction:column;justify-content:center}
+.compact-kpis .kpi strong{font-size:30px}
+.compact-kpis .kpi span{font-size:14px}
+.compact-legend{margin-top:8px;gap:18px}
+.compact-focus-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.compact-focus-grid .focus-block{padding:16px 16px 12px;min-height:0}
+.priority-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.priority-head h4{margin:0;font-size:16.5px}
+.priority-head .count{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:999px;background:var(--grey-bg);font-size:14px;font-weight:700;font-family:var(--mono)}
+.compact-priority-item{display:grid;grid-template-columns:1fr auto;gap:1px 10px;padding:10px 9px;border-top:1px solid var(--line);border-radius:0}
+.compact-priority-item:first-of-type{border-top:0}
+.compact-priority-item:hover{border-radius:8px}
+.compact-priority-item strong{font-size:15.5px;line-height:1.45}
+.compact-priority-item>small{font-size:12.75px;text-align:right;white-space:nowrap}
+.priority-detail{grid-column:1/-1;display:grid;gap:1px;margin-top:3px;font-size:13.5px;line-height:1.55;color:var(--muted)}
+.priority-status{font-weight:600;color:#465a73}
+.priority-action{color:var(--muted)}
+/* Clickable priority overview and category headers */
+.priority-title-button{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  margin:0;
+  padding:2px 0;
+  color:var(--text);
+  font-size:18px;
+  font-weight:700;
+  text-align:left;
+  border-radius:7px;
+}
+.priority-title-button:hover{color:var(--blue)}
+.priority-title-button .arrow{font-size:21px;line-height:1;color:var(--blue)}
+.priority-category-button{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  align-items:center;
+  gap:9px;
+  margin:0 0 8px;
+  padding:2px 0 8px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  color:var(--text);
+}
+.priority-category-button:hover h4,
+.priority-category-button:hover .view-all{color:var(--blue)}
+.priority-category-button h4{margin:0;font-size:16.5px}
+.priority-category-button .count{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:32px;
+  height:30px;
+  padding:0 10px;
+  border-radius:999px;
+  background:var(--grey-bg);
+  font-size:14px;
+  font-weight:700;
+  font-family:var(--mono);
+}
+.priority-category-button .view-all{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.priority-drawer-list{display:grid;gap:10px}
+.priority-drawer-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:5px 12px;
+  padding:13px 14px;
+  border-radius:10px;
+  background:#fbfcfe;
+  border:1px solid var(--line);
+}
+.priority-drawer-item strong{font-size:14.5px}
+.priority-drawer-item .priority-meta{color:var(--muted);font-size:13px;line-height:1.65}
+.priority-drawer-item .priority-reason{grid-column:1/-1;color:#42556e;font-size:13px;line-height:1.65}
+.priority-drawer-item .priority-open{align-self:start}
+.priority-overview-hero{
+  padding:15px 16px;
+  border-radius:10px;
+  background:var(--high-bg);
+  border:1px solid #f2caca;
+  border-left:4px solid var(--high);
+}
+.priority-overview-hero strong{display:block;font-size:15px;margin-bottom:4px}
+.priority-overview-hero p{margin:0;color:#42556e;line-height:1.65;font-size:13.5px}
+.priority-overview-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.priority-overview-count{
+  padding:12px;
+  border-radius:9px;
+  background:#f7fafd;
+  border:1px solid var(--line);
+  text-align:center;
+}
+.priority-overview-count strong{display:block;font-size:22px;font-family:var(--mono)}
+.priority-overview-count span{color:var(--muted);font-size:12.5px}
+
+@media(max-width:1250px){.compact-focus-grid{grid-template-columns:1fr 1fr}.compact-focus-grid .focus-block:last-child{grid-column:1/-1}}
+@media(max-width:760px){
+  .compact-focus-grid{grid-template-columns:1fr}
+  .compact-focus-grid .focus-block:last-child{grid-column:auto}
+  .compact-kpis{grid-template-columns:1fr 1fr}
+  .compact-priority-item{grid-template-columns:1fr}
+  .compact-priority-item>small{text-align:left}
+  .priority-overview-counts{grid-template-columns:1fr}
+  .priority-drawer-item{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body><div style="background:#fff0dc;color:#703400;padding:10px 24px;font:13px system-ui;position:relative;z-index:50">PORTFOLIO DEMO · Anonymized demonstration projects and fictional owners. No live company connection. <a href="../case.html?id=gear">Back to case study ↗</a></div>
+<div style="padding:16px 24px;background:#e8f0dc;color:#263d24;font:14px system-ui"><b>Try this 60-second walkthrough:</b> ① Open a Top 3 priority card. ② Read its risk reason and action owner. ③ Choose APQP Stage Summary in the sidebar — the same project stays selected. ④ Return to Portfolio Overview to try the filters.</div><div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">ZG</div>
+      <div><p class="eyebrow">ZHONGQING GEAR</p><h1>Project Dashboard</h1></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-section="portfolio">Project Portfolio</button>
+      <button class="nav-item" data-section="project">Project Details</button>
+      <button class="nav-item" data-section="qtr">TR/QTR Review</button>
+      <button class="nav-item" data-section="drawing">Drawing Issues</button>
+      <button class="nav-item" data-section="apqp">APQP Overview</button>
+      <button class="nav-item" data-section="risk">Risks and Evidence</button>
+      <button class="nav-item" data-section="files">File Center</button>
+    </nav>
+    <div class="side-note">
+      <strong>How to use this prototype</strong><br/>
+      Review priority items on the portfolio page, then open a project for details.
+      TR/QTR, APQP, drawing-issue, and file views stay linked to the selected project.
+      <span class="mask-note"><span class="redact" aria-hidden="true">████</span> Client codes and specifications are masked for the public portfolio.</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PROJECT EVALUATION · TR/QTR · APQP · PPAP</p>
+        <h2 id="pageTitle">Project Portfolio</h2>
+      </div>
+      <div class="top-actions">
+        <div class="search"><span>⌕</span><input id="searchInput" placeholder="Search by project, ID, or owner..." /></div>
+        <button class="primary" id="openUploadTop">Upload / Update File</button>
+      </div>
+    </header>
+
+    <section id="portfolio" class="section active">
+      <div class="panel snapshot-panel">
+        <div class="section-header compact-header">
+          <div><p class="eyebrow">PORTFOLIO SNAPSHOT</p><h3>Overall project status</h3></div>
+          <span class="small-note">A quick view of the full portfolio</span>
+        </div>
+        <div class="kpis compact-kpis" id="portfolioKpis"></div>
+        <div class="legend compact-legend">
+          <span><i class="dot high"></i>High risk</span>
+          <span><i class="dot mid"></i>Medium risk</span>
+          <span><i class="dot norisk"></i>No clear risk</span>
+          <span><i class="dot done"></i>Completed</span>
+        </div>
+      </div>
+
+      <div class="panel priority-panel">
+        <div class="section-header compact-header">
+          <div>
+            <p class="eyebrow">TODAY'S PRIORITIES</p>
+            <button class="priority-title-button" id="priorityOverviewBtn" type="button">
+              What needs attention today <span class="arrow">›</span>
+            </button>
+          </div>
+          <span class="small-note" id="todayNote"></span>
+        </div>
+        <div class="focus-grid compact-focus-grid" id="focusGrid"></div>
+      </div>
+
+      <div class="panel">
+        <div class="section-header">
+          <div><p class="eyebrow">PROJECT LIST</p><h3>Filter by stage, risk, and time</h3></div>
+          <span class="small-note">Choose filters and select Apply</span>
+        </div>
+        <div class="toolbar">
+          <button class="btn-all" id="btnAllProjects">All Projects</button>
+          <div class="field"><label>Stage</label><select id="fStage">
+            <option>All stages</option><option>Project Evaluation</option><option>TR/QTR Review</option><option>Drawing Review</option>
+            <option>APQP Phase 1</option><option>APQP Phase 2</option><option>APQP Phase 3</option><option>PPAP</option><option>Completed</option>
+          </select></div>
+          <div class="field"><label>Overall risk</label><select id="fRisk">
+            <option>All risk levels</option><option>High Risk</option><option>Medium Risk</option><option>No Clear Risk</option><option>Completed</option>
+          </select></div>
+          <div class="field"><label>Time status</label><select id="fTime">
+            <option>All time statuses</option><option>Overdue</option><option>Due within 3 days</option><option>Due within 7 days</option><option>On schedule</option><option>Completed</option>
+          </select></div>
+          <button class="btn-apply" id="btnApplyFilter">Apply</button>
+          <button class="btn-reset" id="btnResetFilter">Reset</button>
+        </div>
+        <div class="filter-tags" id="filterTags"></div>
+        <div class="result-count" id="resultCount"></div>
+        <div class="project-list" id="projectList" style="margin-top:12px"></div>
+      </div>
+    </section>
+
+    <section id="project" class="section">
+      <div class="panel" id="riskAlertPanel">
+        <div class="section-header">
+          <div><p class="eyebrow">RISK ALERT</p><h3 id="detailTitle"></h3></div>
+          <span id="detailStagePill"></span>
+        </div>
+        <div class="alert-cards" id="alertCards"></div>
+        <div class="alert-lines" id="alertLines"></div>
+      </div>
+
+      <div class="split">
+        <div class="panel">
+          <div class="section-header"><div><p class="eyebrow">PROJECT PROFILE</p><h3>Basic project information</h3></div></div>
+          <div class="info-grid" id="detailInfoGrid"></div>
+          <p class="eyebrow" style="margin-top:16px">LIFECYCLE</p>
+          <div class="stage-line" id="detailStageLine"></div>
+          <div class="progress" style="margin-top:12px"><div class="track"><div class="bar" id="detailBar"></div></div><small id="detailBarLabel"></small></div>
+        </div>
+
+        <div class="panel">
+          <div class="section-header"><div><p class="eyebrow">OWNERS</p><h3>Select a person to review responsibilities</h3></div></div>
+          <div class="owner-grid" id="ownerGrid"></div>
+        </div>
+      </div>
+
+      <div class="split">
+        <div class="panel">
+          <div class="section-header">
+            <div><p class="eyebrow">FILE STATUS</p><h3 id="detailFileTitle">Project files</h3></div>
+            <button class="secondary" id="gotoFiles">Open File Center</button>
+          </div>
+          <div class="mini-list" id="detailFileList"></div>
+        </div>
+
+        <div>
+          <div class="panel">
+            <div class="section-header">
+              <div><p class="eyebrow">OPEN ISSUES</p><h3>Items that still need action</h3></div>
+              <button class="secondary" id="gotoDrawing">Open Drawing Issues</button>
+            </div>
+            <div class="mini-list" id="detailIssueList"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-header">
+              <div><p class="eyebrow">COMPLETION EVIDENCE</p><h3>Archived evidence</h3></div>
+              <button class="secondary" id="gotoUpload">Upload / Update</button>
+            </div>
+            <div class="mini-list" id="detailEvidenceList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qtr" class="section">
+      <div class="panel">
+        <div class="page-select-bar">
+          <div class="field"><label>Select project</label><select id="qtrProjectSelect"></select></div>
+          <div class="proj-chips" id="qtrChips"></div>
+        </div>
+        <div class="section-header">
+          <div><p class="eyebrow">TR/QTR TECHNICAL REVIEW</p><h3 id="qtrTitle"></h3></div>
+          <span class="small-note">The project moves into APQP after the review conclusion is closed</span>
+        </div>
+        <div class="qtr-grid" id="qtrGrid"></div>
+        <div class="conclusion" id="qtrConclusion" style="margin-top:12px"></div>
+      </div>
+    </section>
+
+    <section id="drawing" class="section">
+      <div class="panel">
+        <div class="page-select-bar">
+          <div class="field"><label>Select project</label><select id="drawingProjectSelect"></select></div>
+          <div class="proj-chips" id="drawingChips"></div>
+        </div>
+        <div class="section-header">
+          <div><p class="eyebrow">DRAWING ISSUE CLOSURE</p><h3 id="drawingTitle"></h3></div>
+          <span class="pill high">Open items may block APQP</span>
+        </div>
+        <div class="kpis" id="drawingKpis" style="grid-template-columns:repeat(4,1fr)"></div>
+        <div class="drawing-list" id="drawingIssues"></div>
+      </div>
+    </section>
+
+    <section id="apqp" class="section">
+      <div class="panel">
+        <div class="page-select-bar">
+          <div class="field"><label>Select project</label><select id="apqpProjectSelect"></select></div>
+          <div class="proj-chips" id="apqpChips"></div>
+        </div>
+        <div class="section-header">
+          <div><p class="eyebrow">ADVANCED PRODUCT QUALITY PLANNING</p><h3 id="apqpTitle"></h3></div>
+        </div>
+        <div class="tabs" id="stageTabs"></div>
+        <div class="stage-kpis" id="stageSummary"></div>
+        <p class="eyebrow">PHASE TIMELINE</p>
+        <div class="gantt" id="stageGantt"></div>
+        <p class="eyebrow">DELIVERABLES</p>
+        <div class="task-table" id="stageTable"></div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="panel">
+        <div class="section-header">
+          <div><p class="eyebrow">RISK GROUPING</p><h3>Projects grouped by overall risk</h3></div>
+          <button class="secondary" id="btnRiskRules">View Rules</button>
+        </div>
+        <div class="risk-cols" id="riskCols"></div>
+      </div>
+      <div class="split">
+        <div class="panel">
+          <div class="section-header"><div><p class="eyebrow">DUE SOON</p><h3>Overdue or due within 3 days</h3></div></div>
+          <div class="mini-list" id="riskDueList"></div>
+        </div>
+        <div class="panel">
+          <div class="section-header"><div><p class="eyebrow">RISK ACTION LOG</p><h3>Recent actions</h3></div></div>
+          <div class="mini-list" id="riskLogList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="files" class="section">
+      <div class="panel">
+        <div class="section-header">
+          <div><p class="eyebrow">FILE CENTER</p><h3 id="filesTitle">Project files</h3></div>
+          <span class="small-note">Files may support phase completion and link to risk items</span>
+        </div>
+        <div class="toolbar">
+          <div class="field"><label>Select project</label><select id="fileProjectSelect" style="min-width:220px;max-width:280px"></select></div>
+          <div class="field"><label>File type</label><select id="fileTypeSelect">
+            <option>All files</option><option>TR/QTR Review</option><option>Drawing Response</option><option>Phase 1 Checklist</option>
+            <option>Tooling / Gauge Plan</option><option>Control Plan</option><option>PFMEA</option><option>PPAP Package</option>
+          </select></div>
+          <div class="field"><label>File status</label><select id="fileStatusSelect">
+            <option>All statuses</option><option>Submitted</option><option>Update Required</option><option>Under Review</option>
+            <option>Completion Evidence</option><option>Archived</option>
+          </select></div>
+          <button class="btn-apply" id="btnFileApply">Apply</button>
+          <button class="btn-reset" id="btnFileReset">Reset</button>
+        </div>
+        <div class="result-count" id="fileCount"></div>
+        <div class="file-grid" id="fileGrid" style="margin-top:12px"></div>
+      </div>
+
+      <div class="panel" id="uploadPanel">
+        <div class="section-header"><div><p class="eyebrow">UPLOAD NEW FILE</p><h3>Link the file to a project and phase</h3></div></div>
+        <p class="note-box">This prototype simulates file linking. A production version could connect to an approved internal folder, shared drive, or document platform.</p>
+        <form class="upload-form" id="uploadForm" style="margin-top:12px">
+          <label>Project<select id="upProject"></select></label>
+          <label>File type<select id="upType">
+            <option>TR/QTR Review</option><option>Drawing Response</option><option>Phase 1 Checklist</option>
+            <option>Tooling / Gauge Plan</option><option>Control Plan</option><option>PFMEA</option><option>PPAP Package</option>
+          </select></label>
+          <label>Phase or location<select id="upStage">
+            <option>Project Evaluation / TR</option><option>Drawing Issues</option><option>APQP Phase 1</option>
+            <option>APQP Phase 2</option><option>APQP Phase 3</option><option>PPAP</option>
+          </select></label>
+          <label>Owner<select id="upOwner"></select></label>
+          <label>Version<input id="upVersion" value="V1.0" /></label>
+          <label>Local file<input type="file" id="upFile" /></label>
+          <label class="check" style="align-self:end"><input type="checkbox" id="upEvidence" /> Submit as completion evidence</label>
+          <label>Related risk<select id="upRisk">
+            <option>No linked risk</option><option>Time risk</option><option>Project-condition risk</option><option>Drawing issue</option><option>Customer response</option>
+          </select></label>
+          <button class="primary" type="submit">Submit File</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><h3 id="drawerTitle"></h3><button class="ghost" id="drawerClose">Close ✕</button></div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+function addDays(n){ const d = new Date(TODAY); d.setDate(d.getDate()+n); return d; }
+function fmtDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function parseDate(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
+
+const PM = ['Demo owner 04','Demo owner 05','Demo owner 09','Demo owner 06'];
+const TECH = ['Demo owner 07','Demo owner 10','Demo owner 08'];
+const QA = ['Demo owner 01','Demo owner 02'];
+const TOOL = ['Demo owner 11','Demo owner 03'];
+const CUST = ['Demo owner 12','Demo owner 14','Demo owner 13'];
+
+const STAGES = ['Project Evaluation','TR/QTR Review','Drawing Review','APQP Phase 1','APQP Phase 2','APQP Phase 3','PPAP','Completed'];
+
+const RAW = [
+['Input Shaft Project','Shaft','OEM','A','Drawing Review',42,-2,'High',0,0,0,0,0,'Tighter spline runout tolerance and low Cpk in the current grinding process','Drawing issue DW-03 has no customer response and blocks project launch','Request the written customer response for DW-03 today',1,1,9,3,4],
+['Output Shaft Gear Project','Gear','OEM','A','APQP Phase 2',58,12,'Medium',1,1,1,1,1,'Heat-treatment distortion is close to the limit and needs process validation','The prototype control plan still needs quality approval','Complete approval of the prototype control plan',0,1,11,2,6],
+['Planetary Gear Set Project','Gear','Tier 1 Supplier','A','APQP Phase 1',35,2,'High',2,2,0,0,2,'Matched-set accuracy is demanding and the new gauge has not arrived','The gauge supplier is one week late','Confirm a revised delivery date with the gauge supplier today',0,0,8,2,3],
+['Differential Bevel Gear Project','Bevel Gear','OEM','B','APQP Phase 3',71,18,'Low',3,0,1,1,0,'The process is stable and contact-pattern inspection is consistent','No major blocker','Complete the PFMEA update as planned',0,0,12,1,8],
+['Reducer Gear Set Project','Gear','EV Customer','A','APQP Phase 2',52,6,'Medium',0,1,0,0,1,'The noise target is tighter than the standard product and grinding parameters are still being tuned','NVH test-bench capacity is limited','Reserve an NVH test slot for next week',0,0,10,2,5],
+['Motor Shaft Project','Shaft','EV Customer','B','Drawing Review',30,9,'Medium',1,2,1,1,2,'Dynamic-balance grade {{spec}} requires equipment validation','The customer has not approved the balance inspection method','Send the balance-method confirmation letter',1,0,6,2,2],
+['Helical Gear Production Project','Gear','Tier 1 Supplier','B','PPAP',88,1,'Medium',2,0,0,1,0,'Most PPAP files are complete and the Cpk report needs final review','The third-party material report is still missing','Call the laboratory for the material report today',0,1,14,1,10],
+['Synchronizer Sleeve Project','Sleeve','OEM','A','TR/QTR Review',18,15,'High',3,1,1,0,1,'The reverse-taper forming process has no similar production history and needs a trial','The manufacturing-feasibility conclusion remains open','Hold a process review and close the TR conclusion',0,0,5,3,1],
+['Pump Gear Project','Gear','Industrial Customer','C','Completed',100,-20,'Low',0,2,0,0,2,'Delivered on time and accepted by the customer','None','Archive the complete PPAP package',0,0,15,0,12],
+['Agricultural Gear Project','Gear','Industrial Customer','C','APQP Phase 1',40,25,'Low',1,0,1,1,0,'The product is conventional and the process is mature','No major blocker','Submit the initial process flow as planned',0,0,7,1,3],
+['Intermediate Shaft Project','Shaft','OEM','B','APQP Phase 2',55,-1,'Medium',2,1,0,0,1,'Grinding stock allowance needs to be recalculated','The tooling and gauge plan is overdue','Submit the tooling and gauge plan today',0,1,9,2,4],
+['Spiral Bevel Gear Project','Bevel Gear','Export Customer','A','Drawing Review',28,5,'High',3,2,1,1,2,'The Ra0.4 surface requirement exceeds the current lapping capability','The customer has not answered the proposed alternative','Follow up on the proposed lapping alternative',1,0,6,4,2],
+['Spline Shaft Project','Shaft','Tier 1 Supplier','C','APQP Phase 3',76,20,'Low',0,0,0,1,0,'The forming process is stable and the gauges are validated','No major blocker','Release the work instruction',0,0,11,0,7],
+['Double Gear Project','Gear','OEM','B','APQP Phase 2',48,3,'Medium',1,1,1,0,1,'The phase relationship between two gears is demanding and the fixture is being modified','The modified fixture part arrives this week','Validate locating accuracy after the fixture update',0,0,8,2,4],
+['Internal Ring Gear Project','Ring Gear','EV Customer','A','APQP Phase 1',32,7,'High',2,2,0,1,2,'Thin-wall heat-treatment distortion requires a correction fixture','The correction-fixture concept is not final','Finalize the correction-fixture concept today',0,1,7,3,2],
+['Forged Gear Shaft Project','Shaft','Industrial Customer','C','Project Evaluation',12,22,'Medium',3,0,1,0,0,'Supplier capacity for the forging needs confirmation','The supplier capacity commitment is missing','Request the supplier capacity commitment',0,0,3,1,0],
+['Wind-Turbine Gear Project','Gear','Industrial Customer','A','TR/QTR Review',20,10,'High',0,1,0,0,1,'The large-module grinding operation exceeds the current machine travel and needs outsourcing','An outsourcing source has not been secured','Review external grinding suppliers',0,0,4,2,1],
+['Robot Joint Gear Project','Precision Gear','EV Customer','A','APQP Phase 2',50,2,'High',1,2,1,1,2,'The one-arc-minute backlash target depends on a developing matched-grinding process','The second matched-grinding trial missed the target','Review the second trial data and adjust parameters',0,0,9,3,3],
+['Precision Worm Project','Worm','Industrial Customer','B','APQP Phase 3',68,14,'Low',2,0,0,0,0,'The grinding process is validated and work is on schedule','No major blocker','Complete the measurement-system analysis',0,0,10,1,6],
+['Cycloidal Gear Project','Precision Gear','Tier 1 Supplier','A','PPAP',92,6,'Medium',3,1,1,1,1,'Profile inspection depends on CMM capacity and scheduling is tight','The Part Submission Warrant still needs customer signature','Submit the PSW and follow up on signature',1,0,13,1,9],
+['Commercial Vehicle Gear Project','Gear','OEM','B','APQP Phase 1',38,-4,'Medium',0,2,0,1,0,'The customer moved the SOP date earlier and the plan needs compression','The Phase 1 checklist is overdue','Close the Phase 1 checklist today',0,1,6,2,2],
+['Grinding Process Change Project','Process Change','OEM','B','APQP Phase 3',62,16,'Medium',1,0,1,0,1,'The new worm-wheel grinding parameters need batch validation','The validation lot has not been scheduled','Confirm the validation-lot date with production planning',0,0,8,1,5],
+['High-Speed Gear Project','Gear','EV Customer','A','Drawing Review',25,4,'High',2,1,0,1,2,'The 20,[illustrative specification] balance and profile-modification targets are demanding','The customer has not approved the profile-modification concept','Request customer confirmation of the profile-modification concept',1,0,5,3,1],
+['Export Gear Project','Gear','Export Customer','B','Completed',100,-35,'Low',3,2,1,0,0,'PPAP is complete and approved by the customer','None','Add lessons learned to the knowledge base',0,0,16,0,13],
+['Lightweight Gear Project','Gear','EV Customer','A','TR/QTR Review',15,8,'High',0,0,1,1,0,'The weight-reduction groove needs stiffness simulation and has no production precedent','Simulation results do not meet the customer target','Discuss feasible weight-reduction targets with the customer',1,0,4,2,1],
+['High-Precision Output Shaft Project','Shaft','OEM','A','APQP Phase 2',54,5,'Medium',1,1,0,0,1,'The [illustrative specification] coaxiality target needs two-stage grinding-location validation','The datum-transfer error analysis is incomplete','Complete the datum-transfer error analysis',0,1,8,2,4],
+['EV Prototype Project','Prototype','EV Customer','A','APQP Phase 1',30,-3,'High',2,2,1,1,2,'The customer shortened the prototype lead time by two weeks','The blank supplier is late','Confirm the blank arrival date and update the plan today',0,0,5,2,1],
+['Customer Cost-Reduction Change','Process Change','OEM','B','Drawing Review',35,11,'Medium',3,0,0,0,0,'The material-substitution concept requires new fatigue validation','Fatigue-test capacity is not secured','Reserve a fatigue-test bench',0,0,6,2,2],
+['Heat-Treatment Optimization Project','Process Change','Tier 1 Supplier','C','APQP Phase 3',70,19,'Low',0,1,1,1,1,'The carburizing curve has passed a small-batch trial','No major blocker','Release the updated process control plan',0,0,9,0,6],
+['Gear Noise Improvement Project','Process Change','OEM','A','APQP Phase 2',45,1,'High',1,2,0,0,2,'The target order noise remains above limit and profile modification is still being iterated','The third sample inspection is incomplete','Complete the third sample profile inspection today',0,0,7,3,3],
+['Production Ramp-Up Project','Production','OEM','B','PPAP',85,7,'Medium',2,0,1,1,0,'Equipment OEE is unstable during ramp-up and operator training continues','The Cpk sample size does not meet the PPAP requirement','Collect additional continuous-production Cpk data',0,1,12,1,8],
+['New Customer Prototype Project','Prototype','New Customer','B','Project Evaluation',10,13,'Medium',3,1,0,0,1,'Differences in the new customer standard system still need review','The list of customer-specific requirements has not arrived','Request the customer-specific requirement list',1,0,2,1,0],
+['Tooling Modification Project','Tooling','Tier 1 Supplier','C','APQP Phase 1',44,24,'Low',0,2,1,1,2,'The modification scope is clear and the supplier is selected','No major blocker','Track tooling manufacturing progress',0,0,5,1,2],
+['Gauge Validation Project','Gauge','OEM','C','APQP Phase 2',60,-6,'Medium',1,0,0,0,0,'Gauge repeatability and reproducibility remain high','The GRR retest is overdue and unscheduled','Schedule the GRR retest today',0,1,6,1,3],
+['PPAP Supplemental Submission','Production','OEM','B','PPAP',80,3,'Medium',2,1,1,1,1,'The customer requested added appearance approval and material evidence','The customer has not signed the appearance master sample','Request customer sign-off on the appearance master sample',1,1,10,2,7],
+['Process Capability Improvement','Process Change','Tier 1 Supplier','C','APQP Phase 3',66,21,'Low',3,2,0,0,2,'The plan will raise key-process Cpk from {{spec}} to {{spec}}','No major blocker','Implement tool-life management as planned',0,0,7,0,5]
+];
+
+const projects = RAW.map((r,i) => ({
+  id:'{{client}}-'+String(i+1).padStart(3,'0'),
+  name:r[0], productType:r[1], customerType:r[2], projectLevel:r[3], stage:r[4], progress:r[5],
+  dueDate:fmtDate(addDays(r[6])), dueOffset:r[6], conditionRisk:r[7],
+  projectManager:PM[r[8]], technicalOwner:TECH[r[9]], qualityOwner:QA[r[10]], toolingOwner:TOOL[r[11]], customerOwner:CUST[r[12]],
+  conditionReason:r[13], currentBlocker:r[14], nextAction:r[15],
+  waitCustomer:!!Number(r[16]), pendingFile:!!Number(r[17]),
+  fileCount:r[18], openIssueCount:r[19], evidenceCount:r[20], seed:i
+}));
+const projById = Object.fromEntries(projects.map(p => [p.id,p]));
+
+function stageIdx(stage){ return STAGES.indexOf(stage); }
+function daysUntilDue(p){ if(p.stage==='Completed') return null; return Math.ceil((parseDate(p.dueDate)-TODAY)/86400000); }
+function getTimeStatus(p){
+  if(p.stage==='Completed') return 'Completed';
+  const d=daysUntilDue(p);
+  if(d<0) return 'Overdue';
+  if(d<=3) return 'Due within 3 days';
+  if(d<=7) return 'Due within 7 days';
+  return 'On schedule';
+}
+function calculateTimeRisk(p){
+  if(p.stage==='Completed') return 'Completed';
+  const d=daysUntilDue(p);
+  if(d<=3) return 'High';
+  if(d<=7) return 'Medium';
+  return 'Low';
+}
+function calculateOverallRisk(p){
+  if(p.stage==='Completed') return 'Completed';
+  const t=calculateTimeRisk(p), c=p.conditionRisk;
+  if(t==='High' && (c==='High'||c==='Medium')) return 'High Risk';
+  if(t==='High' && c==='Low') return 'Medium Risk';
+  if(t==='Medium') return 'Medium Risk';
+  if(t==='Low' && (c==='High'||c==='Medium')) return 'Medium Risk';
+  return 'No Clear Risk';
+}
+function riskClass(r){
+  return {'High Risk':'high','Medium Risk':'mid','No Clear Risk':'norisk','Completed':'done','High':'high','Medium':'mid','Low':'norisk','Not Started':'grey'}[r]||'grey';
+}
+function timeClass(t){
+  return {'Overdue':'high','Due within 3 days':'high','Due within 7 days':'mid','On schedule':'norisk','Completed':'done'}[t]||'grey';
+}
+function pill(text,cls){ return '<span class="pill '+cls+'">'+text+'</span>'; }
+function block(h,p){ return '<div class="preview-block"><h4>'+h+'</h4><p>'+p+'</p></div>'; }
+
+const APQP_TABS = ['Phase 1','Phase 2','Phase 3','PPAP'];
+const TAB_TO_STAGE = {'Phase 1':3,'Phase 2':4,'Phase 3':5,'PPAP':6};
+const APQP_TEMPLATES = {
+  'Phase 1':[
+    ['Design and Quality Targets','Define product performance, reliability, and quality targets.'],
+    ['Initial Bill of Materials','Confirm material grade, heat-treatment state, and blank type.'],
+    ['Initial Process Flow','Map the route from raw material to finished part.'],
+    ['Product Assurance Plan','Identify assurance needs created by new technology or processes.'],
+    ['Project Approval and APQP Team','Approve the project and define cross-functional roles.'],
+    ['Phase 1 Checklist','Confirm that Phase 1 outputs are complete and closed.']
+  ],
+  'Phase 2':[
+    ['DFMEA Review Record','Confirm the company input to the customer-led design risk review.'],
+    ['Drawing and Specification Sign-Off','Review dimensions, tolerances, and technical requirements.'],
+    ['Special Characteristics List','Identify and mark product and process special characteristics.'],
+    ['Tooling and Gauge Plan','Define tooling, suppliers, owners, and required dates.'],
+    ['Prototype Control Plan','Define prototype-stage checks and inspection frequency.'],
+    ['Prototype Build and Full Inspection','Build samples and complete the full dimensional report.']
+  ],
+  'Phase 3':[
+    ['Production Process Flow','Freeze the production route and material movement.'],
+    ['PFMEA','Identify process failure modes and assign prevention and detection actions.'],
+    ['Production Control Plan','Convert PFMEA actions into process controls.'],
+    ['Work Instructions','Release instructions for key operations and train operators.'],
+    ['Measurement System Analysis Plan','Complete GRR studies for key gauges.'],
+    ['Packaging and Logistics Plan','Define rust prevention, packaging, and transport protection.']
+  ],
+  'PPAP':[
+    ['Full Dimensional Report','Record all drawing dimensions.'],
+    ['Material and Performance Reports','Complete material, hardness, and metallographic tests.'],
+    ['MSA Report','Submit measurement-system results for key gauges.'],
+    ['Initial Process Capability Study','Complete Cpk studies for special characteristics.'],
+    ['Appearance Approval Report','Approve the appearance master sample where required.'],
+    ['Part Submission Warrant','Compile the PPAP package and obtain customer signature.']
+  ]
+};
+const stageCache={}, qtrCache={}, issueCache={}, fileCache={}, ownerCache={}, logCache={};
+const uploadedRecords=[];
+
+function ownerByRole(p,k){
+  return [p.projectManager+' · Project Manager',p.technicalOwner+' · Technical Owner',p.qualityOwner+' · Quality Owner',p.toolingOwner+' · Tooling Owner',p.customerOwner+' · Customer Interface'][k%5];
+}
+function taskRisk(dueOffset,done){
+  if(done) return 'Completed';
+  if(dueOffset<=3) return 'High Risk';
+  if(dueOffset<=7) return 'Medium Risk';
+  return 'No Clear Risk';
+}
+function apqpFor(id){
+  if(stageCache[id]) return stageCache[id];
+  const p=projById[id], si=stageIdx(p.stage), s=p.seed, data={};
+  APQP_TABS.forEach(tab=>{
+    const gsi=TAB_TO_STAGE[tab], tpl=APQP_TEMPLATES[tab];
+    const doneStage=p.stage==='Completed'||si>gsi;
+    const currentStage=si===gsi;
+    const doneCount=doneStage?tpl.length:(currentStage?Math.max(1,Math.round(p.progress/100*tpl.length)-1):0);
+    const items=tpl.map((t,k)=>{
+      let status='Not Started', progress=0, actual=null, evidence=0, dueOff;
+      if(doneStage||k<doneCount){
+        status='Completed'; progress=100; evidence=1+((s+k)%2); dueOff=-10-k*3-(s%4); actual=fmtDate(addDays(dueOff-((s+k)%3)));
+      } else if(currentStage&&k===doneCount){
+        status='In Progress'; progress=40+((s*7+k*13)%45); dueOff=p.dueOffset-((s+k)%2);
+      } else if(currentStage&&k===doneCount+1){
+        status='Pending Confirmation'; progress=15+((s*11+k*5)%25); dueOff=p.dueOffset+2+(k%3);
+      } else {
+        dueOff=(p.dueOffset+(gsi-si)*14)+4+k*3;
+      }
+      return {
+        name:t[0], purpose:t[1], owner:ownerByRole(p,k+s),
+        planStart:fmtDate(addDays(dueOff-12)), due:fmtDate(addDays(dueOff)), dueOff, actual, status, progress, evidence,
+        risk:taskRisk(dueOff,status==='Completed'),
+        riskReason:status==='Completed'?'Closed with evidence':(currentStage?p.conditionReason:'Scheduled with no additional issue identified'),
+        files:status==='Not Started'?[]:[t[0]+' ('+(status==='Completed'?'V1.2 Archived':'V1.0 Draft')+')'],
+        nextAction:status==='Completed'?'No action. Item closed.':status==='In Progress'?p.nextAction:status==='Pending Confirmation'?'Confirm content and add evidence':'Wait for the prior deliverable'
+      };
+    });
+    data[tab]={timeline:{start:fmtDate(addDays(-20+(gsi-3)*15)),end:fmtDate(addDays(p.dueOffset+(gsi-si)*15+10))},items};
+  });
+  stageCache[id]=data; return data;
+}
+
+const QTR_HEADINGS=['Project Input','Similar Product Experience','Process Concept','Manufacturing Feasibility','Equipment Capability','Capacity Estimate','Quality Control Points','Tooling and Gauge Plan','Development Schedule','Customer Responses','Supplier Commitment'];
+function qtrFor(id){
+  if(qtrCache[id]) return qtrCache[id];
+  const p=projById[id], s=p.seed;
+  const routes=[
+    'Forging → normalizing → rough turning → hobbing → heat treatment → grinding → inspection',
+    'Bar stock → turning → hobbing / shaping → carburizing → grinding → matched inspection',
+    'Forging → turning → milling → heat treatment → lapping → contact-pattern inspection'
+  ];
+  const sections=[
+    [QTR_HEADINGS[0],p.customerType+' '+p.productType+' project, level '+p.projectLevel+', target date '+p.dueDate+'. Customer requirements are coordinated by '+p.customerOwner+'.'],
+    [QTR_HEADINGS[1],['Three similar projects were completed in the last three years and passed PPAP.','The team has production experience with a similar module and accuracy grade.','A related platform product is already in stable production.'][s%3]],
+    [QTR_HEADINGS[2],'Proposed route: '+routes[s%3]+'. '+(p.conditionRisk==='High'?'The key process needs focused validation.':'The main process steps use known methods.')],
+    [QTR_HEADINGS[3],p.conditionRisk==='High'?'Conditional feasibility. Main concern: '+p.conditionReason+'.':'Feasible with attention to: '+p.conditionReason+'.'],
+    [QTR_HEADINGS[4],['Four hobbing machines, three gear grinders, and two CMMs are available.','Six CNC lathes, two shapers, and two worm-wheel grinders support the route.','The forging, machining, and heat-treatment resources are available.'][s%3]],
+    [QTR_HEADINGS[5],'Estimated monthly capacity is '+(8+s%15)+'k parts against demand of '+(5+s%10)+'k parts. '+(s%4===0?'Additional shifts may be required.':'Capacity includes a working margin.')],
+    [QTR_HEADINGS[6],['Profile, lead, and runout are controlled as special characteristics.','Heat-treatment hardness and case depth are monitored by lot.','Matched contact pattern and noise are checked before release.'][s%3]],
+    [QTR_HEADINGS[7],p.toolingOwner+' owns '+(4+s%6)+' tooling and gauge items. '+(s%3===0?'One critical gauge has a delivery risk.':'Items are sourced and scheduled.')],
+    [QTR_HEADINGS[8],'Current stage: '+p.stage+'. Overall progress: '+p.progress+'%. Target date: '+p.dueDate+'.'],
+    [QTR_HEADINGS[9],p.openIssueCount>0?p.openIssueCount+' drawing issues remain open'+(p.waitCustomer?', including an item waiting for customer response.':'. Internal closure is in progress.'):'All drawing issues are closed.'],
+    [QTR_HEADINGS[10],['The blank supplier has submitted a capacity commitment.','The heat-treatment supplier has confirmed its process window.','The purchased-part supplier reports a normal lead time.'][s%3]]
+  ];
+  const conclusion=p.conditionRisk==='High'
+    ?'Conclusion: Conditionally feasible. Close the current blocker before project launch: '+p.currentBlocker+'.'
+    :p.conditionRisk==='Medium'
+      ?'Conclusion: Feasible with continued monitoring of '+p.conditionReason+'.'
+      :'Conclusion: Feasible. Continue to the next stage as planned.';
+  qtrCache[id]={title:p.name+' TR/QTR Technical Review',sections,conclusion};
+  return qtrCache[id];
+}
+
+const ISSUE_TEMPLATES=[
+['Spline major-diameter runout [illustrative specification]','Current fixture repeatability is close to the process limit.','Relax to [illustrative specification] or add a datum-finishing operation.'],
+['Gear-surface roughness Ra0.4','The current grinding process is stable at Ra0.6.','Add lapping or revise the target to Ra0.6.'],
+['Effective case depth 0.8–[illustrative specification]','The process window is narrow and may create lot variation.','Adjust the lower limit to [illustrative specification].'],
+['Unspecified edge break','Assembly and inspection criteria are unclear.','Add a common C0.3 edge-break requirement.'],
+['Foreign-only material grade','Purchasing lead time and cost are high.','Add an approved local equivalent grade.'],
+['Datum scheme inconsistency','Manufacturing and inspection datums create transfer error.','Use the center feature as the common datum.'],
+['Noise limit without a test method','Acceptance criteria cannot be applied consistently.','Provide a test method or accept the company standard.'],
+['Profile modification lacks tolerance','Inspection judgment is unclear.','Add a ±{{spec}} tolerance to the modification target.']
+];
+function issuesFor(id){
+  if(issueCache[id]) return issueCache[id];
+  const p=projById[id], n=Math.min(Math.max(p.openIssueCount,0),4), list=[];
+  for(let k=0;k<n;k++){
+    const t=ISSUE_TEMPLATES[(p.seed+k*3)%ISSUE_TEMPLATES.length];
+    const waiting=p.waitCustomer&&k===0;
+    list.push({
+      code:'DW-0'+(k+1), requirement:t[0], riskReason:t[1], suggestion:t[2],
+      customerReply:waiting?'Customer response is still pending.':'Internal review is in progress.',
+      status:waiting?'Waiting for Customer':'Internal Action',
+      block:p.conditionRisk==='High'&&k===0,
+      owner:waiting?p.customerOwner+' · Customer Interface':ownerByRole(p,k+1),
+      replyDue:fmtDate(addDays(Math.max(-1,p.dueOffset-1+k*2)))
+    });
+  }
+  if(p.stage!=='Completed'){
+    const t=ISSUE_TEMPLATES[(p.seed+5)%ISSUE_TEMPLATES.length];
+    list.push({code:'DW-0'+(n+1),requirement:t[0],riskReason:t[1],suggestion:t[2],customerReply:'Written approval received. Issue closed.',status:'Closed',block:false,owner:ownerByRole(p,2),replyDue:fmtDate(addDays(-8-p.seed%6))});
+  }
+  issueCache[id]=list; return list;
+}
+
+const FILE_TYPES=['TR/QTR Review','Drawing Response','Phase 1 Checklist','Tooling / Gauge Plan','Control Plan','PFMEA','PPAP Package'];
+const FILE_STAGE={'TR/QTR Review':'Project Evaluation / TR','Drawing Response':'Drawing Issues','Phase 1 Checklist':'APQP Phase 1','Tooling / Gauge Plan':'APQP Phase 2','Control Plan':'APQP Phase 3','PFMEA':'APQP Phase 3','PPAP Package':'PPAP'};
+function filesFor(id){
+  if(fileCache[id]) return fileCache[id];
+  const p=projById[id], si=stageIdx(p.stage), list=[], n=Math.min(Math.max(p.fileCount,2),8);
+  for(let k=0;k<n;k++){
+    const type=FILE_TYPES[(p.seed+k)%FILE_TYPES.length];
+    const fsi={'Project Evaluation / TR':1,'Drawing Issues':2,'APQP Phase 1':3,'APQP Phase 2':4,'APQP Phase 3':5,'PPAP':6}[FILE_STAGE[type]];
+    let status;
+    if(p.stage==='Completed') status=k%3===0?'Archived':'Completion Evidence';
+    else if(fsi<si) status=k%2===0?'Completion Evidence':'Archived';
+    else if(fsi===si) status=['Under Review','Submitted','Update Required'][k%3];
+    else status=k%2===0?'Update Required':'Submitted';
+    const ver='V'+(1+(p.seed+k)%2)+'.'+(k%3);
+    list.push({
+      name:p.name.replace(' Project','')+' '+type+' '+ver, projectId:id, type, stage:FILE_STAGE[type], version:ver,
+      uploader:ownerByRole(p,k).split(' · ')[0], updated:fmtDate(addDays(-1-(p.seed+k*4)%20)), status,
+      risk:status==='Update Required'?(p.conditionRisk==='High'?'Linked to high-risk item':'Linked to medium-risk item'):'None',
+      isEvidence:status==='Completion Evidence'||status==='Archived',
+      content:type+' summary for '+p.name+'. '+(status==='Update Required'?'A revision is required after the latest review.':'The document has passed the current internal review step.'),
+      tasks:[FILE_STAGE[type]+' · '+type], versions:['V1.0 Initial submission',ver!=='V1.0'?ver+' Revised after review':null].filter(Boolean),
+      nextAction:status==='Update Required'?'Revise and resubmit':status==='Under Review'?'Wait for quality review':status==='Submitted'?'Continue the review workflow':'No action. File is closed.'
+    });
+  }
+  fileCache[id]=list; return list;
+}
+
+function ownersFor(id){
+  if(ownerCache[id]) return ownerCache[id];
+  const p=projById[id];
+  const roles=[
+    ['Project Manager',p.projectManager,'Coordinate schedule, risk escalation, and customer milestones',p.nextAction],
+    ['Technical Owner',p.technicalOwner,'Own process feasibility, technical responses, and sample validation',p.conditionRisk!=='Low'?'Advance the technical action':'Maintain controlled process documents'],
+    ['Quality Owner',p.qualityOwner,'Own checklists, control plans, MSA, and PPAP quality evidence','Check current evidence completeness'],
+    ['Tooling Owner',p.toolingOwner,'Track tooling, cutting tools, gauges, delivery, and validation','Monitor tooling readiness and GRR'],
+    ['Customer Interface',p.customerOwner,'Coordinate customer communication, responses, and submissions',p.waitCustomer?'Follow up on the open customer response':'Keep customer milestone information current']
+  ];
+  ownerCache[id]=roles.map((r,k)=>({
+    role:r[0],name:r[1],duty:r[2],
+    pending:['Current priority: '+(k===0?p.nextAction:k===1?p.conditionReason:'Support the current project stage')],
+    files:filesFor(id).filter(f=>f.uploader===r[1]).slice(0,3).map(f=>f.name),
+    risks:k<=1&&p.conditionRisk!=='Low'?[p.conditionReason]:['No directly assigned risk'],
+    nextAction:r[3]
+  }));
+  return ownerCache[id];
+}
+function logsFor(id){
+  if(logCache[id]) return logCache[id];
+  const p=projById[id], logs=[];
+  if(p.stage==='Completed'){
+    logs.push({date:fmtDate(addDays(-15-p.seed%10)),owner:p.projectManager,action:'Completed project close-out review',result:'Risks closed and files archived'});
+  } else {
+    logs.push({date:fmtDate(addDays(-1-p.seed%3)),owner:p.projectManager,action:'Reviewed the current project risk',result:'Assigned next action: '+p.nextAction});
+    if(p.waitCustomer) logs.push({date:fmtDate(addDays(-2-p.seed%4)),owner:p.customerOwner,action:'Sent a customer follow-up',result:'Waiting for written response'});
+    if(p.conditionRisk==='High') logs.push({date:fmtDate(addDays(-4-p.seed%5)),owner:p.technicalOwner,action:'Held a focused technical review',result:'Added the action to the phase plan'});
+  }
+  logCache[id]=logs; return logs;
+}
+
+let selectedProject=projects[0].id;
+const PAGE_TITLES={portfolio:'Project Portfolio',project:'Project Details',qtr:'TR/QTR Review',drawing:'Drawing Issues',apqp:'APQP Overview',risk:'Risks and Evidence',files:'File Center'};
+function showSection(key){
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===key));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===key));
+  $('#pageTitle').textContent=PAGE_TITLES[key];
+  if(key==='project') renderDetail();
+  if(key==='qtr'){ $('#qtrProjectSelect').value=selectedProject; renderQtr(); }
+  if(key==='drawing'){ $('#drawingProjectSelect').value=selectedProject; renderDrawing(); }
+  if(key==='apqp'){ $('#apqpProjectSelect').value=selectedProject; renderApqp(); }
+  if(key==='risk') renderRisk();
+  if(key==='files'){ $('#fileProjectSelect').value=selectedProject; $('#upProject').value=selectedProject; renderFiles(); }
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.section)));
+function enterProject(id){ selectedProject=id; showSection('project'); }
+
+function openDrawer(title,html){ $('#drawerTitle').textContent=title; $('#drawerBody').innerHTML=html; $('#drawer').classList.add('open'); $('#overlay').classList.add('show'); }
+function closeDrawer(){ $('#drawer').classList.remove('open'); $('#overlay').classList.remove('show'); }
+$('#drawerClose').addEventListener('click',closeDrawer); $('#overlay').addEventListener('click',closeDrawer);
+let toastTimer;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2400); }
+
+const appliedFilter={stage:'All stages',risk:'All risk levels',time:'All time statuses'};
+let searchKey='';
+function projectMatches(p){
+  if(appliedFilter.stage!=='All stages'&&p.stage!==appliedFilter.stage) return false;
+  if(appliedFilter.risk!=='All risk levels'&&calculateOverallRisk(p)!==appliedFilter.risk) return false;
+  if(appliedFilter.time!=='All time statuses'&&getTimeStatus(p)!==appliedFilter.time) return false;
+  if(searchKey){
+    const hay=[p.name,p.id,p.projectManager,p.technicalOwner,p.qualityOwner,p.toolingOwner,p.customerOwner].join(' ').toLowerCase();
+    if(!hay.includes(searchKey)) return false;
+  }
+  return true;
+}
+function getPriorityGroups(){
+  const urgent=[...projects.filter(p=>['Overdue','Due within 3 days'].includes(getTimeStatus(p)))]
+    .sort((a,b)=>(daysUntilDue(a)??9999)-(daysUntilDue(b)??9999));
+  const high=[...projects.filter(p=>calculateOverallRisk(p)==='High Risk')]
+    .sort((a,b)=>(daysUntilDue(a)??9999)-(daysUntilDue(b)??9999));
+  const waiting=[...projects.filter(p=>(p.waitCustomer||p.pendingFile)&&p.stage!=='Completed')]
+    .sort((a,b)=>(daysUntilDue(a)??9999)-(daysUntilDue(b)??9999));
+
+  return {
+    urgent:{
+      title:'Urgent Deadlines',
+      list:urgent,
+      cls:'high',
+      summary:p=>{
+        const status=getTimeStatus(p);
+        const timing=status==='Overdue' ? Math.abs(daysUntilDue(p))+' days overdue' : 'Due '+p.dueDate;
+        return '<span class="priority-status">'+timing+'</span><span class="priority-action">Action: '+p.nextAction+'</span>';
+      },
+      detail:p=>{
+        const status=getTimeStatus(p);
+        const timing=status==='Overdue' ? Math.abs(daysUntilDue(p))+' days overdue' : 'Due '+p.dueDate;
+        return {meta:timing+' · Owner '+p.projectManager, reason:'Next action: '+p.nextAction};
+      }
+    },
+    high:{
+      title:'High-Risk Projects',
+      list:high,
+      cls:'high',
+      summary:p=>'<span class="priority-status">'+p.stage+' · Owner '+p.projectManager+'</span><span class="priority-action">Reason: '+p.conditionReason+'</span>',
+      detail:p=>({meta:p.stage+' · Owner '+p.projectManager+' · '+getTimeStatus(p), reason:'Risk reason: '+p.conditionReason})
+    },
+    waiting:{
+      title:'Waiting on Input',
+      list:waiting,
+      cls:'mid',
+      summary:p=>{
+        const label=p.waitCustomer?'Customer response':'File update';
+        const owner=p.waitCustomer?p.customerOwner:p.projectManager;
+        return '<span class="priority-status">'+label+' · Owner '+owner+'</span><span class="priority-action">Action: '+p.nextAction+'</span>';
+      },
+      detail:p=>{
+        const label=p.waitCustomer?'Customer response':'File update';
+        const owner=p.waitCustomer?p.customerOwner:p.projectManager;
+        return {meta:label+' · Owner '+owner+' · Target '+p.dueDate, reason:'Next action: '+p.nextAction};
+      }
+    }
+  };
+}
+
+function priorityListHtml(group){
+  if(!group.list.length) return '<div class="focus-empty">No items need attention in this category.</div>';
+  return '<div class="priority-drawer-list">'+group.list.map(p=>{
+    const d=group.detail(p);
+    return '<div class="priority-drawer-item">'+
+      '<div><strong>'+p.name+' · '+p.id+'</strong><div class="priority-meta">'+d.meta+'</div></div>'+
+      '<button class="secondary priority-open" onclick="closeDrawer();enterProject(\''+p.id+'\')">Open Project</button>'+
+      '<div class="priority-reason">'+d.reason+'</div>'+
+      '</div>';
+  }).join('')+'</div>';
+}
+
+function openPriorityCategory(key){
+  const group=getPriorityGroups()[key];
+  openDrawer(group.title+' ('+group.list.length+')',
+    block('What this list shows','All projects in this category, sorted from the most urgent deadline to the least urgent.')+
+    priorityListHtml(group)
+  );
+}
+
+function openPriorityOverview(){
+  const groups=getPriorityGroups();
+  const all=[...groups.urgent.list];
+  const mostUrgent=all[0];
+  const hero=mostUrgent
+    ? '<div class="priority-overview-hero"><strong>Most urgent now: '+mostUrgent.name+' · '+mostUrgent.id+'</strong><p>'+
+      (getTimeStatus(mostUrgent)==='Overdue'
+        ? Math.abs(daysUntilDue(mostUrgent))+' days overdue'
+        : 'Due '+mostUrgent.dueDate)+
+      ' · Owner '+mostUrgent.projectManager+'<br/>Next action: '+mostUrgent.nextAction+
+      '</p><div style="margin-top:10px"><button class="primary" onclick="closeDrawer();enterProject(\''+mostUrgent.id+'\')">Open Most Urgent Project</button></div></div>'
+    : '<div class="priority-overview-hero"><strong>No urgent deadline today</strong><p>There are no overdue projects or projects due within three days.</p></div>';
+
+  const counts='<div class="priority-overview-counts">'+
+    '<button class="priority-overview-count" onclick="openPriorityCategory(\'urgent\')"><strong>'+groups.urgent.list.length+'</strong><span>Urgent deadlines</span></button>'+
+    '<button class="priority-overview-count" onclick="openPriorityCategory(\'high\')"><strong>'+groups.high.list.length+'</strong><span>High-risk projects</span></button>'+
+    '<button class="priority-overview-count" onclick="openPriorityCategory(\'waiting\')"><strong>'+groups.waiting.list.length+'</strong><span>Waiting on input</span></button>'+
+    '</div>';
+
+  openDrawer('Today’s Priority Overview',hero+counts+
+    block('How to use this view','Select a category count to see every project in that group. Each project opens its detailed risk, deadline, owner, files, and next action.'));
+}
+
+function renderFocus(){
+  const groups=getPriorityGroups();
+  $('#todayNote').textContent='Updated '+fmtDate(TODAY)+' · Select a category to view every item';
+
+  $('#focusGrid').innerHTML=Object.entries(groups).map(([key,group])=>
+    '<div class="focus-block '+group.cls+'">'+
+      '<button class="priority-category-button" type="button" onclick="openPriorityCategory(\''+key+'\')">'+
+        '<h4>'+group.title+'</h4><span class="count">'+group.list.length+'</span><span class="view-all">View all ›</span>'+
+      '</button>'+
+      (group.list.length
+        ? group.list.slice(0,3).map(p=>
+          '<div class="focus-item compact-priority-item" onclick="enterProject(\''+p.id+'\')">'+
+            '<strong>'+p.name+'</strong><small>'+p.id+'</small><div class="priority-detail">'+group.summary(p)+'</div>'+
+          '</div>').join('')
+        : '<div class="focus-empty">No items need attention in this category.</div>')+
+    '</div>'
+  ).join('');
+}
+
+$('#priorityOverviewBtn').addEventListener('click',openPriorityOverview);
+
+function renderKpis(){
+  const count=r=>projects.filter(p=>calculateOverallRisk(p)===r).length;
+  $('#portfolioKpis').innerHTML=[['Projects',projects.length],['High Risk',count('High Risk')],['Medium Risk',count('Medium Risk')],['No Clear Risk',count('No Clear Risk')],['Completed',count('Completed')]]
+    .map(([k,v])=>'<div class="kpi"><strong>'+v+'</strong><span>'+k+'</span></div>').join('');
+}
+function renderFilterTags(){
+  const tags=[];
+  if(appliedFilter.stage!=='All stages') tags.push(['stage','Stage = '+appliedFilter.stage]);
+  if(appliedFilter.risk!=='All risk levels') tags.push(['risk','Risk = '+appliedFilter.risk]);
+  if(appliedFilter.time!=='All time statuses') tags.push(['time','Time = '+appliedFilter.time]);
+  $('#filterTags').innerHTML=tags.length?'<span class="small-note">Active filters:</span>'+tags.map(([k,t])=>'<span class="filter-tag">'+t+'<b onclick="removeFilter(\''+k+'\')">✕</b></span>').join(''):'<span class="small-note">No filters are active.</span>';
+}
+function removeFilter(key){
+  if(key==='stage'){ appliedFilter.stage='All stages'; $('#fStage').value='All stages'; }
+  if(key==='risk'){ appliedFilter.risk='All risk levels'; $('#fRisk').value='All risk levels'; }
+  if(key==='time'){ appliedFilter.time='All time statuses'; $('#fTime').value='All time statuses'; }
+  renderPortfolioList();
+}
+function renderPortfolioList(){
+  renderFilterTags();
+  const list=projects.filter(projectMatches);
+  $('#resultCount').textContent='Showing '+list.length+' of '+projects.length+' projects';
+  $('#projectList').innerHTML=list.length?list.map(p=>{
+    const risk=calculateOverallRisk(p), time=getTimeStatus(p), rc=riskClass(risk);
+    return '<div class="pcard b-'+rc+'">'+
+      '<div class="pcard-left"><strong>'+p.name+'</strong><div class="meta">'+p.id+' · '+p.productType+' · '+p.customerType+'<br/>Level '+p.projectLevel+' · '+filesFor(p.id).length+' files · '+p.openIssueCount+' open issues</div></div>'+
+      '<div class="pcard-mid"><div class="row">'+pill(p.stage,'info')+'<span>Project manager: '+p.projectManager+'</span></div><div class="progress"><div class="track"><div class="bar '+rc+'" style="width:'+p.progress+'%"></div></div><small>Overall progress '+p.progress+'%</small></div></div>'+
+      '<div class="pcard-right"><div class="pills">'+pill(risk,rc)+pill(time,timeClass(time))+'</div><div class="nums">Target date '+p.dueDate+'</div><button class="primary" onclick="enterProject(\''+p.id+'\')">Open Project</button></div>'+
+      '<div class="pcard-hint"><span><b>Risk reason:</b> '+p.conditionReason+'</span><span><b>Next action:</b> '+p.nextAction+'</span></div></div>';
+  }).join(''):'<div class="empty-state">No projects match the current filters.</div>';
+}
+function resetFilters(){
+  appliedFilter.stage='All stages'; appliedFilter.risk='All risk levels'; appliedFilter.time='All time statuses';
+  $('#fStage').value='All stages'; $('#fRisk').value='All risk levels'; $('#fTime').value='All time statuses'; renderPortfolioList();
+}
+$('#btnApplyFilter').addEventListener('click',()=>{ appliedFilter.stage=$('#fStage').value; appliedFilter.risk=$('#fRisk').value; appliedFilter.time=$('#fTime').value; renderPortfolioList(); });
+$('#btnResetFilter').addEventListener('click',resetFilters); $('#btnAllProjects').addEventListener('click',resetFilters);
+$('#searchInput').addEventListener('input',e=>{ searchKey=e.target.value.trim().toLowerCase(); renderPortfolioList(); });
+
+function renderDetail(){
+  const p=projById[selectedProject], risk=calculateOverallRisk(p), time=getTimeStatus(p), tRisk=calculateTimeRisk(p), d=daysUntilDue(p);
+  $('#detailTitle').textContent=p.name+' · '+p.id;
+  $('#detailStagePill').innerHTML=pill('Current stage: '+p.stage,'info');
+  $('#alertCards').innerHTML=[
+    ['Overall Risk',risk,riskClass(risk)],['Time Risk',tRisk==='Completed'?'Completed':tRisk+' Risk',riskClass(tRisk)],
+    ['Project Risk',p.conditionRisk+' Risk',riskClass(p.conditionRisk)],['Days Remaining',d===null?'Completed':d<0?Math.abs(d)+' days overdue':d+' days',timeClass(time)],['Target Date',p.dueDate,'info']
+  ].map(([k,v,c])=>'<div class="alert-card"><span>'+k+'</span><strong>'+pill(v,c)+'</strong></div>').join('');
+  $('#alertLines').innerHTML=[
+    '<b>Risk reason:</b> '+p.conditionReason,
+    '<b>Current blocker:</b> '+p.currentBlocker,
+    '<b>Priority action:</b> '+(p.stage==='Completed'?'Maintain the project archive.':p.nextAction),
+    '<b>Core owners:</b> '+p.projectManager+' / '+p.technicalOwner+' / '+p.qualityOwner,
+    '<b>Next step:</b> '+p.nextAction
+  ].map(t=>'<div class="alert-line">'+t+'</div>').join('');
+  $('#detailInfoGrid').innerHTML=[
+    ['Project ID',p.id],['Project Name',p.name],['Customer Type',p.customerType],['Product Type',p.productType],['Project Level',p.projectLevel],
+    ['Current Stage',p.stage],['Project Manager',p.projectManager],['Technical Owner',p.technicalOwner],['Quality Owner',p.qualityOwner],['Tooling Owner',p.toolingOwner],['Customer Interface',p.customerOwner],['Target Date',p.dueDate]
+  ].map(([k,v])=>'<div class="info-item"><span>'+k+'</span><b>'+v+'</b></div>').join('');
+  const si=stageIdx(p.stage);
+  $('#detailStageLine').innerHTML=STAGES.map((s,i)=>'<div class="stage-step '+(i<si?'past':i===si?'now':'')+'">'+s+'</div>').join('');
+  const rc=riskClass(risk); $('#detailBar').className='bar '+rc; $('#detailBar').style.width=p.progress+'%'; $('#detailBarLabel').textContent='Overall progress '+p.progress+'%';
+  $('#ownerGrid').innerHTML=ownersFor(p.id).map((o,i)=>'<div class="owner-card" onclick="openOwnerDrawer('+i+')"><strong>'+o.name+' · '+o.role+'</strong><span>'+o.duty+'</span></div>').join('');
+  $('#detailFileTitle').textContent=p.name+' Files ('+filesFor(p.id).length+')';
+  $('#detailFileList').innerHTML=filesFor(p.id).slice(0,5).map(f=>'<div class="mini-item"><strong>'+f.name+'</strong><span>'+f.stage+' · '+f.uploader+' · '+f.updated+'</span> '+pill(f.status,f.isEvidence?'done':f.status==='Update Required'?'mid':'info')+'</div>').join('');
+  const issues=issuesFor(p.id).filter(i=>i.status!=='Closed');
+  $('#detailIssueList').innerHTML=issues.length?issues.map(i=>'<div class="mini-item"><strong>'+i.code+' · '+i.requirement+'</strong><span>'+i.status+' · '+i.owner+' · Response due '+i.replyDue+'</span></div>').join(''):'<div class="mini-item"><span>No open issues.</span></div>';
+  const evidence=filesFor(p.id).filter(f=>f.isEvidence);
+  $('#detailEvidenceList').innerHTML=evidence.length?evidence.slice(0,5).map(f=>'<div class="mini-item"><strong>'+f.name+'</strong><span>'+f.stage+' · '+f.updated+' · Completion evidence</span></div>').join(''):'<div class="mini-item"><span>No archived completion evidence.</span></div>';
+}
+function openOwnerDrawer(i){
+  const o=ownersFor(selectedProject)[i], p=projById[selectedProject];
+  openDrawer(o.name+' · '+o.role,block('Responsibility',o.duty)+block('Pending Work',o.pending.map(t=>'• '+t).join('<br/>'))+block('Related Files',o.files.length?o.files.map(f=>'• '+f).join('<br/>'):'No uploaded files')+block('Assigned Risk',o.risks.join('<br/>'))+block('Next Action',o.nextAction)+block('Project',p.name+' · '+p.id+' · '+p.stage));
+}
+$('#gotoFiles').addEventListener('click',()=>showSection('files'));
+$('#gotoDrawing').addEventListener('click',()=>showSection('drawing'));
+$('#gotoUpload').addEventListener('click',()=>{ showSection('files'); $('#uploadPanel').scrollIntoView({behavior:'smooth'}); });
+$('#openUploadTop').addEventListener('click',()=>{ showSection('files'); $('#uploadPanel').scrollIntoView({behavior:'smooth'}); });
+
+function projectChips(p){ const r=calculateOverallRisk(p); return pill(p.id,'grey')+pill(p.productType,'info')+pill(p.stage,'info')+pill(r,riskClass(r)); }
+function renderQtr(){
+  const p=projById[$('#qtrProjectSelect').value]; selectedProject=p.id; const q=qtrFor(p.id);
+  $('#qtrTitle').textContent=q.title; $('#qtrChips').innerHTML=projectChips(p);
+  $('#qtrGrid').innerHTML=q.sections.map(([h,t])=>'<div class="qtr-card"><strong>'+h+'</strong><p>'+t+'</p></div>').join('');
+  $('#qtrConclusion').textContent=q.conclusion;
+}
+$('#qtrProjectSelect').addEventListener('change',renderQtr);
+
+function renderDrawing(){
+  const p=projById[$('#drawingProjectSelect').value]; selectedProject=p.id; const list=issuesFor(p.id);
+  $('#drawingTitle').textContent=p.name+' Drawing Issues'; $('#drawingChips').innerHTML=projectChips(p);
+  const open=list.filter(i=>i.status!=='Closed'), wait=list.filter(i=>i.status==='Waiting for Customer'), blocking=list.filter(i=>i.block&&i.status!=='Closed');
+  $('#drawingKpis').innerHTML=[['Total Issues',list.length],['Open',open.length],['Waiting for Customer',wait.length],['Blocking APQP',blocking.length]].map(([k,v])=>'<div class="kpi"><strong>'+v+'</strong><span>'+k+'</span></div>').join('');
+  $('#drawingIssues').innerHTML=list.length?list.map((i,k)=>{
+    const cls=i.status==='Closed'?'norisk':i.block?'high':'mid';
+    return '<div class="drawing-card '+cls+'"><div class="dc-head"><strong>'+i.code+' · '+i.requirement+'</strong><div>'+pill(i.status,i.status==='Closed'?'done':i.status==='Waiting for Customer'?'wait':'info')+' '+pill(i.block&&i.status!=='Closed'?'Blocks APQP':'Does Not Block','grey')+'</div></div>'+
+      '<div class="dc-grid"><span><b>Risk reason:</b> '+i.riskReason+'</span><span><b>Company proposal:</b> '+i.suggestion+'</span><span><b>Customer response:</b> '+i.customerReply+'</span><span><b>Owner:</b> '+i.owner+' · <b>Due:</b> '+i.replyDue+'</span></div>'+
+      '<div style="margin-top:9px"><button class="secondary" onclick="openIssueDrawer('+k+')">View Response</button></div></div>';
+  }).join(''):'<div class="empty-state">No drawing issues are recorded for this project.</div>';
+}
+function openIssueDrawer(k){
+  const p=projById[selectedProject], i=issuesFor(p.id)[k];
+  openDrawer(i.code+' Drawing Issue',block('Original Requirement',i.requirement)+block('Risk Reason',i.riskReason)+block('Company Proposal',i.suggestion)+block('Customer Response',i.customerReply+' · Due '+i.replyDue)+block('Current Status',i.status+(i.block&&i.status!=='Closed'?' · This item blocks APQP launch.':''))+block('Next Action',i.status==='Closed'?'No action. Issue closed.':i.status==='Waiting for Customer'?'Continue follow-up for a written response.':'Complete internal validation and submit the response.'));
+}
+$('#drawingProjectSelect').addEventListener('change',renderDrawing);
+
+let currentTab='Phase 1';
+function defaultTabFor(p){ const si=stageIdx(p.stage); if(si<=3) return 'Phase 1'; if(si===4) return 'Phase 2'; if(si===5) return 'Phase 3'; return 'PPAP'; }
+function renderApqp(){
+  const p=projById[$('#apqpProjectSelect').value]; selectedProject=p.id; currentTab=defaultTabFor(p); renderApqpStage();
+}
+function renderApqpStage(){
+  const p=projById[selectedProject], stage=apqpFor(p.id)[currentTab], items=stage.items;
+  $('#apqpTitle').textContent=p.name+' APQP Overview'; $('#apqpChips').innerHTML=projectChips(p);
+  $('#stageTabs').innerHTML=APQP_TABS.map(t=>'<button class="tab '+(t===currentTab?'active':'')+'" onclick="switchTab(\''+t+'\')">'+(t==='PPAP'?'PPAP':'APQP '+t)+'</button>').join('');
+  const done=items.filter(i=>i.status==='Completed').length, doing=items.filter(i=>i.status==='In Progress').length, pending=items.filter(i=>i.status==='Pending Confirmation').length, risk=items.filter(i=>i.risk==='High Risk'||i.risk==='Medium Risk').length;
+  $('#stageSummary').innerHTML=[['Completion',Math.round(done/items.length*100)+'%'],['Deliverables',items.length],['In Progress',doing],['Pending',pending],['Risk Items',risk]].map(([k,v])=>'<div class="stage-kpi"><strong>'+v+'</strong><span>'+k+'</span></div>').join('');
+  $('#stageGantt').innerHTML='<div class="gantt-row"><strong>'+currentTab+'</strong><div class="track"><div class="bar '+(done===items.length?'done':riskClass(calculateOverallRisk(p)))+'" style="width:'+Math.round(done/items.length*100)+'%"></div></div><small>'+stage.timeline.start+' → '+stage.timeline.end+'</small></div>';
+  $('#stageTable').innerHTML='<div class="task-head"><span>Deliverable</span><span>Owner</span><span>Due</span><span>Status</span><span>Progress / Risk</span><span>Action</span></div>'+
+    items.map((it,k)=>{
+      const sc={'Completed':'done','In Progress':'info','Pending Confirmation':'wait','Not Started':'grey'}[it.status];
+      return '<div class="task-row"><div><strong>'+it.name+'</strong><span>'+it.purpose+'</span></div><span>'+it.owner.split(' ·')[0]+'</span><span>'+it.due+'</span><span>'+pill(it.status,sc)+'</span><div class="progress"><div class="track"><div class="bar '+riskClass(it.risk)+'" style="width:'+it.progress+'%"></div></div><small>'+it.progress+'% · '+it.risk+'</small></div><button class="secondary" onclick="openTaskDrawer('+k+')">View</button></div>';
+    }).join('');
+}
+function switchTab(t){ currentTab=t; renderApqpStage(); }
+function openTaskDrawer(k){
+  const it=apqpFor(selectedProject)[currentTab].items[k];
+  openDrawer(it.name,block('Purpose',it.purpose)+block('Owner',it.owner)+block('Schedule','Plan start '+it.planStart+' · Due '+it.due+' · Actual '+(it.actual||'Not completed'))+block('Status',it.status+' · '+it.progress+'% complete')+block('Risk Reason',it.riskReason)+block('Completion Evidence',it.evidence?it.evidence+' evidence item(s) archived':'No evidence archived')+block('Related Files',it.files.length?it.files.join('<br/>'):'No related file')+block('Next Action',it.nextAction));
+}
+$('#apqpProjectSelect').addEventListener('change',renderApqp);
+
+function renderRisk(){
+  const groups=[['High Risk Projects','High Risk','high'],['Medium Risk Projects','Medium Risk','mid'],['No Clear Risk Projects','No Clear Risk','norisk']];
+  $('#riskCols').innerHTML=groups.map(([title,key,cls])=>{
+    const list=projects.filter(p=>calculateOverallRisk(p)===key);
+    return '<div class="risk-col '+cls+'"><h4>'+title+' ('+list.length+')</h4>'+(list.length?list.map(p=>'<div class="risk-entry"><strong>'+p.name+' · '+p.id+'</strong><small>Owner '+p.projectManager+' · Due '+p.dueDate+'</small><small>'+p.conditionReason+'</small><div class="re-foot">'+pill(getTimeStatus(p),timeClass(getTimeStatus(p)))+'<button class="secondary" onclick="enterProject(\''+p.id+'\')">Open</button></div></div>').join(''):'<small class="focus-empty">No projects</small>')+'</div>';
+  }).join('');
+  const due=projects.filter(p=>['Overdue','Due within 3 days'].includes(getTimeStatus(p)));
+  $('#riskDueList').innerHTML=due.length?due.map(p=>'<div class="mini-item"><strong>'+p.name+' · '+p.id+'</strong><span>'+getTimeStatus(p)+' · '+p.projectManager+' · Due '+p.dueDate+'<br/>Next: '+p.nextAction+'</span><div style="margin-top:7px">'+pill(getTimeStatus(p),timeClass(getTimeStatus(p)))+' <button class="ghost" onclick="enterProject(\''+p.id+'\')">Open</button></div></div>').join(''):'<div class="mini-item"><span>No overdue or near-due projects.</span></div>';
+  const logs=[]; projects.forEach(p=>logsFor(p.id).forEach(l=>logs.push({...l,pname:p.name,pid:p.id}))); logs.sort((a,b)=>b.date.localeCompare(a.date));
+  $('#riskLogList').innerHTML=logs.slice(0,10).map(l=>'<div class="mini-item"><strong>'+l.date+' · '+l.pname+'</strong><span>'+l.owner+' · '+l.action+'<br/>Result: '+l.result+'</span><div style="margin-top:7px"><button class="ghost" onclick="enterProject(\''+l.pid+'\')">Open</button></div></div>').join('');
+}
+$('#btnRiskRules').addEventListener('click',()=>openDrawer('Overall Risk Rules',
+  block('Calculation','Overall risk combines time risk and project-condition risk. The prototype applies the rule automatically.')+
+  block('Time Risk','Overdue or due within 3 days = High. Due within 7 days = Medium. More than 7 days = Low.')+
+  block('Project-Condition Risk','The project team assigns High, Medium, or Low based on technical, customer, tooling, quality, and delivery conditions.')+
+  block('Combined Rule','High time risk plus High or Medium project risk = High Risk. High time risk plus Low project risk = Medium Risk. Medium time risk = Medium Risk. Low time risk plus High or Medium project risk = Medium Risk. Low plus Low = No Clear Risk.')+
+  block('Example','A technically difficult project with 20 days remaining appears as Medium Risk. It becomes High Risk when the schedule also enters the high-risk range.')
+));
+
+const fileFilter={type:'All files',status:'All statuses'};
+function renderFiles(){
+  const p=projById[$('#fileProjectSelect').value]; selectedProject=p.id; $('#filesTitle').textContent=p.name+' · File Center';
+  let list=filesFor(p.id);
+  if(fileFilter.type!=='All files') list=list.filter(f=>f.type===fileFilter.type);
+  if(fileFilter.status!=='All statuses') list=list.filter(f=>f.status===fileFilter.status);
+  $('#fileCount').textContent='Showing '+list.length+' of '+filesFor(p.id).length+' files';
+  $('#fileGrid').innerHTML=list.length?list.map(f=>'<div class="file-card"><strong>'+f.name+'</strong><div class="fmeta">'+f.projectId+' · '+f.stage+' · '+f.version+'<br/>Uploaded by '+f.uploader+' · Updated '+f.updated+'</div><div>'+pill(f.status,f.isEvidence?'done':f.status==='Update Required'?'mid':f.status==='Under Review'?'wait':'info')+(f.risk!=='None'?' '+pill(f.risk,f.risk.includes('high')?'high':'mid'):'')+(f.isEvidence?' '+pill('Completion Evidence','done'):'')+'</div><div class="fbtns"><button class="secondary" onclick="openFileDrawer(\''+f.projectId+'\','+filesFor(p.id).indexOf(f)+')">Preview</button><button class="ghost" onclick="toast(\'Source file opened: '+f.name.replace(/'/g,'')+'\')">Open Source</button><button class="ghost" onclick="toast(\'Use the upload section to submit a new version\')">Replace Version</button></div></div>').join(''):'<div class="empty-state">No files match the current filters.</div>';
+}
+function openFileDrawer(pid,k){ const f=filesFor(pid)[k]; openDrawer(f.name,block('Key Content',f.content)+block('Related Task',f.tasks.join('<br/>'))+block('Owner',f.uploader)+block('Status',f.status)+block('Related Risk',f.risk)+block('Completion Evidence',f.isEvidence?'This file supports phase completion.':'This file is not marked as completion evidence.')+block('Version History',f.versions.join('<br/>'))+block('Next Action',f.nextAction)); }
+$('#btnFileApply').addEventListener('click',()=>{ fileFilter.type=$('#fileTypeSelect').value; fileFilter.status=$('#fileStatusSelect').value; renderFiles(); });
+$('#btnFileReset').addEventListener('click',()=>{ fileFilter.type='All files'; fileFilter.status='All statuses'; $('#fileTypeSelect').value='All files'; $('#fileStatusSelect').value='All statuses'; renderFiles(); });
+$('#fileProjectSelect').addEventListener('change',()=>{ $('#upProject').value=$('#fileProjectSelect').value; renderFiles(); });
+$('#uploadForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const pid=$('#upProject').value,p=projById[pid],type=$('#upType').value,stage=$('#upStage').value,owner=$('#upOwner').value,ver=$('#upVersion').value||'V1.0',asEvidence=$('#upEvidence').checked,riskLink=$('#upRisk').value,fileInput=$('#upFile');
+  const localName=fileInput.files.length?fileInput.files[0].name:p.name.replace(' Project','')+' '+type+' '+ver;
+  const record={name:localName,projectId:pid,type,stage,version:ver,uploader:owner.split(' ·')[0],updated:fmtDate(TODAY),status:asEvidence?'Under Review':'Submitted',risk:riskLink==='No linked risk'?'None':'Linked: '+riskLink,isEvidence:false,content:'New '+type+' upload linked to '+stage+'.',tasks:[stage+' · '+type],versions:[ver+' uploaded '+fmtDate(TODAY)],nextAction:asEvidence?'Wait for quality review':'Continue the review workflow'};
+  filesFor(pid).unshift(record); uploadedRecords.push(record); p.fileCount+=1; $('#fileProjectSelect').value=pid; renderFiles(); toast('File linked to the selected project'); e.target.reset(); $('#upProject').value=pid; $('#upVersion').value='V1.0';
+});
+
+function fillProjectSelects(){
+  const opts=projects.map(p=>'<option value="'+p.id+'">'+p.name+' · '+p.id+'</option>').join('');
+  ['qtrProjectSelect','drawingProjectSelect','apqpProjectSelect','fileProjectSelect','upProject'].forEach(id=>$('#'+id).innerHTML=opts);
+  const owners=new Set(); projects.forEach(p=>{ owners.add(p.projectManager+' · Project Manager'); owners.add(p.technicalOwner+' · Technical Owner'); owners.add(p.qualityOwner+' · Quality Owner'); owners.add(p.toolingOwner+' · Tooling Owner'); owners.add(p.customerOwner+' · Customer Interface'); });
+  $('#upOwner').innerHTML=[...owners].map(o=>'<option>'+o+'</option>').join('');
+}
+fillProjectSelects(); renderFocus(); renderKpis(); renderPortfolioList();
+</script>
+<style>
+.redact{display:inline-block;vertical-align:-2px;line-height:1.15;padding:0 3px;border-radius:3px;color:transparent;user-select:none;letter-spacing:-1px;background:repeating-linear-gradient(90deg,#26364c 0 4px,#3c5069 4px 8px);font-family:var(--mono);font-size:.9em}
+.sidebar .redact{background:repeating-linear-gradient(90deg,#5d7391 0 4px,#7c92b0 4px 8px)}
+.mask-note{display:block;margin-top:10px;font-size:11.5px;color:#8ea3bd}
+.ll-back{position:sticky;top:0;z-index:60;display:flex;justify-content:space-between;align-items:center;gap:16px;height:44px;padding:0 24px;background:#111214;color:#d7dbe1;font:11px ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+.ll-back a{color:inherit;text-decoration:none}.ll-back a:hover{color:#ff5b1f}
+</style>
+<script>
+// Public-portfolio masking: confidential values were removed from the data and
+// replaced with {{tokens}}; render each token as a visible redaction block.
+(() => {
+  const SIZES = {client: '█████', spec: '████'};
+  const LABELS = {client: 'Client code masked', spec: 'Specification masked'};
+  const TOKEN = /\{\{(client|spec)\}\}/;
+  function mask(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: n => TOKEN.test(n.nodeValue) && !n.parentElement.closest('script,style,textarea') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT});
+    const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      node.nodeValue.split(/(\{\{(?:client|spec)\}\})/).forEach(part => {
+        const m = part.match(TOKEN);
+        if (!m) { if (part) frag.append(part); return; }
+        const span = document.createElement('span');
+        span.className = 'redact'; span.textContent = SIZES[m[1]]; span.title = LABELS[m[1]];
+        span.setAttribute('role', 'img'); span.setAttribute('aria-label', LABELS[m[1]]);
+        frag.append(span);
+      });
+      node.replaceWith(frag);
+    });
+    root.querySelectorAll && root.querySelectorAll('option,input').forEach(el => {
+      if (el.tagName === 'OPTION' && TOKEN.test(el.textContent)) el.textContent = el.textContent.replace(/\{\{client\}\}/g, '•••').replace(/\{\{spec\}\}/g, '••');
+      if (el.tagName === 'INPUT' && TOKEN.test(el.value)) el.value = el.value.replace(/\{\{(client|spec)\}\}/g, '•••');
+    });
+  }
+  mask(document.body);
+  new MutationObserver(() => mask(document.body)).observe(document.body, {childList: true, subtree: true, characterData: true});
+  // Opened directly (not inside the portfolio's theater or iframe): offer a way back.
+  if (window.top === window) {
+    const bar = document.createElement('div');
+    bar.className = 'll-back';
+    bar.innerHTML = '<a href="../case.html?id=gear">← Back to the Zhongqing Gear case study</a><span>Lucia Liao · Working prototype</span>';
+    document.body.prepend(bar);
+  }
+})();
+</script>
+</body>
+</html>

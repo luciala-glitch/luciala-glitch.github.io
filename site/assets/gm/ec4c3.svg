@@ -1,0 +1,25 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/phone-filled" clip-path="url(#clip0_0_163)">
+<g id="Vector">
+</g>
+<g id="Vector_2" filter="url(#filter0_d_0_163)">
+<path d="M55 5H25C23.0109 5 21.1032 5.79018 19.6967 7.1967C18.2902 8.60322 17.5 10.5109 17.5 12.5V67.5C17.5 69.4891 18.2902 71.3968 19.6967 72.8033C21.1032 74.2098 23.0109 75 25 75H55C56.9891 75 58.8968 74.2098 60.3033 72.8033C61.7098 71.3968 62.5 69.4891 62.5 67.5V12.5C62.5 10.5109 61.7098 8.60322 60.3033 7.1967C58.8968 5.79018 56.9891 5 55 5ZM25 10H55C55.663 10 56.2989 10.2634 56.7678 10.7322C57.2366 11.2011 57.5 11.837 57.5 12.5V15H22.5V12.5C22.5 11.837 22.7634 11.2011 23.2322 10.7322C23.7011 10.2634 24.337 10 25 10ZM55 70H25C24.337 70 23.7011 69.7366 23.2322 69.2678C22.7634 68.7989 22.5 68.163 22.5 67.5V65H57.5V67.5C57.5 68.163 57.2366 68.7989 56.7678 69.2678C56.2989 69.7366 55.663 70 55 70Z" fill="#9CA3AF"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_163" x="2.1" y="-8.4" width="81.8" height="106.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="9" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_0_163"/>
+<feOffset dx="3" dy="5"/>
+<feGaussianBlur stdDeviation="4.7"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.52 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_163"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_163" result="shape"/>
+</filter>
+<clipPath id="clip0_0_163">
+<rect width="80" height="80" fill="white"/>
+</clipPath>
+</defs>
+</svg>

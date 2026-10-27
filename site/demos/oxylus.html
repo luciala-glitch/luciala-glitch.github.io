@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="Oxylus experiment explorer — a public, fully synthetic adaptation by Lucia Liao.">
+  <title>Oxylus Experiment Explorer — Synthetic Public Edition</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111214'/%3E%3Ctext x='4' y='23' font-family='Arial' font-weight='700' font-size='18' fill='%23c9ff61'%3EOX%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="oxylus.css?v=4">
+</head>
+<body>
+  <header class="ox-nav">
+    <a href="../case.html?id=oxylus">← Case study</a>
+    <span>Lucia Liao · Oxylus Energy · Public edition</span>
+    <a href="#explorer">Skip to explorer ↓</a>
+  </header>
+
+  <main>
+    <section class="ox-intro">
+      <p class="ox-kicker">OXYLUS ENERGY / CO₂ ELECTROLYSIS TEST REVIEW / 2026</p>
+      <h1>Which signal<br>moved <em>first?</em></h1>
+      <div class="ox-intro-bottom">
+        <p>An explorer for long-running electrolysis experiments. Survey hundreds of runs, open one, zoom into its telemetry, and compare what changed before the outcome.</p>
+        <div class="ox-safety mono">
+          <b>SYNTHETIC PUBLIC EDITION</b>
+          <span>Runs, lots, and stands are fictional, and every signal is a normalized index. The failure criteria are applied internally and not shown. This build has no company code, raw data, or live connection.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="explorer" class="ox-shell" aria-label="Synthetic experiment explorer">
+      <div class="ox-toolbar">
+        <div class="ox-seg" role="radiogroup" aria-label="Dataset">
+          <button role="radio" aria-checked="true" data-dataset="A">Formulation A <small>180 runs</small></button>
+          <button role="radio" aria-checked="false" data-dataset="B">Formulation B <small>150 runs</small></button>
+        </div>
+        <label class="ox-select mono">STAND
+          <select id="stand"><option value="all">All stands</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+        </label>
+        <button id="export" class="ox-ghost" type="button">Export visible runs (.csv)</button>
+      </div>
+
+      <div class="ox-kpis" id="kpis"></div>
+
+      <div class="ox-grid-2">
+        <section class="ox-panel" aria-labelledby="matrix-title">
+          <div class="ox-panel-head"><div><p class="ox-label">01 / RUN DIRECTORY</p><h2 id="matrix-title">Every run, one glance.</h2></div><span class="mono ox-dim" id="matrix-count"></span></div>
+          <div class="ox-legend" id="legend" aria-label="Filter by outcome"></div>
+          <div class="ox-matrix" id="matrix" role="listbox" aria-label="Runs"></div>
+          <p class="ox-hint">Click a square to open a run. Toggle outcome categories above to filter the whole explorer.</p>
+        </section>
+
+        <section class="ox-panel ox-space" aria-labelledby="space-title">
+          <div class="ox-panel-head"><div><p class="ox-label">02 / RUN SPACE · 3D</p><h2 id="space-title">Duration × first event × gap.</h2></div><button class="ox-ghost small" id="spin" aria-pressed="true">Auto-rotate on</button></div>
+          <canvas id="space" aria-label="Rotatable 3D scatter of synthetic runs" role="img"></canvas>
+          <p class="ox-hint">Drag to rotate · click a point to open that run. Hollow points never reached an outcome.</p>
+        </section>
+      </div>
+
+      <section class="ox-panel ox-run" aria-labelledby="run-title">
+        <div class="ox-panel-head">
+          <div><p class="ox-label">03 / TELEMETRY</p><h2 id="run-title">Run</h2></div>
+          <div class="ox-run-actions">
+            <button class="ox-ghost small" id="prev-run" aria-label="Previous run">←</button>
+            <button class="ox-ghost small" id="next-run" aria-label="Next run">→</button>
+            <button class="ox-ghost small" id="jump">Jump to first breach</button>
+            <button class="ox-ghost small" id="reset-zoom">Reset zoom</button>
+          </div>
+        </div>
+        <div class="ox-alert" id="alert" role="status"></div>
+        <div class="ox-chart-wrap"><canvas id="series" aria-label="Normalized telemetry chart for the selected run" role="img"></canvas><div class="ox-readout mono" id="readout"></div></div>
+        <div class="ox-series-legend mono"><span><i style="background:var(--v)"></i>Voltage index</span><span><i style="background:var(--e)"></i>Efficiency index</span><span><i class="tri"></i>Signal events</span><span><i class="shade"></i>After first breach</span><span class="ox-dim">Drag across the chart to zoom</span></div>
+        <div class="ox-meta" id="meta"></div>
+      </section>
+
+      <section class="ox-panel" aria-labelledby="mile-title">
+        <div class="ox-panel-head"><div><p class="ox-label">04 / MILESTONE SCRUBBER</p><h2 id="mile-title">Walk the run hour by hour.</h2></div><output class="ox-hour mono" id="scrub-out">0 h</output></div>
+        <input type="range" id="scrub" min="0" max="100" step="0.1" value="0" aria-label="Elapsed hours">
+        <div class="ox-miles" id="miles"></div>
+      </section>
+
+      <div class="ox-grid-2">
+        <section class="ox-panel" aria-labelledby="seq-title">
+          <div class="ox-panel-head"><div><p class="ox-label">05 / EVENT SEQUENCE</p><h2 id="seq-title">Order, then outcome.</h2></div></div>
+          <svg id="lanes" viewBox="0 0 640 230" role="img" aria-label="Event order for the selected run"></svg>
+          <div class="ox-gap"><strong id="gap">—</strong><p id="gap-copy"></p></div>
+        </section>
+        <section class="ox-panel" aria-labelledby="agg-title">
+          <div class="ox-panel-head"><div><p class="ox-label">06 / ACROSS VISIBLE RUNS</p><h2 id="agg-title">Patterns, not proof.</h2></div></div>
+          <div class="ox-bars" id="first-bars"></div>
+          <p class="ox-label" style="margin-top:26px">GAP FROM FIRST EVENT TO OUTCOME</p>
+          <svg id="hist" viewBox="0 0 640 170" role="img" aria-label="Histogram of gaps between first event and outcome"></svg>
+        </section>
+      </div>
+
+      <section class="ox-panel" aria-labelledby="near-title">
+        <div class="ox-panel-head"><div><p class="ox-label">07 / AVERAGE CHANGE NEAR FIRST EVENT</p><h2 id="near-title">What moves around the moment.</h2></div><span class="mono ox-dim" id="near-n"></span></div>
+        <div class="ox-near" id="near"></div>
+        <p class="ox-hint">Mean change from each run's pre-event level, ±24 h around its first signal event. A shared shift tells you where to look first. It does not show cause.</p>
+      </section>
+    </section>
+
+    <section class="ox-foot">
+      <p class="ox-label">ABOUT THIS BUILD</p>
+      <p>This public interface was written fresh for the portfolio. It takes the structure of the team's experiment dashboard (dataset review, telemetry zoom, milestone checks, event-order analysis) and runs it on generated data. Operational failure criteria, company datasets, source code, credentials, and infrastructure are excluded. Event order does not establish causation, and faster review is a design goal, not a measured outcome.</p>
+      <a href="../case.html?id=oxylus">Back to the Oxylus case study ↗</a>
+    </section>
+  </main>
+  <div class="ox-tip mono" id="tip" hidden></div>
+  <script src="oxylus.js?v=2"></script>
+</body>
+</html>
