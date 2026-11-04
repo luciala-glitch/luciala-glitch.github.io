@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Lucia Liao — UX researcher, product designer, and front-end prototyper turning complex evidence into usable interfaces.">
-  <meta name="theme-color" content="#f3f0e8">
+  <meta name="theme-color" content="#090b0e">
   <title>Lucia Liao — UX research and product design</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151512'/%3E%3Ctext x='5' y='23' font-family='Arial' font-weight='700' font-size='18' fill='%23f3f0e8'%3ELL%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="polish.css?v=3">
   <link rel="stylesheet" href="instrument.css?v=7">
   <link rel="stylesheet" href="restraint.css?v=7">
+  <link rel="stylesheet" href="depth.css?v=1">
 </head>
 <body class="portfolio-home">
   <a class="skip" href="#work">Skip to work</a>
@@ -33,21 +34,29 @@
 
   <main>
     <section class="portfolio-hero" data-scene="00 — OPENING">
+      <div class="hero-atmosphere" aria-hidden="true"><i></i><i></i><span>01—05</span></div>
       <div class="hero-left">
         <div class="hero-meta"><span><i class="live-dot"></i> Open to full-time roles · 2027</span><span>Ann Arbor, Michigan</span></div>
         <p class="eyebrow">UX research · product design · prototyping</p>
         <h1>Lucia Liao</h1>
-        <p class="hero-intro">I’m a UX researcher and product designer finishing my MS in Design Science at the University of Michigan. I study how people make decisions, design the interface around them, and build working prototypes.</p>
+        <p class="hero-intro">I turn complex evidence into interfaces people can understand, test, and act on.</p>
         <div class="hero-actions">
           <a class="button dark" href="#highlights">See the projects <span>↓</span></a>
           <a class="text-link" href="mailto:luciala@umich.edu">luciala@umich.edu</a>
         </div>
       </div>
-      <figure class="hero-shot">
-        <img src="assets/hero-cockpit.webp" alt="Silverado concept: instrument cluster in Tow Mode and center display showing trailer status" width="1800" height="1110" fetchpriority="high">
-        <figcaption><span>Silverado RST · towing concept · Figma, 2026</span><span>With Ashita Nichanametla</span></figcaption>
-      </figure>
-      <div class="hero-foot"><span>MS Design Science · University of Michigan</span><span>Scroll ↓</span></div>
+      <div class="evidence-stage" aria-label="Five featured projects arranged as an interactive spatial composition">
+        <a class="artifact artifact-gear" href="case.html?id=gear" aria-label="Open Zhongqing Gear case study"><img src="assets/hl/gear-portfolio.webp" alt="Zhongqing Gear dashboard prototype"><span>03 · Enterprise UX</span></a>
+        <a class="artifact artifact-xray" href="case.html?id=northern" aria-label="Open Northern measurement research case study"><img src="assets/p19-0.webp" alt="Annotated dental X-ray measurement"><span>04 · Measurement research</span></a>
+        <a class="artifact artifact-cockpit" href="case.html?id=silverado" aria-label="Open Silverado automotive HMI case study"><img src="assets/hero-cockpit.webp" alt="Silverado instrument cluster and center display concept" fetchpriority="high"><span>01 · Automotive HMI <b>with Ashita Nichanametla</b></span></a>
+        <a class="artifact artifact-phone" href="case.html?id=fablab" aria-label="Open FABLab mobile experience case study"><img src="assets/hl/phone-0.webp" alt="FABLab mobile preparation prototype"><span>02 · Service &amp; mobile UX</span></a>
+        <a class="artifact artifact-signal" href="case.html?id=oxylus" aria-label="Open Oxylus sequence analysis case study">
+          <svg viewBox="0 0 360 180" role="img" aria-label="Synthetic signal sequence visualization"><g class="signal-grid"><path d="M0 45H360M0 90H360M0 135H360M60 0V180M120 0V180M180 0V180M240 0V180M300 0V180"/></g><path class="signal-line" d="M0 126 C28 120 38 133 62 120 S102 87 126 98 S164 116 183 82 S218 29 242 55 S270 108 294 72 S326 31 360 40"/><circle cx="183" cy="82" r="5"/><circle cx="294" cy="72" r="5"/></svg>
+          <span>05 · Sequence analysis</span>
+        </a>
+        <div class="stage-axis" aria-hidden="true"><i></i><span>EVIDENCE / INTERFACE / BEHAVIOR</span></div>
+      </div>
+      <div class="hero-foot"><span>MS Design Science · University of Michigan</span><span>Move to explore · Scroll to enter ↓</span></div>
     </section>
 
     <section class="evidence section" id="evidence" aria-labelledby="evidence-title">
@@ -165,5 +174,6 @@
   <script src="smooth.js?v=1"></script>
   <script src="cinema.js?v=10"></script>
   <script src="highlights.js?v=10"></script>
+  <script src="depth.js?v=1"></script>
 </body>
 </html>
