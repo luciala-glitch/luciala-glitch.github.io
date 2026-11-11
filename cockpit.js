@@ -53,6 +53,24 @@
     hang:'M3 14c5-5 13-5 18 0l-2 3-4-1v-3a12 12 0 0 0-6 0v3l-4 1z',
     back:'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
     cross:'M12 6v12M6 12h12',
+    user:'M12 4a4 4 0 1 0 0 8a4 4 0 1 0 0-8M4 21a8 8 0 0 1 16 0',
+    x:'M6 6l12 12M18 6L6 18',
+    call:'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+    micoff:'M9 5a3 3 0 0 1 6 0v6a3 3 0 0 1-6 0zM5 11a7 7 0 0 0 14 0M12 18v3M4 4l16 16',
+    keypad:'M6 5h.01M12 5h.01M18 5h.01M6 11h.01M12 11h.01M18 11h.01M6 17h.01M12 17h.01M18 17h.01',
+    wiper:'M4 18a10 10 0 0 1 16 0M12 18L7 8',
+    mirror:'M3 8h10l3 3v5H3zM16 11h5',
+    dome:'M5 13a7 7 0 0 1 14 0zM12 16v3M8 17l-1.5 2M16 17l1.5 2',
+    headl:'M3 12c0-4 2-6 6-6v12c-4 0-6-2-6-6zM13 8h7M13 12h7M13 16h7',
+    child:'M12 3a2 2 0 1 0 0 4a2 2 0 1 0 0-4M7 21v-5l-2-5h14l-2 5v5M10 21v-4h4v4',
+    dnd:'M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z',
+    hotspot:'M12 12h.01M8.5 15.5a5 5 0 0 1 0-7M15.5 8.5a5 5 0 0 1 0 7M5.6 18.4a9 9 0 0 1 0-12.8M18.4 5.6a9 9 0 0 1 0 12.8',
+    clean:'M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z',
+    tailg:'M3 8h18v9H3zM6 8V5h12v3M3 17v2M21 17v2',
+    expand:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
+    shrink:'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5',
+    sun2:'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2',
+    sliders:'M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0M14 4v4M8 10v4M16 16v4',
     rest:'M4 11h11v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM15 12h2a2 2 0 0 1 0 4h-2M17 3a4 4 0 1 1 0 .01M17 4.5V6l1 1',
     wc:'M7 4a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M17 4a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M5 9h4l.5 5H8v6H6v-6H4.5zM15 9h4l1.5 7H19v4h-4v-4h-1.5zM12 3v18',
     food:'M6 3v7a2 2 0 0 0 4 0V3M8 3v18M15 3c-2 2-2 7 0 9v9M15 3c2 2 2 7 0 9',
@@ -379,6 +397,13 @@
     var st = { nav:'exit', screen:'home', left:null, right:'nav', mode:'Normal', gear:'D', speed:62, chip:null, milestone:false, popup:null, panel:null, stop:-1,
       drive:'Normal', wd:'AUTO', trailerCard:false, lane:true, acc:true, hazard:false, view:0, vol:14, muted:false, playing:true, sound:'cabin', locked:true,
       fan:3, ac:true, auto:false, off:false, recirc:false, fdef:false, rdef:false, seatL:false, seatR:false, tl:72, tr:75 };
+    st.vtab = 'mode'; st.trl = { brake:'adjust', gain:4.5, modal:false };
+    st.ctl = { mirrors:false, wipers:0, dome:false, lights:'Auto', gate:false, bed:false };
+    st.call = null; st.dial = ''; st.ptab = 'recents';
+    st.asst = false; st.asstLog = []; st.asstBusy = false;
+    st.cat = 'assist'; st.bright = 80; st.theme = 'Auto'; st.prompts = true; st.chime = 'Med'; st.follow = 3; st.evAlert = true; st.fatigue = true; st.wind = true; st.turnPath = true;
+    st.units = 'mi'; st.psiU = 'psi'; st.walkLock = true; st.profile = 'Mark'; st.tprof = 'Weekend Camper';
+    st.cc = false; st.wifi = true; st.bt = true; st.hot = false; st.dndOn = false; st.childLock = true; st.clean = false;
     var shownSpeed = st.speed, ctx = -1, lastScreen = '', toastT = 0;
 
     host.innerHTML = DEFS + '<div class="ck"><div class="ck-stick">' +
@@ -397,7 +422,7 @@
           '<div class="sw-tip"></div></div>' +
         '<div class="cd"><div class="cd-in"><div class="cd-status"></div><div class="cd-body"></div><nav class="cd-nav"></nav><div class="cd-toast"></div></div></div>' +
         '<div class="pb"></div>' +
-        '<p class="ck-hint">Try it — tap the screen, the buttons below it, or the wheel controls</p>' +
+        '<div class="ck-hint"><button class="ck-full" data-full>' + I('expand') + 'Explore the full system</button><button class="ck-focus" data-focus>' + I('expand') + 'Screen only</button><span>Tap the screen, the buttons below it, or the wheel controls</span></div>' +
       '</div></div>' +
       '<div class="ck-foot"><i class="ck-meter"></i><span>Scroll to ride along with Mark · six moments</span><span>Figma concept by Lucia Liao &amp; Ashita Nichanametla, rebuilt in code · proposed behavior, not deployed capability</span></div>' +
     '</div></div>';
@@ -450,10 +475,10 @@
     }
 
     /* ---------- center display ---------- */
-    cdStatus.innerHTML = I('pin') + I('wifi') + I('bt') + '<span class="mid"><span class="chip">' + I('music') + 'MEDIA</span><span class="chip">↑ MAPS</span><span style="font-size:14px;display:flex">' + I('grid') + '</span><span class="chip" style="letter-spacing:0;color:#f2c14e">' + I('sun') + '<b style="color:#e7ecf4;font-weight:400">74°F</b></span></span><span class="tm">12:47</span>' + I('bat');
+    cdStatus.innerHTML = '<button class="sb-av" data-sys="profile" aria-label="Driver profile">M</button>' + I('pin') + '<span class="sb-wifi">' + I('wifi') + '</span><span class="sb-bt">' + I('bt') + '</span><span class="mid"><button class="chip" data-nav="music">' + I('music') + 'MEDIA</button><button class="chip" data-nav="map">↑ MAPS</button><button class="sb-grid" data-sys="cc" aria-label="Control center">' + I('grid') + '</button><span class="chip" style="letter-spacing:0;color:#f2c14e">' + I('sun') + '<b style="color:#e7ecf4;font-weight:400">74°F</b></span></span><button class="sb-mic" data-sys="asst" aria-label="Voice assistant">' + I('mic') + '</button><span class="tm">12:47</span>' + I('bat');
     var NAV = [['climate', 'fan'], ['drive', 'car'], ['map', 'map'], ['home', 'home'], ['music', 'music'], ['camera', 'cam']];
     cdNav.innerHTML = NAV.map(function(n){ return '<button type="button" data-nav="' + n[0] + '" aria-label="' + n[0] + '">' + I(n[1]) + '</button>'; }).join('');
-    function navKey(s){ return s === 'stability' ? 'map' : s; }
+    function navKey(s){ return s === 'stability' ? 'map' : s === 'phone' || s === 'settings' ? 'home' : s; }
     function mapView(extra){
       return '<div class="mp">' + CITY +
         (st.nav === 'huron'
@@ -469,13 +494,119 @@
     var STOPS = [['Lakeview Travel Center', '5 min', '+3 min detour', '●○○', true, ['wc', 'food', 'fuel', 'ev'], 'paw'],
                  ['Pine Ridge Rest Area', '16 min', '+9 min detour', '●●●', false, ['wc', 'fuel'], 'nopaw'],
                  ['North Creek Service Plaza', '20 min', '+8 min detour', '●●○', false, ['wc'], 'paw']];
+
+    /* ================= complete system: extra screens ================= */
+    function tog(key, on){ return '<button class="sw-tg' + (on ? ' on' : '') + '" data-set="' + key + '" aria-pressed="' + !!on + '"><i></i></button>'; }
+    function segc(key, val, opts){ return '<span class="segc">' + opts.map(function(o){ return '<button data-setv="' + key + '" data-v="' + o + '" class="' + (String(val) === String(o) ? 'on' : '') + '">' + o + '</button>'; }).join('') + '</span>'; }
+    function rangeC(key, val, min, max){ return '<input class="rg" type="range" data-range="' + key + '" min="' + min + '" max="' + max + '" value="' + val + '" style="--p:' + ((val - min) / (max - min) * 100).toFixed(0) + '%">'; }
+    function row(label, sub, ctrl){ return '<div class="st-row"><div><b>' + label + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>' + ctrl + '</div>'; }
+
+    function controlsHTML(){
+      var c = st.ctl, beams = c.lights !== 'Off';
+      var svg = '<svg class="qc-truck" viewBox="0 0 560 230" aria-hidden="true"><defs><linearGradient id="qcBeam" x1="1" x2="0"><stop offset="0" stop-color="#cfe3ff" stop-opacity=".55"/><stop offset="1" stop-color="#cfe3ff" stop-opacity="0"/></linearGradient>' +
+        '<radialGradient id="qcWarm"><stop offset="0" stop-color="#ffe2a8" stop-opacity=".7"/><stop offset="1" stop-color="#ffe2a8" stop-opacity="0"/></radialGradient></defs>' +
+        (beams ? '<path d="M96 70 L0 30 L0 98 Z M96 160 L0 132 L0 200 Z" fill="url(#qcBeam)"' + (c.lights === 'Auto' ? ' opacity=".6"' : '') + '/>' : '') +
+        (c.bed ? '<ellipse cx="420" cy="115" rx="90" ry="58" fill="url(#qcWarm)"/>' : '') + (c.dome ? '<ellipse cx="248" cy="115" rx="64" ry="48" fill="url(#qcWarm)"/>' : '') +
+        '<g fill="none" stroke="#c9d3e3" stroke-width="1.6" stroke-linejoin="round">' +
+          '<path d="M100 62 Q100 52 112 50 L500 50 Q512 50 512 62 L512 168 Q512 180 500 180 L112 180 Q100 178 100 168 Z"/>' +
+          '<path d="M100 82 Q130 76 168 72 M100 148 Q130 154 168 158"/><path d="M168 66 L196 70 L196 160 L168 164 Z"/>' +
+          '<rect x="196" y="70" width="112" height="90" rx="10"/><path d="M220 82 h30 v26 h-30z M262 82 h30 v26 h-30z M220 122 h72 v26 h-72z"/>' +
+          '<path d="M308 70 L318 70 L318 160 L308 160"/><rect x="330" y="62" width="172" height="106" rx="4"/>' +
+          [356, 382, 408, 434, 460, 486].map(function(x){ return '<path d="M' + x + ' 66 V164"/>'; }).join('') + '</g>' +
+        '<g fill="#7d8899">' + [[118, 40], [118, 178], [398, 40], [398, 178]].map(function(w){ return '<rect x="' + w[0] + '" y="' + w[1] + '" width="44" height="12" rx="4"/>'; }).join('') + '</g>' +
+        '<g class="qc-mir' + (c.mirrors ? ' fold' : '') + '" fill="#c9d3e3"><rect class="m1" x="180" y="38" width="14" height="22" rx="3"/><rect class="m2" x="180" y="170" width="14" height="22" rx="3"/></g>' +
+        '<g class="qc-wipe' + (c.wipers ? ' on s' + c.wipers : '') + '" stroke="#e8eef8" stroke-width="2.4" stroke-linecap="round"><line class="w1" x1="186" y1="150" x2="178" y2="96"/><line class="w2" x1="186" y1="110" x2="178" y2="74"/></g>' +
+        '<rect class="qc-gate' + (c.gate ? ' open' : '') + '" x="502" y="64" width="8" height="102" rx="2" fill="#c9d3e3"/>' +
+        '<g fill="#fff" opacity=".85"><circle cx="102" cy="72" r="3"/><circle cx="102" cy="158" r="3"/></g><g fill="#ef5b4f"><rect x="508" y="56" width="4" height="10" rx="1"/><rect x="508" y="164" width="4" height="10" rx="1"/></g></svg>';
+      function hot(k, icon, label, sub, x, y){ var on = k === 'lights' ? c.lights !== 'Off' : k === 'wipers' ? c.wipers > 0 : c[k];
+        return '<button class="qc-hot' + (on ? ' on' : '') + '" data-ctl="' + k + '" style="left:' + x + '%;top:' + y + '%"><span class="ring">' + I(icon) + '</span><span class="lb">' + label + (sub ? '<em>' + sub + '</em>' : '') + '</span></button>'; }
+      return '<div class="qc pn">' + svg +
+        hot('lights', 'headl', 'Lights', c.lights, 9, 46) + hot('mirrors', 'mirror', 'Mirrors', c.mirrors ? 'Folded' : 'Open', 34, 4) + hot('wipers', 'wiper', 'Wipers', ['Off', 'Auto', 'Low', 'High'][c.wipers], 32, 70) +
+        hot('dome', 'dome', 'Dome', c.dome ? 'On' : 'Off', 47, 40) + hot('bed', 'bed', 'Bed light', c.bed ? 'On' : 'Off', 72, 40) + hot('gate', 'tailg', 'Tailgate', c.gate ? 'Open' : 'Closed', 93, 46) +
+        '<div class="qc-foot"><span>' + I(st.locked ? 'lock' : 'unlock') + (st.locked ? 'Locked' : 'Unlocked') + '</span><span>' + I('fuel') + 'Fuel 78%</span><span>' + I('ev') + 'Range 312 mi</span><span>' + I('trailer') + st.tprof + '</span></div></div>';
+    }
+
+    function trailerHTML(){
+      var t = st.trl, ok = t.brake === 'ok';
+      var items = [['Trailer Connected', 'Secure'], ['7-Pin Connection', 'Secure'], ['Turn Signals', 'OK'], ['Taillights', 'OK'], ['Brake Lights', 'OK'], ['Trailer Brake', ok ? 'OK' : 'Needs Adjustment']];
+      var trailerSvg = '<svg viewBox="0 0 220 110" aria-hidden="true"><defs><linearGradient id="trBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset="1" stop-color="#b9c0c8"/></linearGradient></defs>' +
+        '<ellipse cx="112" cy="96" rx="90" ry="6" fill="#000" opacity=".35"/><path d="M40 20 Q40 10 52 10 L186 10 Q198 10 198 22 L198 80 L40 80 Z" fill="url(#trBody)"/><path d="M40 40 L198 40" stroke="#8b96a6" stroke-width="2"/>' +
+        '<rect x="60" y="48" width="34" height="18" rx="3" fill="#2a3446"/><rect x="150" y="46" width="24" height="34" rx="2" fill="#d7dce2" stroke="#8b96a6"/><path d="M40 72 L8 80" stroke="#6b7480" stroke-width="3"/>' +
+        '<circle cx="118" cy="84" r="12" fill="#1b1d21"/><circle cx="146" cy="84" r="12" fill="#1b1d21"/><circle cx="118" cy="84" r="5" fill="#9aa1aa"/><circle cx="146" cy="84" r="5" fill="#9aa1aa"/></svg>';
+      return '<div class="tr-l pn"><div class="tr-ban ' + (ok ? 'good' : 'warn') + '">' + I(ok ? 'ok' : 'warn') + (ok ? 'ALL GOOD' : 'Brake Adjustment Needed Before Towing') + '</div><h6>Trailer Status</h6>' +
+        items.map(function(it, i){ var bad = i === 5 && !ok; return '<button class="tr-it' + (bad ? ' bad' : '') + '"' + (i === 5 ? ' data-trl="brake"' : '') + '><span class="ic">' + I(bad ? 'warn' : 'ok') + '</span>' + it[0] + '<em>' + it[1] + '</em>' + I('chev') + '</button>'; }).join('') + '</div>' +
+        '<div class="tr-r pn"><div class="row"><h6>Active Trailer</h6><span class="ok">' + I('trailer') + 'Connected</span></div><b class="nm">' + st.tprof + '</b>' +
+        '<p class="mut">' + (st.tprof === 'Weekend Camper' ? 'Travel Trailer • Dual Axle<br>4,850 lbs • Electric Brake' : 'Utility Trailer • Single Axle<br>Bikes &amp; outdoor gear') + '</p>' +
+        '<div class="tr-tires"><span class="mut">' + I('ok') + ' All Tires Within Range (42–65 PSI)</span>' + trailerSvg +
+        '<i style="left:8%;top:34%">42 <small>60 F</small></i><i style="right:6%;top:30%">41 <small>60 F</small></i><i style="left:12%;bottom:0">43 <small>60 F</small></i><i style="right:4%;bottom:4%">42 <small>60 F</small></i></div>' +
+        '<div class="row b"><button class="tb" data-sysnav="towing">Edit Profile</button><button class="tb pri" data-trl="start">Start Towing ›</button></div></div>' +
+        (t.modal ? '<div class="modal-bg" data-trl="close"></div><div class="pop tr-pop"><h5 style="display:block">Trailer Brake Setup</h5><p>Adjust the brake gain to set the braking force applied by the trailer’s electric brakes.</p>' +
+          '<div class="tr-gain"><b>Brake Gain</b><span class="v">' + t.gain.toFixed(1) + '</span></div><div class="tr-sl"><span>0.0</span>' + rangeC('gain', t.gain * 10, 0, 100) + '<span>10.0</span></div>' +
+          '<div class="row" style="grid-template-columns:1fr"><button class="tb" data-trl="auto">Switch to automatic<small>Adaptive Brake Gain</small></button><button class="tb pri" data-trl="save">Save</button></div></div>' : '');
+    }
+
+    var CONTACTS = [['Home', 'Mobile', '2:14 PM'], ['Grandma', 'Mobile', 'Yesterday'], ['Lake House Caretaker', 'Mobile', 'Yesterday'], ['Roadside Assistance', '24/7', 'Mon'], ['Dr. Patel', 'Office', 'Sep 28']];
+    function phoneHTML(){
+      if (st.call){
+        var c = st.call;
+        return '<div class="pc"><div class="pc-av">' + c.name.split(' ').map(function(w){ return w[0]; }).join('').slice(0, 2) + '</div><b>' + c.name + '</b><span class="pc-t" data-callt>' + (c.live ? fmtT((Date.now() - c.t0) / 1000) : 'Calling…') + '</span>' +
+          '<div class="pc-ctl"><button class="' + (c.mute ? 'on' : '') + '" data-call="mute">' + I(c.mute ? 'micoff' : 'mic') + '<small>Mute</small></button><button data-call="keypad">' + I('keypad') + '<small>Keypad</small></button><button class="' + (c.spk ? 'on' : '') + '" data-call="spk">' + I('speak') + '<small>Speaker</small></button></div>' +
+          '<button class="pc-end" data-call="end" aria-label="End call">' + I('call') + '</button></div>';
+      }
+      var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
+      return '<div class="ph-l pn"><div class="segc wide">' + [['recents', 'Recents'], ['favorites', 'Favorites']].map(function(t){ return '<button data-ptab="' + t[0] + '" class="' + (st.ptab === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join('') + '</div>' +
+        (st.ptab === 'recents' ? CONTACTS : CONTACTS.slice(0, 3)).map(function(c, i){ return '<button class="ph-c" data-callto="' + c[0] + '"><span class="av">' + c[0].split(' ').map(function(w){ return w[0]; }).join('').slice(0, 2) + '</span><span class="nm">' + c[0] + '<small>' + c[1] + '</small></span><span class="mut">' + c[2] + '</span>' + I('call') + '</button>'; }).join('') + '</div>' +
+        '<div class="ph-r pn"><div class="ph-num">' + (st.dial || '<span class="mut">Enter a number</span>') + (st.dial ? '<button data-dial="del">⌫</button>' : '') + '</div><div class="ph-keys">' + keys.map(function(k){ return '<button data-dial="' + k + '">' + k + '</button>'; }).join('') + '</div>' +
+        '<button class="ph-go" data-callto="' + (st.dial || '') + '"' + (st.dial ? '' : ' disabled') + '>' + I('call') + '</button></div>';
+    }
+    function fmtT(sec){ sec = Math.max(0, Math.floor(sec)); return ('0' + Math.floor(sec / 60)).slice(-2) + ':' + ('0' + sec % 60).slice(-2); }
+
+    var CATS = [['profile', 'user', 'Profile'], ['display', 'sun2', 'Display'], ['sound', 'music', 'Sound'], ['assist', 'wheel', 'Driver Assistance'], ['towing', 'trailer', 'Towing'], ['vehicle', 'car', 'Vehicle'], ['system', 'info', 'System']];
+    function settingsHTML(){
+      var b = '', c = st.cat;
+      if (c === 'profile') b = '<div class="sp-card"><span class="pc-av sm">M</span><div><b>Mark</b><small>Driver profile · seat, mirrors, climate and music restore when the truck unlocks</small></div></div>' +
+        row('Active profile', null, segc('profile', st.profile, ['Mark', 'Guest'])) + row('Restore on unlock', 'Seat, mirrors, climate, last source', tog('walkLock', st.walkLock));
+      else if (c === 'display') b = row('Brightness', st.bright + '%', rangeC('bright', st.bright, 20, 100)) + row('Appearance', null, segc('theme', st.theme, ['Auto', 'Night', 'Day'])) + row('Driver display view', 'Also on the steering-wheel roller', segc('view', ['Normal', 'Tow 1', 'Tow 2'][st.view], ['Normal', 'Tow 1', 'Tow 2']));
+      else if (c === 'sound') b = row('Media volume', st.muted ? 'Muted' : String(st.vol), rangeC('vol', st.vol, 0, 30)) + row('Navigation prompts', 'Spoken turn-by-turn', tog('prompts', st.prompts)) + row('Alert chime', null, segc('chime', st.chime, ['Low', 'Med', 'High']));
+      else if (c === 'assist') b = row('Lane Keep Assist', 'Also on the wheel: LANE', tog('lane', st.lane)) + row('Adaptive Cruise', 'Also on the wheel: ACC', tog('acc', st.acc)) + row('Follow distance', null, segc('follow', st.follow, [1, 2, 3, 4])) +
+        row('Emergency vehicle alerts', 'Siren and lights detection with an action to take', tog('evAlert', st.evAlert)) + row('Fatigue monitoring', 'Offers a recovery route when signs appear', tog('fatigue', st.fatigue)) + row('Crosswind stability assist', null, tog('wind', st.wind));
+      else if (c === 'towing') b = row('Trailer profile', null, segc('tprof', st.tprof === 'Weekend Camper' ? 'Camper' : 'Utility', ['Camper', 'Utility'])) + row('Trailer brake gain', st.trl.brake === 'ok' ? 'Set to ' + st.trl.gain.toFixed(1) : 'Needs adjustment', '<button class="tb sm" data-vgo="trailer">Adjust ›</button>') +
+        row('Wider turn path guidance', 'Shown on the driver display while towing', tog('turnPath', st.turnPath));
+      else if (c === 'vehicle') b = row('Distance units', null, segc('units', st.units, ['mi', 'km'])) + row('Tire pressure units', null, segc('psiU', st.psiU, ['psi', 'kPa'])) + row('Child lock', 'Rear doors', tog('childLock', st.childLock)) + row('Fold mirrors on lock', null, tog('mirrors', st.ctl.mirrors));
+      else b = '<div class="sp-card"><span class="pc-av sm">' + I('info') + '</span><div><b>Silverado HMI · concept build</b><small>Figma concept by Lucia Liao &amp; Ashita Nichanametla, rebuilt in HTML/SVG. Proposed behavior, not deployed capability.</small></div></div>' +
+        row('Over-the-air updates', 'Up to date', '<span class="mut">✓</span>') + row('Restart demo', 'Reset every setting in this cockpit', '<button class="tb sm" data-sysreset>Reset</button>');
+      return '<div class="set-l pn">' + CATS.map(function(k){ return '<button data-cat="' + k[0] + '" class="' + (c === k[0] ? 'on' : '') + '">' + I(k[1]) + k[2] + '</button>'; }).join('') + '</div><div class="set-r pn"><h5>' + CATS.filter(function(k){ return k[0] === c; })[0][2] + '</h5>' + b + '</div>';
+    }
+
+    var ASK = [
+      ['Find a rest stop', 'rest', 'Lakeview Travel Center is five minutes ahead, with fuel — a three-minute detour. Here are your options.', function(){ st.screen = 'map'; st.nav = 'huron'; st.popup = 'recovery'; st.panel = null; }],
+      ['Set the cabin to 70°', 'fan', 'Setting both zones to 70° with A/C on.', function(){ st.tl = 70; st.tr = 70; st.off = false; st.ac = true; st.screen = 'climate'; }],
+      ['Play music outside', 'speak', 'Switching to Outside Mode.', function(){ st.sound = 'outside'; st.popup = null; st.screen = 'music'; }],
+      ['Open the tailgate', 'tailg', 'Opening the tailgate.', function(){ st.ctl.gate = true; st.screen = 'drive'; st.vtab = 'controls'; }],
+      ['Check the trailer', 'trailer', 'One item needs attention: the trailer brake gain.', function(){ st.screen = 'drive'; st.vtab = 'trailer'; }],
+      ['Call Home', 'call', 'Calling Home.', function(){ startCall('Home'); }]
+    ];
+    function asstHTML(){
+      return '<div class="as"><button class="as-x" data-sys="asstclose" aria-label="Close">' + I('x') + '</button><div class="as-orb' + (st.asstBusy ? ' busy' : '') + '"><i></i><i></i><i></i><b></b></div>' +
+        '<div class="as-log">' + (st.asstLog.length ? st.asstLog.map(function(m){ return '<p class="' + m[0] + '">' + m[1] + '</p>'; }).join('') : '<p class="hi">Hi Mark — what can I do?</p><p class="sub">Try one of these, or say “Hey Silverado”.</p>') + '</div>' +
+        '<div class="as-chips">' + ASK.map(function(a, i){ return '<button data-ask="' + i + '">' + I(a[1]) + a[0] + '</button>'; }).join('') + '</div></div>';
+    }
+    function ccHTML(){
+      var tiles = [['wifi', 'wifi', 'Wi-Fi', st.wifi], ['bt', 'bt', 'Bluetooth', st.bt], ['hot', 'hotspot', 'Hotspot', st.hot], ['dndOn', 'dnd', 'Do Not Disturb', st.dndOn],
+        ['childLock', 'child', 'Child Lock', st.childLock], ['mirrors', 'mirror', 'Fold Mirrors', st.ctl.mirrors], ['hazard', 'haz', 'Hazard', st.hazard], ['dome', 'dome', 'Dome Light', st.ctl.dome],
+        ['fdef', 'defF', 'Front Defrost', st.fdef], ['rdef', 'defR', 'Rear Defrost', st.rdef], ['gate', 'tailg', 'Tailgate', st.ctl.gate], ['clean', 'clean', 'Clean Screen', false]];
+      return '<div class="cc-bg" data-sys="cc"></div><div class="cc"><div class="cc-grid">' + tiles.map(function(t){ return '<button class="' + (t[3] ? 'on' : '') + '" data-cc="' + t[0] + '">' + I(t[1]) + '<span>' + t[2] + '</span></button>'; }).join('') + '</div>' +
+        '<div class="cc-sl"><label>' + I('sun2') + rangeC('bright', st.bright, 20, 100) + '</label><label>' + I('music') + rangeC('vol', st.vol, 0, 30) + '</label></div><span class="cc-h"></span></div>';
+    }
+    function startCall(name){ st.call = { name:name, t0:Date.now(), live:false, mute:false, spk:true }; st.screen = 'phone'; setTimeout(function(){ if (st.call && st.call.name === name){ st.call.live = true; st.call.t0 = Date.now(); render(); } }, 1600); }
+    setInterval(function(){ if (st.call && st.call.live){ var el = cdBody.querySelector('[data-callt]'); if (el) el.textContent = fmtT((Date.now() - st.call.t0) / 1000); } }, 1000);
     function screenHTML(){
       var s = st.screen;
       if (s === 'home'){
         var conf = '';
         if (st.milestone && !RM){ var R = rng(4), cols = ['#f2c14e', '#6ea0ff', '#e7ecf4', '#c79a52', '#8a5cff']; conf = '<div class="confetti">'; for (var i = 0; i < 26; i++) conf += '<i style="left:' + (R() * 100).toFixed(1) + '%;background:' + cols[i % 5] + ';animation-duration:' + (2.6 + R() * 2.4).toFixed(2) + 's;animation-delay:-' + (R() * 4).toFixed(2) + 's"></i>'; conf += '</div>'; }
         return (st.milestone ? '<div class="milestone"><span class="badge">10K</span>Mileage Milestone Unlocked<em>10,000 total miles reached</em></div>' + conf : '') +
-          '<div class="hm-tiles pn">' + [['map', 'pin', 'Maps'], ['music', 'music', 'Audio'], ['home', 'phone', 'Phone'], ['drive', 'car', 'Drive mode'], ['home', 'info', 'Assistant'], ['home', 'gear', 'Settings']].map(function(t){ return '<button class="tb" data-nav="' + t[0] + '"' + (t[2] === 'Phone' || t[2] === 'Assistant' || t[2] === 'Settings' ? ' data-toast="' + t[2] + '"' : '') + '>' + I(t[1]) + t[2] + '</button>'; }).join('') + '</div>' +
+          '<div class="hm-tiles pn">' + [['map', 'pin', 'Maps'], ['music', 'music', 'Audio'], ['phone', 'phone', 'Phone'], ['drive', 'car', 'Drive mode'], ['asst', 'info', 'Assistant'], ['settings', 'gear', 'Settings']].map(function(t){ return '<button class="tb" ' + (t[0] === 'asst' ? 'data-sys="asst"' : 'data-nav="' + t[0] + '"') + '>' + I(t[1]) + t[2] + '</button>'; }).join('') + '</div>' +
           '<div class="hm-right" style="' + (st.milestone ? 'top:44px' : '') + '"><div class="hm-time">12:47</div><div class="hm-greet">Good Afternoon</div><img class="hm-truck" src="assets/gm/truck.png" alt="" draggable="false">' +
           '<div class="hm-cards"><div class="pn">65°F<small>Outdoors</small></div><div class="pn">' + I('cloud') + '<small>Cloudy</small></div><button class="tb hm-lock" data-act="lock"><span class="' + (st.locked ? 'on' : '') + '">' + I('lock') + '</span><span class="' + (st.locked ? '' : 'on') + '">' + I('unlock') + '</span></button></div>' +
           '<div class="mini-player pn"><span class="disc"></span><div class="t">Blinding Lights<small>The Weeknd</small></div><button class="pbtn">' + I('prev') + '</button><button class="pbtn big" data-act="play">' + I(st.playing ? 'pause' : 'play') + '</button><button class="pbtn">' + I('next') + '</button></div></div>';
@@ -522,12 +653,18 @@
           '<div class="cm-aq pn">Air Quality<svg viewBox="0 0 66 66"><circle cx="33" cy="33" r="27" fill="none" stroke="#3a4252" stroke-width="3"/><circle cx="33" cy="33" r="27" fill="none" stroke="#5fd39a" stroke-width="3" stroke-dasharray="40 200" transform="rotate(130 33 33)"/><text x="33" y="40" text-anchor="middle" fill="#fff" font-size="20" font-family="Nunito Sans,sans-serif">17</text></svg></div></div></div>';
       }
       if (s === 'drive'){
-        return '<div class="dm-l"><div class="dm-modes pn">' + [['Normal', 'truck'], ['Off-Road', 'offroad'], ['Eco', 'eco'], ['Tow', 'trailer']].map(function(m){ return '<button class="tb' + (st.drive === m[0] ? ' on' : '') + '" data-drive="' + m[0] + '">' + I(m[1]) + m[0] + '</button>'; }).join('') + '</div>' +
+        var seg = '<div class="seg" style="--i:' + ['mode', 'controls', 'trailer'].indexOf(st.vtab) + '"><i></i>' + [['mode', 'Drive Mode'], ['controls', 'Quick Controls'], ['trailer', 'Trailer']].map(function(v){ return '<button data-vtab="' + v[0] + '" class="' + (st.vtab === v[0] ? 'on' : '') + '">' + v[1] + (v[0] === 'trailer' && st.trl.brake === 'adjust' ? '<em class="dot"></em>' : '') + '</button>'; }).join('') + '</div>';
+        if (st.vtab === 'controls') return seg + controlsHTML();
+        if (st.vtab === 'trailer') return seg + trailerHTML();
+        return seg + '<div class="dm-l"><div class="dm-modes pn">' + [['Normal', 'truck'], ['Off-Road', 'offroad'], ['Eco', 'eco'], ['Tow', 'trailer']].map(function(m){ return '<button class="tb' + (st.drive === m[0] ? ' on' : '') + '" data-drive="' + m[0] + '">' + I(m[1]) + m[0] + '</button>'; }).join('') + '</div>' +
           '<div class="dm-sub pn"><label>Rear Differential Lock</label><div class="dm-lock">' + I('unlock') + '<i></i>' + I('lock') + '</div><div class="dm-ride"><span class="mut" style="font-size:10px">Ride Height</span><button>−</button><span>Normal</span><button>+</button></div></div>' +
-          (st.trailerCard ? '<div class="dm-trailer pn"><b>Trailer detected</b><span style="font-size:30px;color:#d8dee8;display:flex">' + I('trailer') + '</span><button class="tb" data-act="profile">view profile</button><a data-act="skip">Skip for now</a></div>' : '') + '</div>' +
+          (st.trailerCard ? '<div class="dm-trailer pn"><b>Trailer detected</b><span style="font-size:30px;color:#d8dee8;display:flex">' + I('trailer') + '</span><button class="tb" data-act="profile">view profile</button><a data-act="skip">Skip for now</a></div>'
+            : '<div class="dm-energy pn"><div class="row"><span class="mut">Range</span><b>312 mi</b></div><div class="bar"><i style="width:78%"></i></div><div class="row"><span class="mut">Fuel 78%</span><span class="mut">' + st.drive + ' mode</span></div></div>') + '</div>' +
           '<div class="dm-r pn"><div class="dm-wd">' + [['AUTO', ''], ['4WD', 'High'], ['4WD', 'Low'], ['2WD', '']].map(function(w){ var k = w[0] + w[1]; return '<button class="tb' + (st.wd === k ? ' on' : '') + '" data-wd="' + k + '">' + w[0] + (w[1] ? '<small>' + w[1] + '</small>' : '') + '</button>'; }).join('') + '</div>' +
-          '<div class="mut" style="font-size:11px;margin-top:10px">Rear Priority</div><div class="dm-chassis">' + chassisSVG(250) + '<span style="left:30px;top:30px">35 psi</span><span style="right:30px;top:30px">35 psi</span><span style="left:30px;top:190px">35 psi</span><span style="right:30px;top:190px">35 psi</span></div></div>';
+          '<div class="mut" style="font-size:11px;margin-top:10px">Rear Priority</div><div class="dm-chassis">' + chassisSVG(214) + '<span style="left:30px;top:30px">35 psi</span><span style="right:30px;top:30px">35 psi</span><span style="left:30px;top:190px">35 psi</span><span style="right:30px;top:190px">35 psi</span></div></div>';
       }
+      if (s === 'phone') return phoneHTML();
+      if (s === 'settings') return settingsHTML();
       if (s === 'map'){
         var extra = '';
         if (st.popup === 'recovery') extra = '<div class="pop"><h5>' + I('rest') + '<span>Coordinated Recovery Plan<br>Switch to recovery route?</span></h5><p>Rest area ahead in: <b>5 min</b><br>Fuel stop included<br><b>Detour +3 min</b><br>Fuel on arrival: <b>34 mi</b></p><div class="row"><button class="tb pri" data-act="accept">Accept Route</button><button class="tb" data-act="more">More Option</button></div></div>';
@@ -558,12 +695,20 @@
     }
     function renderScreen(){
       var key = st.screen;
-      cdBody.innerHTML = '<div class="cd-screen' + (st.screen === 'home' && st.milestone ? ' ms' : '') + '"' + (key === lastScreen ? ' style="animation:none"' : '') + '>' + screenHTML() + '</div>';
+      var sk = key + (key === 'drive' ? st.vtab : key === 'settings' ? st.cat : '');
+      cdBody.innerHTML = '<div class="cd-screen' + (st.screen === 'home' && st.milestone ? ' ms' : '') + '"' + (sk === lastScreen ? ' style="animation:none"' : '') + '>' + screenHTML() + '</div>' +
+        (st.asst ? asstHTML() : '') + (st.cc ? ccHTML() : '') + (st.clean ? '<button class="clean" data-cc="clean"><b>Screen cleaning</b><span>Touch is paused · tap here to exit</span></button>' : '');
+      key = sk;
+      cd.style.filter = 'brightness(' + (.55 + st.bright / 100 * .45).toFixed(3) + ')' + (st.theme === 'Day' ? ' saturate(.9) contrast(.95)' : '');
+      cd.classList.toggle('t-day', st.theme === 'Day');
+      cdStatus.querySelector('.sb-wifi').style.opacity = st.wifi ? 1 : .25; cdStatus.querySelector('.sb-bt').style.opacity = st.bt ? 1 : .25;
+      cdStatus.querySelector('.sb-grid').classList.toggle('on', st.cc); cdStatus.querySelector('.sb-mic').classList.toggle('on', st.asst);
       lastScreen = key;
       [].forEach.call(cdNav.children, function(b){ b.classList.toggle('on', b.dataset.nav === navKey(st.screen)); });
     }
     function showToast(html){
-      toast.innerHTML = html; toast.classList.add('on');
+      toast.innerHTML = html; toast.classList.add('on'); cdStatus.classList.add('island');
+      clearTimeout(showToast._t); showToast._t = setTimeout(function(){ cdStatus.classList.remove('island'); }, 1700);
       clearTimeout(toastT); toastT = setTimeout(function(){ toast.classList.remove('on'); }, 1700);
     }
     function volToast(){ showToast(I(st.muted ? 'minus' : 'music') + (st.muted ? 'Muted' : 'Volume ' + st.vol) + '<i class="vol" style="--v:' + (st.muted ? 0 : st.vol / 30 * 100) + '%"></i>'); }
@@ -619,7 +764,7 @@
         if (d.w === 'acc'){ st.acc = !st.acc; st.chip = st.acc ? 'acc' : null; render(); setTimeout(function(){ if (st.chip === 'acc'){ st.chip = null; renderCluster(); } }, 2600); return; }
         if (d.w === 'lane'){ st.lane = !st.lane; render(); showToast(I('car') + 'Lane assist ' + (st.lane ? 'on' : 'off')); return; }
         if (d.w === 'home'){ st.screen = 'home'; st.popup = null; render(); return; }
-        if (d.w === 'voice'){ showToast('<span class="wave"><b></b><b style="animation-delay:-.2s"></b><b style="animation-delay:-.4s"></b><b style="animation-delay:-.1s"></b></span> Listening…'); return; }
+        if (d.w === 'voice'){ st.asst = true; st.cc = false; st.asstLog = []; render(); return; }
         if (d.w === 'view'){ showToast(I('car') + 'Drive assist menu'); return; }
         if (d.w === 'vol'){ st.muted = !st.muted; renderBar(); volToast(); return; }
       }
@@ -634,6 +779,98 @@
       else if (a === 'dismiss'){ st.popup = null; render(); }
       else if (a) climate(a);
     });
+
+    /* ================= complete system: handlers ================= */
+    var SET_TOGGLE = { lane:1, acc:1, prompts:1, evAlert:1, fatigue:1, wind:1, turnPath:1, walkLock:1, childLock:1 };
+    function setVal(k, v){
+      if (k === 'view'){ st.view = ['Normal', 'Tow 1', 'Tow 2'].indexOf(v); }
+      else if (k === 'tprof'){ st.tprof = v === 'Camper' ? 'Weekend Camper' : 'Utility Trailer'; }
+      else if (k === 'follow'){ st.follow = +v; }
+      else st[k] = v;
+    }
+    function ask(i){
+      var a = ASK[i]; if (st.asstBusy) return;
+      st.asstLog = [['me', a[0]]]; st.asstBusy = true; render();
+      setTimeout(function(){ st.asstLog.push(['ai', a[2]]); st.asstBusy = false; render(); }, 700);
+      setTimeout(function(){ if (!st.asst) return; st.asst = false; a[3](); render(); }, 2000);
+    }
+    host.addEventListener('click', function(e){
+      var t = e.target.closest('[data-sys],[data-vtab],[data-ctl],[data-trl],[data-ptab],[data-callto],[data-call],[data-dial],[data-cat],[data-set],[data-setv],[data-ask],[data-cc],[data-vgo],[data-sysnav],[data-sysreset],[data-full],[data-focus]');
+      if (!t || !host.contains(t)) return;
+      var d = t.dataset;
+      if (st.clean && d.cc !== 'clean') return;
+      if (d.full != null){ setFull(!full); return; }
+      if (d.focus != null){ canvas.classList.toggle('focus'); t.classList.toggle('on'); return; }
+      if (d.sys === 'asst'){ st.asst = !st.asst; st.cc = false; st.asstLog = []; render(); return; }
+      if (d.sys === 'asstclose'){ st.asst = false; render(); return; }
+      if (d.sys === 'cc'){ st.cc = !st.cc; st.asst = false; render(); return; }
+      if (d.sys === 'profile'){ st.screen = 'settings'; st.cat = 'profile'; st.cc = false; render(); return; }
+      if (d.vtab){ st.vtab = d.vtab; render(); return; }
+      if (d.vgo){ st.screen = 'drive'; st.vtab = d.vgo; render(); return; }
+      if (d.sysnav){ st.screen = 'settings'; st.cat = d.sysnav; render(); return; }
+      if (d.ctl){
+        var c = st.ctl, k = d.ctl;
+        if (k === 'lights') c.lights = { Auto:'On', On:'Off', Off:'Auto' }[c.lights];
+        else if (k === 'wipers') c.wipers = (c.wipers + 1) % 4;
+        else c[k] = !c[k];
+        render();
+        showToast(I({ lights:'headl', mirrors:'mirror', wipers:'wiper', dome:'dome', bed:'bed', gate:'tailg' }[k]) + ({ lights:'Lights ' + c.lights, mirrors:c.mirrors ? 'Mirrors folded' : 'Mirrors open', wipers:'Wipers ' + ['off', 'auto', 'low', 'high'][c.wipers],
+          dome:'Dome light ' + (c.dome ? 'on' : 'off'), bed:'Bed light ' + (c.bed ? 'on' : 'off'), gate:c.gate ? 'Tailgate open' : 'Tailgate closed' }[k]));
+        if (k === 'gate' && c.gate && st.sound !== 'outside') setTimeout(function(){ st.screen = 'music'; st.popup = 'tailgate'; render(); }, 900);
+        return;
+      }
+      if (d.trl){
+        var tr = st.trl;
+        if (d.trl === 'brake'){ tr.modal = true; }
+        else if (d.trl === 'close'){ tr.modal = false; }
+        else if (d.trl === 'auto'){ tr.gain = 5.5; showToast(I('ok') + 'Adaptive brake gain'); }
+        else if (d.trl === 'save'){ tr.modal = false; tr.brake = 'ok'; showToast(I('ok') + 'Trailer brake gain ' + tr.gain.toFixed(1) + ' · All good'); }
+        else if (d.trl === 'start'){
+          if (tr.brake !== 'ok'){ tr.modal = true; showToast(I('warn') + 'Adjust the trailer brake first'); }
+          else { st.drive = 'Tow'; st.mode = 'TOW MODE'; st.left = 'trailer'; st.vtab = 'mode'; showToast(I('trailer') + 'Tow mode · drive safe'); }
+        }
+        render(); return;
+      }
+      if (d.ptab){ st.ptab = d.ptab; render(); return; }
+      if (d.dial){ st.dial = d.dial === 'del' ? st.dial.slice(0, -1) : (st.dial + d.dial).slice(0, 14); render(); return; }
+      if (d.callto != null){ if (!d.callto) return; startCall(d.callto); st.dial = ''; render(); return; }
+      if (d.call){ var cl = st.call; if (!cl) return;
+        if (d.call === 'end'){ st.call = null; showToast(I('call') + 'Call ended'); }
+        else if (d.call === 'mute') cl.mute = !cl.mute; else if (d.call === 'spk') cl.spk = !cl.spk; else showToast(I('keypad') + 'Keypad');
+        render(); return; }
+      if (d.cat){ st.cat = d.cat; render(); return; }
+      if (d.set){ var key = d.set;
+        if (key === 'mirrors') st.ctl.mirrors = !st.ctl.mirrors; else st[key] = !st[key];
+        render(); return; }
+      if (d.setv){ setVal(d.setv, d.v); render(); return; }
+      if (d.ask != null){ ask(+d.ask); return; }
+      if (d.sysreset != null){ location.reload(); return; }
+      if (d.cc){ var k2 = d.cc;
+        if (k2 === 'clean'){ st.clean = !st.clean; st.cc = false; }
+        else if (k2 === 'mirrors' || k2 === 'dome' || k2 === 'gate'){ st.ctl[k2] = !st.ctl[k2]; if (k2 === 'gate' && st.ctl.gate && st.sound !== 'outside'){ st.cc = false; st.screen = 'music'; st.popup = 'tailgate'; } }
+        else st[k2] = !st[k2];
+        render(); return; }
+    });
+    host.addEventListener('input', function(e){
+      var r = e.target.closest('[data-range]'); if (!r) return;
+      var k = r.dataset.range, v = +r.value;
+      r.style.setProperty('--p', ((v - r.min) / (r.max - r.min) * 100).toFixed(0) + '%');
+      if (k === 'gain'){ st.trl.gain = Math.round(v / 5) / 2; var vv = cdBody.querySelector('.tr-gain .v'); if (vv) vv.textContent = st.trl.gain.toFixed(1); return; }
+      if (k === 'bright'){ st.bright = v; cd.style.filter = 'brightness(' + (.55 + v / 100 * .45).toFixed(3) + ')'; return; }
+      if (k === 'vol'){ st.vol = v; st.muted = false; renderBar(); return; }
+    });
+    host.addEventListener('change', function(e){ if (e.target.closest('[data-range]')) render(); });
+
+    /* full-screen exploration: lock the page scroll and freeze the scroll story */
+    var full = false;
+    function setFull(on){
+      full = on; sec.classList.toggle('full', on);
+      document.documentElement.style.overflow = on ? 'hidden' : '';
+      if (!on) canvas.classList.remove('focus');
+      [].forEach.call(host.querySelectorAll('[data-full]'), function(b){ b.innerHTML = on ? I('shrink') + 'Exit full screen' : I('expand') + 'Explore the full system'; });
+      setTimeout(fit, 30);
+    }
+    addEventListener('keydown', function(e){ if (e.key === 'Escape' && full) setFull(false); });
     /* rollers and knobs turn with the wheel or a vertical drag */
     function turn(kind, dir){
       if (kind === 'vol'){ st.muted = false; st.vol = clamp(st.vol + dir, 0, 30); renderBar(); volToast(); }
@@ -681,7 +918,7 @@
     applyCtx(0);
     var shown = 0;
     api.ticks.push(function(dt){
-      if (!api.near(sec, .2)) return;
+      if (!api.near(sec, .2) || full) return;
       var target = api.stickProgress(sec);
       shown += (target - shown) * (RM ? 1 : 1 - Math.exp(-dt * 7));
       var s = shown, idx = Math.min(5, Math.floor(s * 6));
