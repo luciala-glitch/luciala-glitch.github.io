@@ -13,7 +13,7 @@
       eyebrow:'UX research · product design · prototyping',
       h:['Research, interface', 'and the code between.'],
       p:'I work where the evidence is messy and the interface has to be clear — from manufacturing systems and dental measurement studies to an in-vehicle cockpit.',
-      cta:['Selected work', 'classic.html#highlights'], cta2:['Email me', 'mailto:luciala@umich.edu'] },
+      cta:['All projects', 'projects.html'], cta2:['Email me', 'mailto:luciala@umich.edu'] },
     { id:'silverado', name:'SILVERADO', shape:1, accent:'#ffb36b',
       eyebrow:'01 / Silverado RST 1500 · Automotive HMI', cat:'AUTOMOTIVE HMI',
       h:['Step inside', 'the cockpit.'],

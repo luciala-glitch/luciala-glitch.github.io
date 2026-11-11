@@ -63,7 +63,7 @@
   document.title = p.name + ' — Lucia Liao';
 
   /* project switcher */
-  $('.w-switch').innerHTML = ORDER.map(function(k, i){
+  $('.w-switch').innerHTML = '<a href="projects.html"><i></i>ALL</a>' + ORDER.map(function(k, i){
     var q = ALL.filter(function(x){ return x.id === k; })[0];
     return '<a href="work.html?id=' + k + '"' + (k === id ? ' aria-current="page"' : '') + '><i></i>0' + (i + 1) + ' ' + q.name.split(/[ \/]/)[0].toUpperCase() + '</a>';
   }).join('');
