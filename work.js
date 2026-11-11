@@ -172,19 +172,19 @@
   ================================================================== */
   function sigSilverado(host){
     var S = [
-      { k:'home', center:'home', tab:'Home', kick:'Context 01 · everyday driving', h:['Six places', 'that never move.'],
+      { bg:'home', cl:'assets/hl/cluster-home.webp', ce:'assets/hl/center-home.webp', tab:'Home', kick:'Context 01 · everyday driving', h:['Six places', 'that never move.'],
         p:'The primary destinations stay fixed, so the driver never has to hunt for them while the truck is moving.' },
-      { k:'tow', center:'trailer', tab:'Tow', kick:'Context 02 · hitching up', h:['Towing,', 'as a guided flow.'],
-        p:'Hitching becomes one guided sequence across the instrument cluster and the center display, instead of features scattered across screens.' },
-      { k:'trailer', center:'trailer', tab:'Trailer', kick:'Context 03 · on the road', h:['Quiet what', 'has already passed.'],
-        p:'Passing trailer checks recede, so the one unresolved item is the thing that gets the driver’s attention.' },
-      { k:'detected', center:'detected', tab:'Alert', kick:'Context 04 · something is wrong', h:['Say what', 'to do next.'],
-        p:'An emergency alert states an action instead of only a warning, and stability assistance explains what it is doing.' }
+      { bg:'detected', cl:'assets/hl/cluster-detected.webp', ce:'assets/hl/center-detected.webp', tab:'Detected', kick:'Context 02 · trailer plugged in', h:['Notice', 'the trailer.'],
+        p:'Plugging in a trailer is recognized on the home screen, with a quiet prompt to review its setup instead of a menu the driver has to find.' },
+      { bg:'trailer', cl:'assets/hl/cluster-trailer.webp', ce:'assets/hl/center-trailer.webp', tab:'Checks', kick:'Context 03 · before towing', h:['Quiet what', 'has already passed.'],
+        p:'Passing checks stay quiet, so the one unresolved item — the trailer brake needs adjustment — is the thing that gets attention.' },
+      { bg:'tow', cl:'assets/hl/cluster-tow.webp', ce:'assets/p14-2.webp', tab:'Tow', kick:'Context 04 · ready to tow', h:['Say what', 'to do next.'],
+        p:'The warning leads straight to the fix: set the trailer brake gain, then the cluster switches to tow mode for the drive.' }
     ];
     host.innerHTML = '<div class="sv"><div class="sv-stick">' +
-      '<div class="sv-bg">' + S.map(function(s){ return '<img src="assets/gm/cockpit-' + s.k + '.png" alt="" loading="lazy">'; }).join('') + '</div><div class="sv-shade"></div>' +
-      '<div class="sv-screens"><figure class="sv-cluster"><figcaption>INSTRUMENT CLUSTER</figcaption>' + S.map(function(s){ return '<img src="assets/hl/cluster-' + s.k + '.webp" alt="Cluster, ' + s.tab + ' context" loading="lazy">'; }).join('') + '</figure>' +
-      '<figure class="sv-center"><figcaption>CENTER DISPLAY</figcaption>' + S.map(function(s){ return '<img src="assets/hl/center-' + s.center + '.webp" alt="Center display, ' + s.tab + ' context" loading="lazy">'; }).join('') + '</figure></div>' +
+      '<div class="sv-bg">' + S.map(function(s){ return '<img src="assets/gm/cockpit-' + s.bg + '.png" alt="" loading="lazy">'; }).join('') + '</div><div class="sv-shade"></div>' +
+      '<div class="sv-screens"><figure class="sv-cluster"><figcaption>INSTRUMENT CLUSTER</figcaption>' + S.map(function(s){ return '<img src="' + s.cl + '" alt="Cluster, ' + s.tab + ' context" loading="lazy">'; }).join('') + '</figure>' +
+      '<figure class="sv-center"><figcaption>CENTER DISPLAY</figcaption>' + S.map(function(s){ return '<img src="' + s.ce + '" alt="Center display, ' + s.tab + ' context" loading="lazy">'; }).join('') + '</figure></div>' +
       '<nav class="sv-dots lbl" aria-label="Driving contexts">' + S.map(function(s, i){ return '<button type="button">0' + (i + 1) + ' ' + s.tab + '</button>'; }).join('') + '</nav>' +
       S.map(function(s){ return '<div class="sv-panel"><span class="lbl">' + s.kick + '</span><h3>' + s.h[0] + '<em>' + s.h[1] + '</em></h3><p>' + s.p + '</p></div>'; }).join('') +
       '<div class="sv-meter"><i></i></div><div class="sv-foot"><span>Scroll to drive through four contexts</span><span>Figma concept · proposed behavior, not deployed capability</span></div>' +
