@@ -76,15 +76,37 @@
   function rng(seed){ return function(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
 
   /* ---------------- static art, built once ---------------- */
+  var DEFS = '<svg class="ck-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>' +
+    '<filter id="ckGrain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .35 0"/><feComposite in2="SourceGraphic" operator="in"/><feBlend in="SourceGraphic" mode="multiply"/></filter>' +
+    '<filter id="ckBlurX"><feGaussianBlur stdDeviation="1.4 0"/></filter><filter id="ckSoft"><feGaussianBlur stdDeviation="3"/></filter><filter id="ckGlow"><feGaussianBlur stdDeviation="6"/></filter>' +
+    '<linearGradient id="ckSkyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8ecf0"/><stop offset="1" stop-color="#b8c1ca"/></linearGradient>' +
+    '<linearGradient id="ckAsph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a7e85"/><stop offset=".5" stop-color="#5f636a"/><stop offset="1" stop-color="#45484e"/></linearGradient>' +
+    '<linearGradient id="ckGrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d9a78"/><stop offset="1" stop-color="#6c7a58"/></linearGradient>' +
+    '<linearGradient id="ckCarG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9aa0a8"/><stop offset=".55" stop-color="#6b7078"/><stop offset="1" stop-color="#3f4349"/></linearGradient>' +
+    '<linearGradient id="ckWhiteG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d9dde2"/><stop offset=".6" stop-color="#f6f7f9"/><stop offset="1" stop-color="#c9ced4"/></linearGradient>' +
+    '<linearGradient id="ckGlass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4048"/><stop offset="1" stop-color="#16181c"/></linearGradient>' +
+    '<radialGradient id="ckVig" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>' +
+    '<linearGradient id="ckTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7d838d"/><stop offset="1" stop-color="#4a4f57"/></linearGradient>' +
+    '<linearGradient id="ckOwn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c8ccd2"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#c8ccd2"/></linearGradient>' +
+    '<linearGradient id="ckLaneHi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d7bff" stop-opacity="0"/><stop offset=".35" stop-color="#3d7bff" stop-opacity=".35"/><stop offset="1" stop-color="#3d7bff" stop-opacity=".55"/></linearGradient>' +
+    '<linearGradient id="ckFlowB" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cc2ff" stop-opacity=".1"/><stop offset=".5" stop-color="#6ea0ff" stop-opacity=".75"/><stop offset="1" stop-color="#3b6fe0" stop-opacity=".95"/></linearGradient>' +
+    '<linearGradient id="ckFlowW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5dcb8" stop-opacity=".1"/><stop offset=".5" stop-color="#ecc795" stop-opacity=".75"/><stop offset="1" stop-color="#d9a35e" stop-opacity=".95"/></linearGradient>' +
+    '<linearGradient id="ckWind" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fb"/><stop offset=".55" stop-color="#cfdbe8"/><stop offset="1" stop-color="#a7b6c6"/></linearGradient>' +
+    '<linearGradient id="ckDashG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2e35"/><stop offset="1" stop-color="#16181c"/></linearGradient>' +
+    '<radialGradient id="ckSpeedGlow"><stop offset="0" stop-color="#6ea0ff" stop-opacity=".22"/><stop offset="1" stop-color="#6ea0ff" stop-opacity="0"/></radialGradient>' +
+    '</defs></svg>';
+
+  function mix(a, b, t){ var A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), r = (A >> 16) + ((B >> 16) - (A >> 16)) * t, g = (A >> 8 & 255) + ((B >> 8 & 255) - (A >> 8 & 255)) * t, bl = (A & 255) + ((B & 255) - (A & 255)) * t; return 'rgb(' + (r | 0) + ',' + (g | 0) + ',' + (bl | 0) + ')'; }
   function gaugeSVG(){
-    var s = '<svg class="cl-gauge" viewBox="0 0 220 220" aria-hidden="true"><defs><linearGradient id="ckBlue" x1="0" x2="1"><stop offset="0" stop-color="#3b6fe0"/><stop offset="1" stop-color="#9dbdf6"/></linearGradient></defs>';
-    var cx = 110, cy = 110, N = 54;
+    var s = '<svg class="cl-gauge" viewBox="0 0 220 220" aria-hidden="true"><circle cx="110" cy="110" r="78" fill="url(#ckSpeedGlow)"/>' +
+      '<path d="M41 179 A98 98 0 1 1 179 179" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>';
+    var cx = 110, cy = 110, N = 72;
     for (var k = 0; k <= N; k++){
-      var t = k / N, a = (135 + 270 * t) * Math.PI / 180, major = k % 6 === 0;
-      var r1 = 96, r2 = major ? 80 : 86;
-      var col = t < .34 ? 'url(#ckBlue)' : t > .78 ? '#e0524f' : '#e8ecf3';
-      s += '<line data-t="' + t.toFixed(3) + '" x1="' + (cx + r1 * Math.cos(a)).toFixed(1) + '" y1="' + (cy + r1 * Math.sin(a)).toFixed(1) + '" x2="' + (cx + r2 * Math.cos(a)).toFixed(1) + '" y2="' + (cy + r2 * Math.sin(a)).toFixed(1) + '" stroke="' + col + '" stroke-width="' + (major ? 2.6 : 2) + '"/>';
-      if (major){ var rl = 68; s += '<text x="' + (cx + rl * Math.cos(a)).toFixed(1) + '" y="' + (cy + rl * Math.sin(a) + 3).toFixed(1) + '" fill="#cfd6e2" font-size="9" text-anchor="middle" font-family="Nunito Sans,sans-serif">' + (k / 6) + '</text>'; }
+      var t = k / N, a = (135 + 270 * t) * Math.PI / 180, major = k % 8 === 0;
+      var r1 = 97, r2 = major ? 80 : (k % 2 ? 88 : 85);
+      var col = t < .32 ? mix('#2f63d8', '#b7cdf5', t / .32) : t < .72 ? '#eef1f6' : mix('#f2c4c1', '#e0463f', (t - .72) / .28);
+      s += '<line data-t="' + t.toFixed(3) + '" x1="' + (cx + r1 * Math.cos(a)).toFixed(1) + '" y1="' + (cy + r1 * Math.sin(a)).toFixed(1) + '" x2="' + (cx + r2 * Math.cos(a)).toFixed(1) + '" y2="' + (cy + r2 * Math.sin(a)).toFixed(1) + '" stroke="' + col + '" stroke-width="' + (major ? 2.6 : 1.7) + '" stroke-linecap="round"/>';
+      if (major){ var rl = 68; s += '<text x="' + (cx + rl * Math.cos(a)).toFixed(1) + '" y="' + (cy + rl * Math.sin(a) + 3).toFixed(1) + '" fill="#cfd6e2" font-size="9" text-anchor="middle" font-family="Nunito Sans,sans-serif">' + (k / 8) + '</text>'; }
     }
     return s + '</svg>';
   }
@@ -97,59 +119,100 @@
     return s + '</svg>';
   }
   var CITY = (function(){
-    var R = rng(11), W = 640, H = 420, s = '<svg class="city" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="' + W + '" height="' + H + '" fill="#2a2f37"/>';
-    var xs = [0, 90, 190, 270, 380, 470, 560, 640], ys = [0, 70, 150, 230, 300, 380, 420];
-    for (var i = 0; i < xs.length - 1; i++) for (var j = 0; j < ys.length - 1; j++){
-      var x0 = xs[i] + 8, x1 = xs[i + 1] - 8, y0 = ys[j] + 8, y1 = ys[j + 1] - 8;
-      if (i === 4 && j === 2){ s += '<rect x="' + x0 + '" y="' + y0 + '" width="' + (x1 - x0) + '" height="' + (y1 - y0) + '" fill="#2d4537"/>'; continue; }
-      for (var b = 0; b < 7; b++){ var bw = 12 + R() * 22, bh = 10 + R() * 18, bx = x0 + R() * Math.max(1, x1 - x0 - bw), by = y0 + R() * Math.max(1, y1 - y0 - bh);
-        s += '<rect x="' + bx.toFixed(0) + '" y="' + by.toFixed(0) + '" width="' + bw.toFixed(0) + '" height="' + bh.toFixed(0) + '" fill="#3a404a" stroke="#2f343c"/>'; }
-    }
-    s += '<g stroke="#4b525d" stroke-width="5">';
+    var R = rng(11), W = 640, H = 420, s = '<svg class="city" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="' + W + '" height="' + H + '" fill="#23272e"/>';
+    var xs = [0, 90, 190, 270, 380, 470, 560, 640], ys = [0, 70, 150, 230, 300, 380, 420], blds = [];
+    s += '<g stroke="#3d434d" stroke-width="7">';
     xs.forEach(function(x){ s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + H + '"/>'; });
     ys.forEach(function(y){ s += '<line x1="0" y1="' + y + '" x2="' + W + '" y2="' + y + '"/>'; });
-    s += '</g><g fill="#c9d0db" font-size="11" font-family="Nunito Sans,sans-serif"><text x="420" y="64">W Huron St</text><text x="420" y="144">W Washington St</text><text x="470" y="224">W Liberty St</text><text x="400" y="294">W Jefferson St</text>' +
-      '<text transform="translate(282 150) rotate(90)">S 7th St</text></g>';
-    s += '<line x1="276" y1="0" x2="276" y2="' + H + '" stroke="#3d7bff" stroke-width="9" opacity=".35"/><line x1="276" y1="0" x2="276" y2="' + H + '" stroke="#4f8cff" stroke-width="5"/>';
+    s += '</g><g stroke="#4a515c" stroke-width="1" stroke-dasharray="4 6">';
+    xs.forEach(function(x){ s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + H + '"/>'; });
+    s += '</g>';
+    for (var i = 0; i < xs.length - 1; i++) for (var j = 0; j < ys.length - 1; j++){
+      var x0 = xs[i] + 10, x1 = xs[i + 1] - 10, y0 = ys[j] + 10, y1 = ys[j + 1] - 10;
+      if (i === 4 && j === 2){ s += '<rect x="' + x0 + '" y="' + y0 + '" width="' + (x1 - x0) + '" height="' + (y1 - y0) + '" rx="3" fill="#2c4636"/><circle cx="' + (x0 + 30) + '" cy="' + (y0 + 26) + '" r="9" fill="#35553f"/><circle cx="' + (x1 - 26) + '" cy="' + (y1 - 20) + '" r="11" fill="#35553f"/>'; continue; }
+      for (var b = 0; b < 6; b++){ var bw = 14 + R() * 20, bh = 12 + R() * 16, bx = x0 + R() * Math.max(1, x1 - x0 - bw), by = y0 + 6 + R() * Math.max(1, y1 - y0 - bh - 6); blds.push([bx, by, bw, bh, 3 + R() * 7]); }
+    }
+    blds.sort(function(a, b){ return a[1] - b[1]; });
+    blds.forEach(function(q){
+      var x = q[0].toFixed(0), y = q[1].toFixed(0), w = q[2].toFixed(0), h = q[3].toFixed(0), e = q[4];
+      s += '<rect x="' + x + '" y="' + (q[1] + 2).toFixed(0) + '" width="' + w + '" height="' + h + '" fill="#1a1d22" opacity=".7"/>' +
+        '<path d="M' + x + ' ' + (q[1] + q[3]).toFixed(0) + 'v' + (-e).toFixed(1) + 'h' + w + 'v' + e.toFixed(1) + 'z" fill="#353a43"/>' +
+        '<rect x="' + x + '" y="' + (q[1] - e).toFixed(1) + '" width="' + w + '" height="' + h + '" fill="#4a505a" stroke="#565d68" stroke-width=".6"/>';
+    });
+    s += '<g fill="#c9d0db" font-size="11" font-family="Nunito Sans,sans-serif" paint-order="stroke" stroke="#23272e" stroke-width="3"><text x="420" y="64">W Huron St</text><text x="420" y="144">W Washington St</text><text x="470" y="224">W Liberty St</text><text x="400" y="294">W Jefferson St</text>' +
+      '<text transform="translate(283 140) rotate(90)">S 7th St</text></g>';
+    s += '<line x1="276" y1="0" x2="276" y2="' + H + '" stroke="#3d7bff" stroke-width="16" opacity=".22" filter="url(#ckSoft)"/><line x1="276" y1="0" x2="276" y2="' + H + '" stroke="#4f8cff" stroke-width="6" stroke-linecap="round"/><line x1="276" y1="0" x2="276" y2="' + H + '" stroke="#9cc0ff" stroke-width="1.4" opacity=".7"/>';
     return s + '</svg>';
   })();
+  var camN = 0;
   function camSVG(kind){
-    var s = '<svg viewBox="0 0 160 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="ckSky' + kind + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd5dc"/><stop offset="1" stop-color="#a3abb5"/></linearGradient></defs>' +
-      '<rect width="160" height="70" fill="url(#ckSky' + kind + ')"/><rect y="62" width="160" height="10" fill="#7d8b6e"/><polygon points="-40,180 200,180 104,64 56,64" fill="#5a5e65"/>';
-    s += '<g stroke="#f1f3f6" stroke-width="2.4" stroke-dasharray="10 12"><line x1="80" y1="66" x2="40" y2="180"/><line x1="80" y1="66" x2="122" y2="180"/></g>';
-    if (kind === 'L' || kind === 'R'){
-      var m = kind === 'R' ? 'transform="translate(160 0) scale(-1 1)"' : '';
-      s += '<g ' + m + '><path d="M-6 120 L40 96 L80 100 L86 150 L-6 168z" fill="#71767e"/><path d="M8 112 L40 99 L64 101 L66 118 L8 124z" fill="#3b3f46"/><circle cx="20" cy="164" r="12" fill="#222"/>' +
-        '<path d="M126 70 L160 60 L160 180 L120 180z" fill="#e9ebee"/><path d="M130 86 L156 78 L156 120 L132 124z" fill="#b8bdc4"/></g>';
-    } else if (kind === 'H'){
-      s += '<g stroke="#2a2c30" stroke-width="3" fill="none"><path d="M40 70 L120 70 L132 150 L28 150z"/><line x1="80" y1="150" x2="80" y2="178"/><path d="M50 90 L110 90M46 110 L114 110M42 130 L118 130"/></g>' +
-        '<g stroke="#3a3c40" stroke-width="2" fill="none"><circle cx="62" cy="96" r="13"/><circle cx="96" cy="96" r="13"/><path d="M62 96 L80 84 L96 96"/></g><path d="M70 160 L90 160 L86 178 L74 178z" fill="#9aa0a8"/><rect x="0" y="170" width="160" height="10" fill="#2d3035"/>';
-    } else {
-      s += '<path d="M66 96 L94 96 L98 120 L62 120z" fill="#8a9099"/><path d="M69 99 L91 99 L92 108 L68 108z" fill="#3b3f46"/><rect x="0" y="166" width="160" height="14" fill="#2d3035"/><path d="M30 166 L48 150 L112 150 L130 166" stroke="#2d3035" stroke-width="4" fill="none"/>';
+    var id = 'ckCam' + (camN++), s = '<svg viewBox="0 0 160 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>' +
+      '<mask id="' + id + '"><g class="cam-dash" stroke="#fff" stroke-width="40" stroke-dasharray="14 16"><line x1="80" y1="40" x2="80" y2="200"/></g></mask></defs>';
+    s += '<rect width="160" height="72" fill="url(#ckSkyG)"/>' +
+      '<path d="M0 60 Q20 50 40 57 T80 54 T120 56 T160 52 V70 H0z" fill="#8f9aa5" opacity=".7"/>' +
+      '<path d="M0 64 q6-5 12 0 q5-6 11 0 q6-4 12 0 q6-6 12 0 q5-4 11 0 q6-5 12 0 q6-4 11 0 q6-6 12 0 q5-4 12 0 q6-5 11 0 q6-4 12 0 q6-6 12 0 q5-4 11 0 q6-5 10 0 V72 H0z" fill="#56664a"/>' +
+      '<polygon points="0,72 160,72 160,180 0,180" fill="url(#ckGrass)"/>' +
+      '<polygon points="-60,180 220,180 98,70 62,70" fill="url(#ckAsph)" filter="url(#ckGrain)"/>' +
+      '<polygon points="-60,180 -46,180 63,70 62,70" fill="#eef0f2"/><polygon points="206,180 220,180 98,70 97,70" fill="#eef0f2"/>' +
+      '<g mask="url(#' + id + ')"><polygon points="28,180 40,180 81.5,70 80.6,70" fill="#f4f5f6"/><polygon points="120,180 132,180 79.4,70 78.5,70" fill="#f4f5f6"/></g>';
+    function car(x, y, sc, flip){
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -sc : sc) + ' ' + sc + ')" filter="url(#ckBlurX)"><ellipse cx="0" cy="22" rx="46" ry="6" fill="#000" opacity=".35"/>' +
+        '<path d="M-44 18 L-44 2 Q-40 -8 -26 -10 L-12 -24 Q0 -30 22 -28 L36 -14 Q46 -10 46 2 L46 18z" fill="url(#ckCarG)"/>' +
+        '<path d="M-8 -22 L-22 -10 L4 -10 L4 -24z M8 -24 L8 -10 L32 -10 L22 -24z" fill="url(#ckGlass)"/>' +
+        '<path d="M-44 4 H46" stroke="rgba(255,255,255,.25)" stroke-width="1"/>' +
+        '<circle cx="-26" cy="18" r="9" fill="#18191c"/><circle cx="-26" cy="18" r="4.5" fill="#7a7f87"/><circle cx="28" cy="18" r="9" fill="#18191c"/><circle cx="28" cy="18" r="4.5" fill="#7a7f87"/></g>';
     }
+    if (kind === 'L' || kind === 'R'){
+      var m = kind === 'R' ? ' transform="translate(160 0) scale(-1 1)"' : '';
+      s += '<g' + m + '>' + car(30, 112, .9, false) +
+        '<path d="M120 50 L170 30 L170 190 L106 190 Q110 120 120 50z" fill="url(#ckWhiteG)"/>' +
+        '<path d="M126 70 L170 58 L170 112 L120 120z" fill="#9ba2ab" opacity=".55"/>' +
+        '<path d="M118 132 Q140 128 170 130" stroke="#aab0b8" stroke-width="1.2" fill="none"/>' +
+        '<rect x="66" y="0" width="22" height="9" rx="4" fill="#111"/></g>';
+    } else if (kind === 'H'){
+      s += '<g><path d="M30 84 L130 84 L146 156 L14 156z" fill="#3b3e43" opacity=".35"/>' +
+        '<path d="M34 86 L126 86 L140 152 L20 152z" fill="none" stroke="#202226" stroke-width="3"/>' +
+        '<g stroke="#2b2d31" stroke-width="1.2" opacity=".85">' + [96, 106, 116, 126, 136, 146].map(function(y){ var k = (y - 86) / 66, l = 34 - 14 * k, r = 126 + 14 * k; return '<line x1="' + l.toFixed(1) + '" y1="' + y + '" x2="' + r.toFixed(1) + '" y2="' + y + '"/>'; }).join('') + '</g>' +
+        '<g fill="none" stroke="#1d1f22" stroke-width="2.4"><circle cx="58" cy="104" r="14"/><circle cx="92" cy="104" r="14"/><path d="M58 104 L72 92 L92 104 M72 92 L68 84"/></g>' +
+        '<path d="M70 152 L80 172 L90 152" fill="none" stroke="#202226" stroke-width="3"/><path d="M74 160 q-6 8 0 14 q6 6 0 12" stroke="#9aa0a8" stroke-width="1.6" fill="none"/>' +
+        '<circle cx="80" cy="172" r="5" fill="#c4c9d0"/><rect x="0" y="170" width="160" height="10" fill="#1b1d21"/></g>';
+    } else {
+      s += car(80, 104, .38, false) + '<rect x="0" y="168" width="160" height="12" fill="#1b1d21"/><path d="M26 168 L44 150 L116 150 L134 168" stroke="#1b1d21" stroke-width="4" fill="none"/>';
+    }
+    s += '<rect width="160" height="180" fill="url(#ckVig)"/>';
     return s + '</svg>';
   }
   function laneSVG(kind){
-    var s = '<svg viewBox="0 0 282 368" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="282" height="368" fill="#23272f"/>';
-    var lanes = [30, 80, 130, 180, 230];
-    s += '<rect x="' + lanes[2] + '" y="0" width="50" height="368" fill="#3d7bff" opacity=".22"/><line x1="130" y1="0" x2="130" y2="368" stroke="#4f8cff" stroke-width="2.5"/><line x1="180" y1="0" x2="180" y2="368" stroke="#4f8cff" stroke-width="2.5"/>';
-    s += '<g stroke="#9aa3b0" stroke-width="1.4" stroke-dasharray="12 14">';
-    [80, 230].forEach(function(x){ s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="368"/>'; });
-    s += '</g><line x1="30" y1="0" x2="30" y2="368" stroke="#c9d0db" stroke-width="2"/><line x1="280" y1="0" x2="280" y2="368" stroke="#c9d0db" stroke-width="2"/>';
+    var s = '<div class="lane3d"><svg viewBox="0 0 282 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="282" height="420" fill="#1f2329"/>';
+    s += '<rect x="22" y="0" width="238" height="420" fill="#2a2e35" filter="url(#ckGrain)"/>';
+    s += '<rect x="122" y="0" width="46" height="420" fill="url(#ckLaneHi)"/><line x1="122" y1="0" x2="122" y2="420" stroke="#4f8cff" stroke-width="2.5"/><line x1="168" y1="0" x2="168" y2="420" stroke="#4f8cff" stroke-width="2.5"/>';
+    s += '<g class="lane-mv" stroke="#a9b1bd" stroke-width="1.6" stroke-dasharray="14 16">';
+    [72, 214].forEach(function(x){ s += '<line x1="' + x + '" y1="-30" x2="' + x + '" y2="450"/>'; });
+    s += '</g><line x1="24" y1="0" x2="24" y2="420" stroke="#d6dbe2" stroke-width="2"/><line x1="258" y1="0" x2="258" y2="420" stroke="#d6dbe2" stroke-width="2"/>';
     var R = rng(kind === 'wind' ? 5 : 3);
-    function car(x, y, c, w, h){ w = w || 22; h = h || 38; return '<g transform="translate(' + x + ' ' + y + ')"><rect x="' + (-w / 2) + '" y="' + (-h / 2) + '" width="' + w + '" height="' + h + '" rx="6" fill="' + (c || '#5d636e') + '"/><rect x="' + (-w / 2 + 3) + '" y="' + (-h / 2 + 7) + '" width="' + (w - 6) + '" height="9" rx="2" fill="#2c3038"/></g>'; }
-    [[55, 40], [55, 150], [55, 290], [105, 90], [105, 230], [205, 60], [205, 200], [255, 120], [255, 300], [155, 40]].forEach(function(p){ s += car(p[0], p[1] + R() * 20); });
-    s += car(155, 210, '#eef1f5', 26, 52);
+    function car(x, y, body, w, h){
+      w = w || 22; h = h || 40;
+      return '<g transform="translate(' + x + ' ' + y + ')"><rect x="' + (-w / 2 - 1) + '" y="' + (-h / 2 + 3) + '" width="' + (w + 2) + '" height="' + h + '" rx="7" fill="#000" opacity=".45" filter="url(#ckSoft)"/>' +
+        '<rect x="' + (-w / 2) + '" y="' + (-h / 2) + '" width="' + w + '" height="' + h + '" rx="6.5" fill="' + (body || 'url(#ckTop)') + '"/>' +
+        '<path d="M' + (-w / 2 + 3) + ' ' + (-h / 2 + 9) + ' Q0 ' + (-h / 2 + 5) + ' ' + (w / 2 - 3) + ' ' + (-h / 2 + 9) + ' L' + (w / 2 - 4) + ' ' + (-h / 2 + 15) + ' L' + (-w / 2 + 4) + ' ' + (-h / 2 + 15) + 'z" fill="#1d2025"/>' +
+        '<rect x="' + (-w / 2 + 4) + '" y="' + (h / 2 - 9) + '" width="' + (w - 8) + '" height="4" rx="1.5" fill="#1d2025"/>' +
+        '<rect x="' + (-w / 2 + 3) + '" y="' + (-h / 2 + 17) + '" width="' + (w - 6) + '" height="' + (h - 28) + '" rx="3" fill="#fff" opacity=".07"/></g>';
+    }
+    [[48, 30], [48, 150], [48, 300], [96, 90], [96, 250], [192, 50], [192, 200], [236, 120], [236, 320], [145, 30]].forEach(function(p){ s += car(p[0], p[1] + R() * 22); });
+    /* Mark's truck with the trailer behind it */
+    s += '<g transform="translate(145 168)"><rect x="-15" y="34" width="30" height="46" rx="3" fill="#000" opacity=".4" filter="url(#ckSoft)"/><rect x="-14" y="32" width="28" height="44" rx="3" fill="#4b5058" stroke="#6b717a"/><path d="M-10 38h20M-10 46h20M-10 54h20M-10 62h20" stroke="#5c626b"/><path d="M0 28v6" stroke="#9aa0a8" stroke-width="2"/></g>';
+    s += car(145, 152, 'url(#ckOwn)', 26, 54);
     if (kind === 'siren'){
-      s += '<g transform="translate(155 320)"><rect x="-13" y="-24" width="26" height="48" rx="5" fill="#f4f6f8"/><path d="M-5 0h10M0 -5v10" stroke="#e0524f" stroke-width="3"/>' +
-        '<rect class="siren-l" x="-12" y="-26" width="10" height="5" rx="2" fill="#ff3b3b"/><rect class="siren-r" x="2" y="-26" width="10" height="5" rx="2" fill="#3b7bff"/><circle class="siren-l" cx="0" cy="-24" r="22" fill="#3b7bff" opacity=".18"/></g>';
-      s += '<path class="dash-arrow" d="M160 182 C160 140 205 136 205 70" stroke="#8fb3ff" stroke-width="2.5" fill="none"/><path d="M198 74 L205 60 L212 74z" fill="#8fb3ff"/>';
+      s += '<g transform="translate(145 300)"><circle class="siren-l" r="34" fill="#3b7bff" opacity=".22" filter="url(#ckGlow)"/><circle class="siren-r" r="30" fill="#ff3b3b" opacity=".22" filter="url(#ckGlow)"/>' +
+        '<rect x="-14" y="-26" width="28" height="52" rx="6" fill="#f4f6f8"/><path d="M-5 2h10M0 -3v10" stroke="#e0524f" stroke-width="3"/>' +
+        '<rect class="siren-l" x="-12" y="-27" width="10" height="5" rx="2" fill="#ff3b3b"/><rect class="siren-r" x="2" y="-27" width="10" height="5" rx="2" fill="#3b7bff"/></g>';
+      s += '<path class="dash-arrow" d="M150 124 C150 80 192 80 192 30" stroke="#8fb3ff" stroke-width="2.5" fill="none"/><path d="M185 34 L192 18 L199 34z" fill="#8fb3ff"/>';
     } else {
       s += '<g class="wind" stroke="#9ed2ff" stroke-width="1.6" fill="none" opacity=".85">';
-      for (var i = 0; i < 9; i++){ var y = 20 + i * 38; s += '<path style="animation-delay:-' + (i * .27).toFixed(2) + 's" d="M-10 ' + y + ' C 80 ' + (y - 20) + ', 160 ' + (y + 26) + ', 300 ' + (y - 10) + '"/>'; }
+      for (var i = 0; i < 10; i++){ var y = 20 + i * 40; s += '<path style="animation-delay:-' + (i * .27).toFixed(2) + 's" d="M-10 ' + y + ' C 80 ' + (y - 20) + ', 160 ' + (y + 26) + ', 300 ' + (y - 10) + '"/>'; }
       s += '</g>';
     }
-    return s + '</svg>';
+    return s + '</svg></div>';
   }
   function wavesSVG(){
     var s = '<svg class="waves" viewBox="0 0 640 392" preserveAspectRatio="none" aria-hidden="true">';
@@ -318,7 +381,7 @@
       fan:3, ac:true, auto:false, off:false, recirc:false, fdef:false, rdef:false, seatL:false, seatR:false, tl:72, tr:75 };
     var shownSpeed = st.speed, ctx = -1, lastScreen = '', toastT = 0;
 
-    host.innerHTML = '<div class="ck"><div class="ck-stick">' +
+    host.innerHTML = DEFS + '<div class="ck"><div class="ck-stick">' +
       '<div class="ck-head"><div class="ck-copy">' + CTX.map(function(c){ return '<div class="ck-panel"><span class="lbl">' + c.kick + '</span><h3>' + c.h[0] + ' <em>' + c.h[1] + '</em></h3><p>' + c.p + '</p></div>'; }).join('') + '</div>' +
       '<nav class="ck-tabs lbl" aria-label="Driving contexts">' + CTX.map(function(c, i){ return '<button type="button">0' + (i + 1) + ' ' + c.tab + '</button>'; }).join('') + '</nav></div>' +
       '<div class="ck-area"><div class="ck-canvas">' +
@@ -387,7 +450,7 @@
     }
 
     /* ---------- center display ---------- */
-    cdStatus.innerHTML = I('pin') + I('wifi') + I('bt') + '<span class="mid"><span>' + I('music') + 'MEDIA</span><span>↑ MAPS</span><span style="font-size:14px">' + I('grid') + '</span><span style="font-size:12px;letter-spacing:0">' + I('sun') + ' 74°F</span></span><span class="tm">12:47</span>' + I('bat');
+    cdStatus.innerHTML = I('pin') + I('wifi') + I('bt') + '<span class="mid"><span class="chip">' + I('music') + 'MEDIA</span><span class="chip">↑ MAPS</span><span style="font-size:14px;display:flex">' + I('grid') + '</span><span class="chip" style="letter-spacing:0;color:#f2c14e">' + I('sun') + '<b style="color:#e7ecf4;font-weight:400">74°F</b></span></span><span class="tm">12:47</span>' + I('bat');
     var NAV = [['climate', 'fan'], ['drive', 'car'], ['map', 'map'], ['home', 'home'], ['music', 'music'], ['camera', 'cam']];
     cdNav.innerHTML = NAV.map(function(n){ return '<button type="button" data-nav="' + n[0] + '" aria-label="' + n[0] + '">' + I(n[1]) + '</button>'; }).join('');
     function navKey(s){ return s === 'stability' ? 'map' : s; }
@@ -419,17 +482,38 @@
       }
       if (s === 'climate'){
         var f = st.off ? 0 : st.fan, dur = (1.6 - f * .18).toFixed(2) + 's';
-        var flowL = '', flowR = '';
+        var flows = '';
         if (!st.off){
-          for (var k = 0; k < 3; k++){ flowL += '<path style="animation-duration:' + dur + '" d="M' + (150 + k * 14) + ' 168 C ' + (130 + k * 10) + ' 120, ' + (90 + k * 8) + ' 110, ' + (70 + k * 12) + ' 160" stroke="#6ea0ff" stroke-width="5" fill="none" opacity=".85"/>';
-            flowR += '<path style="animation-duration:' + dur + '" d="M' + (410 - k * 14) + ' 168 C ' + (440 - k * 10) + ' 118, ' + (480 - k * 8) + ' 112, ' + (500 - k * 12) + ' 160" stroke="#e9c79b" stroke-width="5" fill="none" opacity=".85"/>'; }
+          var sp = (2.2 - f * .22).toFixed(2) + 's';
+          flows = '<g class="cm-flow2" style="--d:' + sp + '">' +
+            '<path d="M232 128 C214 92 168 84 134 104 C112 118 104 146 112 176" stroke="url(#ckFlowB)" stroke-width="16" fill="none" stroke-linecap="round" opacity=".55"/>' +
+            '<path class="mv" d="M232 128 C214 92 168 84 134 104 C112 118 104 146 112 176" stroke="#cfe0ff" stroke-width="2" fill="none" stroke-dasharray="8 14"/>' +
+            '<path d="M104 170 L112 186 L122 168z" fill="#4f84f0"/>' +
+            '<path d="M214 136 C190 122 160 132 150 160 C146 172 148 184 152 194" stroke="url(#ckFlowB)" stroke-width="12" fill="none" stroke-linecap="round" opacity=".45"/>' +
+            '<path class="mv" d="M214 136 C190 122 160 132 150 160 C146 172 148 184 152 194" stroke="#cfe0ff" stroke-width="1.6" fill="none" stroke-dasharray="7 12"/>' +
+            '<path d="M380 128 C398 92 444 84 478 104 C500 118 508 146 500 176" stroke="url(#ckFlowW)" stroke-width="16" fill="none" stroke-linecap="round" opacity=".55"/>' +
+            '<path class="mv" d="M380 128 C398 92 444 84 478 104 C500 118 508 146 500 176" stroke="#fff1dc" stroke-width="2" fill="none" stroke-dasharray="8 14"/>' +
+            '<path d="M490 168 L500 186 L508 168z" fill="#d9a35e"/>' +
+            '<path d="M398 136 C422 122 452 132 462 160 C466 172 464 184 460 194" stroke="url(#ckFlowW)" stroke-width="12" fill="none" stroke-linecap="round" opacity=".45"/>' +
+            '<path class="mv" d="M398 136 C422 122 452 132 462 160 C466 172 464 184 460 194" stroke="#fff1dc" stroke-width="1.6" fill="none" stroke-dasharray="7 12"/></g>';
         }
-        return '<div class="' + (st.off ? 'cm-off' : '') + '"><div class="cm-view"><svg viewBox="0 0 612 236" preserveAspectRatio="none" aria-hidden="true">' +
-          '<path d="M60 0 L552 0 L600 90 L12 90z" fill="#e6eaee" opacity=".55"/>' + (st.fdef ? '<path d="M60 0 L552 0 L600 90 L12 90z" fill="#ffd9a8" opacity=".35"/>' : '') +
-          '<path d="M0 96 C200 70 412 70 612 96 L612 236 L0 236z" fill="#2c3037"/><path d="M0 96 C200 70 412 70 612 96" stroke="#4a4f58" stroke-width="2" fill="none"/>' +
-          '<circle cx="150" cy="150" r="54" fill="none" stroke="#15171b" stroke-width="12"/><rect x="128" y="138" width="44" height="26" rx="8" fill="#15171b"/>' +
-          '<rect x="250" y="104" width="112" height="62" rx="6" fill="#15171b" stroke="#3a3f47"/><rect x="200" y="182" width="212" height="54" fill="#22252b"/>' +
-          '<g class="cm-flow">' + flowL + flowR + '</g></svg>' +
+        return '<div class="' + (st.off ? 'cm-off' : '') + '"><div class="cm-view"><svg viewBox="0 0 612 236" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+          '<rect width="612" height="236" fill="#1b1e23"/>' +
+          '<path d="M40 0 H572 L596 96 Q306 70 16 96z" fill="url(#ckWind)"/>' + (st.fdef ? '<path d="M40 0 H572 L596 96 Q306 70 16 96z" fill="#ffcf8f" opacity=".28"/>' : '') +
+          '<path d="M300 0 h12 v14 h-12z" fill="#2a2d33"/><rect x="286" y="12" width="40" height="10" rx="3" fill="#2a2d33"/>' +
+          '<path d="M0 0 L40 0 L16 96 L0 100z M612 0 L572 0 L596 96 L612 100z" fill="#24272c"/>' +
+          '<path d="M0 100 Q306 66 612 100 L612 236 L0 236z" fill="url(#ckDashG)"/>' +
+          '<path d="M0 100 Q306 66 612 100" stroke="#4a4f58" stroke-width="1.5" fill="none"/>' +
+          '<path d="M70 104 Q150 84 240 92 L236 122 Q150 116 74 132z" fill="#121418"/><rect x="104" y="98" width="110" height="20" rx="5" fill="#0d1a2c"/><rect x="108" y="101" width="102" height="14" rx="3" fill="#1f3b63" opacity=".8"/>' +
+          '<rect x="252" y="96" width="108" height="64" rx="7" fill="#0d0f13" stroke="#3a3f47"/><rect x="257" y="101" width="98" height="54" rx="4" fill="#1d2534"/><rect x="262" y="106" width="40" height="44" rx="3" fill="#2a3446"/><rect x="306" y="106" width="44" height="20" rx="3" fill="#2a3446"/><rect x="306" y="130" width="44" height="20" rx="3" fill="#2a3446"/>' +
+          '<g fill="#0c0d10"><rect x="262" y="168" width="34" height="14" rx="4"/><rect x="316" y="168" width="34" height="14" rx="4"/></g><g stroke="#30343b" stroke-width="1.2">' + [171, 175, 179].map(function(y){ return '<line x1="265" y1="' + y + '" x2="293" y2="' + y + '"/><line x1="319" y1="' + y + '" x2="347" y2="' + y + '"/>'; }).join('') + '</g>' +
+          '<g fill="#0c0d10"><rect x="70" y="142" width="30" height="13" rx="4"/><rect x="512" y="142" width="30" height="13" rx="4"/></g>' +
+          '<path d="M232 236 L248 188 L364 188 L380 236z" fill="#15171b"/><circle cx="306" cy="214" r="10" fill="#2a2d33" stroke="#4a4f58"/>' +
+          '<g transform="translate(158 160)"><circle r="62" fill="none" stroke="#0f1013" stroke-width="13"/><circle r="62" fill="none" stroke="#2c2f35" stroke-width="1"/><path d="M-60 6 Q-30 12 -16 8 L16 8 Q30 12 60 6 M0 22 V58" stroke="#0f1013" stroke-width="11" fill="none"/>' +
+          '<rect x="-24" y="-12" width="48" height="36" rx="12" fill="#17191d" stroke="#2c2f35"/><path d="M-12 4 h24" stroke="#4a4e56" stroke-width="2.5"/></g>' +
+          '<path d="M400 236 Q420 200 470 196 L612 196 L612 236z" fill="#121418"/>' +
+          flows + '</svg>' +
+          '<span class="cm-back">Back Seat ▾</span>' +
           '<div class="cm-temp l" style="--h:' + ((st.tl - 60) / 25 * 100).toFixed(0) + '%"><span>HI</span><i></i><b>' + st.tl + '°</b><span>LO</span></div>' +
           '<div class="cm-temp r" style="--h:' + ((st.tr - 60) / 25 * 100).toFixed(0) + '%"><span>HI</span><i></i><b>' + st.tr + '°</b><span>LO</span></div></div>' +
           '<div class="cm-ctrl"><div class="cm-vents pn"><button class="tb on">' + I('ventF') + '</button><button class="tb' + (st.fdef ? ' on' : '') + '" data-act="fdef">' + I('defF') + '</button><button class="tb">' + I('ventD') + '</button><button class="tb' + (st.rdef ? ' on' : '') + '" data-act="rdef">' + I('defR') + '</button></div>' +
@@ -457,7 +541,7 @@
           '<div class="cams"><div class="cam">' + camSVG('L') + '<span>LEFT</span></div><div class="cam">' + camSVG('R') + '<span>RIGHT</span></div><div class="cam">' + camSVG('H') + '<span>HITCH</span></div><div class="cam">' + camSVG('B') + '<span>REAR</span></div></div>';
       }
       if (s === 'stability'){
-        return '<div class="sp-l"><div class="stab"><img src="assets/gm/truck.png" alt="" draggable="false"><svg viewBox="0 0 282 170" aria-hidden="true"><path d="M70 64 L70 30 L100 30" stroke="#5fd39a" fill="none"/><path d="M160 120 L160 140 L190 140" stroke="#5fd39a" fill="none"/></svg><span style="left:104px;top:22px">Chassis Control Active</span><span style="left:150px;top:146px">Steering Assist Active</span></div>' +
+        return '<div class="sp-l"><div class="stab"><img src="assets/gm/truck.png" alt="" draggable="false"><svg viewBox="0 0 282 170" aria-hidden="true"><path d="M100 24 H76 V70" stroke="#5fd39a" fill="none"/><circle cx="76" cy="72" r="3" fill="#5fd39a"/><path d="M146 150 H118 V128" stroke="#5fd39a" fill="none"/><circle cx="118" cy="126" r="3" fill="#5fd39a"/></svg><span style="left:104px;top:16px">Chassis Control Active</span><span style="left:150px;top:142px">Steering Assist Active</span></div>' +
           '<div style="position:absolute;left:0;right:0;bottom:0;height:54%;overflow:hidden">' + laneSVG('wind') + '<div class="alert warn"><b>' + I('warn') + ' Strong crosswind detected</b><p>Stability Assist active</p></div></div></div>' +
           '<div class="sp-r">' + mapView('') + '</div>';
       }
