@@ -217,7 +217,7 @@
     var stars = ''; var R = rng(9); for (var i = 0; i < 34; i++) stars += '<i style="left:' + (R() * 100).toFixed(1) + '%;top:' + (R() * 100).toFixed(1) + '%;opacity:' + (.3 + R() * .6).toFixed(2) + '"></i>';
     host.innerHTML = '<section class="co"><div class="co-copy">' +
         '<span class="lbl">Off the road · mobile companion</span><h3>The truck, <em>in your pocket.</em></h3>' +
-        '<p>The same truck from a phone: lock state, fluid level, drive mode and range at a glance; unlock, remote start, climate and panic arranged around the truck itself; quick modes for towing, off-road, winter, camping and work.</p>' +
+        '<p>The same truck from a phone: lock state, fuel, drive mode and range at a glance; unlock, remote start, climate and panic arranged around the truck itself; quick modes for towing, off-road, winter, camping and work.</p>' +
         '<p class="co-try">Try it — what you press on the phone reaches the cockpit above.</p><p class="co-sync lbl"><i></i><span>Linked to the cockpit</span></p></div>' +
       '<div class="co-phone"><div class="co-scr"><div class="co-app">' +
         '<div class="co-stars">' + stars + '</div><div class="co-arc"></div>' +
