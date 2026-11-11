@@ -1,0 +1,82 @@
+/* Editorial pass — fewer interface tropes, more authorship and project evidence. */
+:root{
+  --paper:#f4f0e7;--paper-2:#e9e3d7;--ink:#191914;--ink-2:#55564e;
+  --muted:#74756d;--line:#c9c2b5;--night:#11120f;
+  --blue:#cd4d2d;--blue-ink:#b33f24;--acid:#e36a42;--coral:#cd4d2d;
+  --font-display:'DM Sans','Helvetica Neue',Arial,sans-serif;
+  --font-serif:'Newsreader',Georgia,serif;
+  --font-mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+body.portfolio-home,body.case-page{background:var(--paper);color:var(--ink);font-family:var(--font-display);font-feature-settings:normal}
+body.portfolio-home::after,body.case-page::after,.curtain,.scene-hud,.scroll-progress,.ruler,.cursor{display:none!important}
+.has-cursor,.has-cursor a,.has-cursor button{cursor:auto}.has-cursor a,.has-cursor button{cursor:pointer}
+.hero-signal,.hero-field-wrap,.hero-workbench,.hero-foot{display:none!important}
+.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.09em;text-transform:uppercase}.mono{letter-spacing:.06em}
+em{font-family:var(--font-serif);font-weight:400}
+
+/* A quiet, useful header. */
+.portfolio-home .site-header,.case-page>header{height:74px;padding:0 3.2vw;border-bottom:1px solid var(--line);background:rgba(244,240,231,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.portfolio-home .brand,.case-page .brand{gap:12px;font-size:29px;font-weight:600;letter-spacing:-3px}
+.portfolio-home .brand>span,.case-page .brand>span{font-size:12px;font-weight:500;letter-spacing:0}
+.portfolio-home nav,.case-page nav{gap:28px;font-size:12px}.portfolio-home .nav-contact{padding-left:20px}
+
+/* Homepage opening: Lucia first, then the work itself. */
+.portfolio-home .editorial-hero{min-height:auto;display:block;padding:clamp(54px,7vw,104px) 3.2vw clamp(72px,8vw,120px);overflow:hidden}
+.editorial-hero-top{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:14px;border-top:1px solid var(--ink)}
+.editorial-hero-top p{margin:14px 0 0}.hero-availability{font-size:12px;color:var(--ink-2)}
+.portfolio-home .editorial-hero h1{margin:clamp(48px,7vw,96px) 0 clamp(46px,6vw,82px);font-family:var(--font-display)!important;font-size:clamp(82px,14.3vw,224px)!important;font-weight:500;line-height:.76!important;letter-spacing:-.075em!important;white-space:nowrap}
+.editorial-hero-bottom{display:grid;grid-template-columns:minmax(260px,.56fr) minmax(0,1.44fr);gap:clamp(44px,7vw,110px);align-items:end}
+.hero-statement{align-self:start;max-width:430px}.hero-statement>p{margin:0;font:italic clamp(20px,2vw,29px)/1.35 var(--font-serif);letter-spacing:-.015em;color:var(--ink-2)}
+.hero-actions{margin-top:34px;gap:24px;flex-wrap:wrap}.button{transition:background .25s,color .25s,border-color .25s,transform .25s}.button:hover{background:var(--coral);border-color:var(--coral);transform:translateY(-2px)}.text-link{font-size:12px}
+.hero-projects{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(180px,.75fr);grid-template-rows:1fr 1fr;gap:12px}
+.hero-project{position:relative;min-height:172px;overflow:hidden;background:#d7d2c7}.hero-project-main{grid-row:1/3;min-height:420px;background:#202521}
+.hero-project img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1),filter .4s}.hero-project-main img{object-fit:contain;padding:7%}.hero-project:hover img{transform:scale(1.025);filter:saturate(1.05)}
+.hero-project>span{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:end;gap:18px;padding:15px 17px;background:rgba(244,240,231,.94);color:var(--ink)}
+.hero-project strong{font-size:13px;font-weight:600}.hero-project small{font-size:10px;color:var(--muted);text-align:right}
+
+/* Let the immersive section be the one deliberate cinematic moment. */
+.highlights{background:#11120f;color:#f1eee7}.hl-sticky:before{background:linear-gradient(90deg,#11120ff2 0%,#11120fb8 31%,transparent 57%),linear-gradient(0deg,#11120fd9,transparent 24%)}
+.hl-head{top:98px;border-color:#ffffff2e}.hl-head .eyebrow{color:#e36a42}.hl-head span{letter-spacing:.06em;text-transform:none;color:#aaa9a2}
+.hl-chapter .mono{letter-spacing:.08em;color:#a7a69f}.hl-chapter h3{letter-spacing:-.055em}.hl-chapter h3 em{color:#e36a42}.hl-chapter p{color:#c1c0ba}
+.hl-chapter .hl-proof span{letter-spacing:.04em;text-transform:none;border-radius:2px}.hl-chapter a.hl-link{background:#e8e3d8;color:#171813}.hl-chapter a.hl-link:hover{background:#e36a42}.hl-progress i{background:#e36a42}.hl-index button{border-radius:2px;letter-spacing:.05em}
+
+/* Project index reads like an editorial contents page. */
+.portfolio-home .section{padding:clamp(80px,9vw,136px) 3.2vw}.portfolio-home .section-top{border-color:var(--line)}
+.portfolio-home .work-heading{margin:52px 0 42px}.portfolio-home .work-heading h2{max-width:940px;font-size:clamp(48px,6vw,96px)!important;line-height:.94}
+.portfolio-home .work-heading h2 em,.portfolio-home .about h2 em{color:var(--coral)}
+.portfolio-home .project-grid{border-top-color:var(--ink)}.portfolio-home .project{grid-template-columns:62px minmax(0,1fr) minmax(180px,250px);padding:28px 0;border-color:var(--line)}
+.portfolio-home .project:after{background:#ebe5da}.portfolio-home .project:hover h3{color:var(--coral);transform:translateX(8px)}.portfolio-home .project-info p{font-size:20px}.portfolio-home .project:hover .project-info p{transform:translateX(8px)}
+.index-preview{border-radius:0;box-shadow:0 24px 60px -25px #0008}
+
+/* Code is evidence, presented plainly. */
+.code-lab{background:#e9e3d7!important;border-top:1px solid var(--line)}.code-copy h2{font-size:clamp(52px,6vw,92px)!important}.code-facts span{border-radius:0;letter-spacing:.04em}
+.code-console{min-height:560px;border-radius:0;border:1px solid #2b2c28;box-shadow:none!important;background:#181916}.code-console pre{background:#11120f;height:440px}.workbench-tabs button.active,.code-tabs button.active{border-bottom-color:#e36a42}
+
+/* About is personal, without a faux dashboard grid. */
+.portfolio-home .about{grid-template-columns:minmax(280px,.82fr) minmax(0,1.18fr);gap:9%}.portfolio-home .about-monogram{top:104px;height:min(540px,68vh);background:#d9d1c4;background-image:none}
+.portfolio-home .about-monogram>span{color:var(--ink);font-family:var(--font-serif)!important;font-size:clamp(210px,23vw,330px);font-style:italic;font-weight:400;transform:none}
+.portfolio-home .about-monogram>span>span{color:var(--coral);transform:translateY(22px)}.portfolio-home .about-monogram small{color:#55564e}.portfolio-home .about h2{font-size:clamp(48px,5.6vw,86px)}.how-lead{font-size:25px!important}
+.portfolio-home .contact{background:#c85232;color:#191914}.portfolio-home .contact .eyebrow{color:#542819}.portfolio-home .contact em{color:#f4f0e7}.portfolio-home .contact-link{border-color:#7e321f}
+
+/* Case studies share the same quieter visual language. */
+.case-page .case-hero{min-height:auto;padding:clamp(54px,7vw,90px) 5vw clamp(66px,8vw,110px);background:var(--paper)}.case-page .back{letter-spacing:.06em}
+.case-page .case-hero h1{font-size:clamp(52px,6.4vw,102px)!important;line-height:.9;letter-spacing:-.06em}.case-page .case-intro{font:italic clamp(20px,2vw,28px)/1.4 var(--font-serif);color:var(--ink-2)}
+.case-page .case-tags span{border-radius:2px;letter-spacing:.04em;text-transform:none}.case-hero-media{border-radius:0;background:#1c211e;box-shadow:none}.case-hero-media.northern,.case-hero-media.fablab{background:#ded8cd}
+.case-page .metrics strong{color:var(--coral)}.case-page .story-row{margin:90px 0}.case-page .story-row h2{font-size:clamp(38px,4.2vw,64px)!important}.case-page .case-gallery{gap:16px}.case-page .case-gallery figure{border-radius:0;background:#e5dfd4}
+.case-page .demo-section{background:#171815;color:#f1eee7;padding:clamp(28px,5vw,58px)}.case-page .demo-section .eyebrow{color:#e36a42!important}
+.case-page .next-project{background:#ded7cb;color:var(--ink);min-height:270px;padding:42px}.case-page .next-project small,.case-page .next-project:after{color:var(--coral)}.case-page .next-project em{color:var(--ink-2);font-family:var(--font-display)}
+
+@media(max-width:900px){
+  .editorial-hero-bottom{grid-template-columns:1fr;gap:48px}.hero-statement{max-width:620px}.hero-project-main{min-height:360px}
+  .portfolio-home .about{grid-template-columns:1fr;gap:55px}.portfolio-home .about-monogram{position:relative;top:auto;height:420px}.case-page .case-hero{padding-left:18px;padding-right:18px}
+}
+@media(max-width:720px){
+  .portfolio-home .site-header,.case-page>header{height:66px}.portfolio-home .brand>span,.case-page .brand>span{display:none}.portfolio-home .site-header nav a:not(.nav-contact){display:inline-block!important}.portfolio-home .site-header nav a[href="#build"]{display:none!important}.portfolio-home .site-header nav{gap:15px}
+  .portfolio-home .editorial-hero{padding:38px 18px 76px}.editorial-hero-top{display:block}.hero-availability{margin-top:9px!important;line-height:1.5}.portfolio-home .editorial-hero h1{margin:52px 0 42px;font-size:21.2vw!important;line-height:.8!important}
+  .hero-projects{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}.hero-project-main{grid-column:1/3;grid-row:auto;min-height:300px}.hero-project{min-height:190px}.hero-project>span{display:block;padding:12px}.hero-project small{display:block;text-align:left;margin-top:4px}
+  .portfolio-home .section{padding:76px 18px}.portfolio-home .work-heading h2{font-size:14vw!important}.portfolio-home .project{grid-template-columns:36px minmax(0,1fr);gap:5px 10px}.portfolio-home .project-category{grid-column:2}.portfolio-home .project-info p{font-size:17px}
+  .code-console{margin-right:0;min-height:490px}.code-console pre{height:390px}.portfolio-home .about-monogram{height:330px}.portfolio-home .contact{padding-top:72px;padding-bottom:72px}
+  .case-page .case-hero h1{font-size:14vw!important}.case-page .case-meta{grid-template-columns:1fr}.case-page .story-row{margin:60px 0}.case-page .next-project{padding:28px}
+}
+@media(max-width:480px){.hero-projects{display:block}.hero-project{display:block;min-height:210px;margin-top:10px}.hero-project-main{min-height:270px}.filters{gap:6px}.filters button{padding:9px 11px}}
+@media(prefers-reduced-motion:reduce){.hero-project img{transition:none}}
