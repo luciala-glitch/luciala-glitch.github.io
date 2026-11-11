@@ -32,8 +32,8 @@
   var ALL = (typeof projects !== 'undefined') ? projects : [];
   var ORDER = ['silverado', 'fablab', 'gear', 'northern', 'oxylus'];
   var CFG = {
-    silverado:{ shape:1, accent:'#ffb36b', h:['The right signal.', 'At the right moment.'], device:'wide', sig:sigSilverado,
-      sigTitle:['Drive through', 'the contexts.'], sigText:'Scroll to move through four moments of the concept. The cockpit stays the same; what each screen asks of the driver changes.',
+    silverado:{ shape:1, accent:'#ffb36b', h:['The right signal.', 'At the right moment.'], device:'wide', sig:function(host){ if (window.LLCockpit) window.LLCockpit(host, { ticks:ticks, stickProgress:stickProgress, near:near, RM:RM }); else sigSilverado(host); },
+      sigTitle:['Take the', 'driver’s seat.'], sigText:'The concept, rebuilt in code: driver display, center display, steering-wheel controls and the physical button bar. Scroll to drive through six moments — or take over and press anything.',
       demoText:'Enter the original cockpit design, then complete a guided towing flow across the center display and instrument cluster. The interactive targets follow the existing Figma prototype.',
       demoCta:'Step inside the experience' },
     fablab:{ shape:2, accent:'#7fe0c3', h:['Design the', 'moment before.'], device:'phone', sig:sigFablab,
