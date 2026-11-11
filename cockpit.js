@@ -52,7 +52,22 @@
     ventD:'M8 4c-1 4-1 8 2 11l3 6M5 18h6M15 8l4 4-4 4',
     hang:'M3 14c5-5 13-5 18 0l-2 3-4-1v-3a12 12 0 0 0-6 0v3l-4 1z',
     back:'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
-    cross:'M12 6v12M6 12h12'
+    cross:'M12 6v12M6 12h12',
+    rest:'M4 11h11v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM15 12h2a2 2 0 0 1 0 4h-2M17 3a4 4 0 1 1 0 .01M17 4.5V6l1 1',
+    wc:'M7 4a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M17 4a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M5 9h4l.5 5H8v6H6v-6H4.5zM15 9h4l1.5 7H19v4h-4v-4h-1.5zM12 3v18',
+    food:'M6 3v7a2 2 0 0 0 4 0V3M8 3v18M15 3c-2 2-2 7 0 9v9M15 3c2 2 2 7 0 9',
+    fuel:'M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16zM4 11h10M14 9h3l2 2v7a1.5 1.5 0 0 1-3 0v-3h-2',
+    ev:'M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16zM9 6l-2 4h4l-2 4M14 9h3l2 2v7a1.5 1.5 0 0 1-3 0v-3h-2',
+    paw:'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M9 14c0-2 1.5-3 3-3s3 1 3 3-1.5 2.5-3 2.5-3-.5-3-2.5M8.5 9.5h.01M11 8h.01M13 8h.01M15.5 9.5h.01',
+    nopaw:'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M9 14c0-2 1.5-3 3-3s3 1 3 3-1.5 2.5-3 2.5-3-.5-3-2.5M8.5 9.5h.01M11 8h.01M13 8h.01M15.5 9.5h.01M5.6 5.6l12.8 12.8',
+    chev:'M9 6l6 6-6 6',
+    snow:'M12 2v20M4 7l16 10M20 7L4 17M9 3l3 3 3-3M9 21l3-3 3 3',
+    tent:'M12 4L3 20h18zM12 4v16M9 20l3-6 3 6',
+    case:'M3 8h18v12H3zM8 8V5h8v3M3 13h18',
+    mount:'M3 20l6-11 4 6 2-3 6 8z',
+    bulb:'M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z',
+    bed:'M3 18V8M21 18v-6a3 3 0 0 0-3-3H10v6M3 15h18M6 12h1',
+    speak:'M4 9h4l5-4v14l-5-4H4zM17 8l2-2M17 12h3M17 16l2 2'
   };
   function I(n, cls){ return '<svg class="i' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true"><path d="' + IC[n] + '"/></svg>'; }
   function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
@@ -172,30 +187,133 @@
       '<rect x="222" y="372" width="16" height="70" fill="#121316"/><circle cx="230" cy="18" r="4" fill="#ff3b3b"/></svg>';
   }
 
+
+  /* ---------------- Silverado Mobile Companion ----------------
+     The phone app from the same concept. What you press here is
+     mirrored in the cockpit above (lock state, climate, hazard,
+     drive mode, outside speakers). */
+  function truckTopSVG(){
+    return '<svg class="co-truck" viewBox="0 0 120 270" aria-hidden="true"><defs>' +
+      '<linearGradient id="coBody" x1="0" x2="1"><stop offset="0" stop-color="#c9ced4"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c9ced4"/></linearGradient>' +
+      '<radialGradient id="coHead"><stop offset="0" stop-color="#bfe9ff" stop-opacity=".9"/><stop offset="1" stop-color="#bfe9ff" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="coBed"><stop offset="0" stop-color="#ffe7b0" stop-opacity=".85"/><stop offset="1" stop-color="#ffe7b0" stop-opacity="0"/></radialGradient></defs>' +
+      '<g class="co-head"><ellipse cx="38" cy="4" rx="26" ry="22" fill="url(#coHead)"/><ellipse cx="82" cy="4" rx="26" ry="22" fill="url(#coHead)"/></g>' +
+      '<ellipse cx="60" cy="140" rx="58" ry="132" fill="#000" opacity=".35"/>' +
+      '<path d="M26 26 C26 12 40 8 60 8 C80 8 94 12 94 26 L98 128 L22 128z" fill="url(#coBody)"/>' +
+      '<path d="M30 30 C34 22 86 22 90 30 L86 44 L34 44z" fill="#e4e8ec" stroke="#b9bfc6" stroke-width=".6"/>' +
+      '<path d="M32 50 C40 46 80 46 88 50 L86 66 L34 66z" fill="#6f7882"/>' +
+      '<rect x="34" y="68" width="52" height="44" rx="6" fill="#dfe3e7"/><path d="M34 112 L86 112 L88 124 L32 124z" fill="#7d8690"/>' +
+      '<path d="M20 60 L12 58 L12 66 L20 68z M100 60 L108 58 L108 66 L100 68z" fill="#d7dbe0"/>' +
+      '<rect x="20" y="130" width="80" height="112" rx="4" fill="url(#coBody)"/><rect x="28" y="136" width="64" height="100" rx="2" fill="#cdd2d8"/>' +
+      '<g stroke="#bfc5cc" stroke-width="1.2">' + [150, 166, 182, 198, 214].map(function(y){ return '<line x1="30" y1="' + y + '" x2="90" y2="' + y + '"/>'; }).join('') + '</g>' +
+      '<ellipse class="co-bedlight" cx="60" cy="186" rx="34" ry="52" fill="url(#coBed)"/>' +
+      '<rect class="co-gate" x="22" y="240" width="76" height="9" rx="2" fill="#e6e9ec" stroke="#b9bfc6" stroke-width=".6"/>' +
+      '<g class="co-flash"><rect x="14" y="4" width="92" height="250" rx="24" fill="none" stroke="#ffb36b" stroke-width="4"/></g></svg>';
+  }
+  window.LLCompanion = function(host, ck){
+    var st = { locked:true, running:false, climate:false, panic:false, gate:false, head:true, bed:false, mode:'Normal' };
+    var MODES = [['Tow Mode', 'trailer'], ['Off-Road', 'mount'], ['Winter', 'snow'], ['Camping', 'tent'], ['Work', 'case']];
+    var DOCK = [['head', 'bulb', 'Head Lights'], ['bed', 'bed', 'Bed Lights'], ['gate', 'truck', 'Tailgate'], ['speak', 'speak', 'Speakers'], ['cam', 'cam', 'Camera']];
+    var stars = ''; var R = rng(9); for (var i = 0; i < 34; i++) stars += '<i style="left:' + (R() * 100).toFixed(1) + '%;top:' + (R() * 100).toFixed(1) + '%;opacity:' + (.3 + R() * .6).toFixed(2) + '"></i>';
+    host.innerHTML = '<section class="co"><div class="co-copy">' +
+        '<span class="lbl">Off the road · mobile companion</span><h3>The truck, <em>in your pocket.</em></h3>' +
+        '<p>The same truck from a phone: lock state, fluid level, drive mode and range at a glance; unlock, remote start, climate and panic arranged around the truck itself; quick modes for towing, off-road, winter, camping and work.</p>' +
+        '<p class="co-try">Try it — what you press on the phone reaches the cockpit above.</p><p class="co-sync lbl"><i></i><span>Linked to the cockpit</span></p></div>' +
+      '<div class="co-phone"><div class="co-scr"><div class="co-app">' +
+        '<div class="co-stars">' + stars + '</div><div class="co-arc"></div>' +
+        '<div class="co-time"><span>9:41</span><span class="co-island"></span><span>' + I('wifi') + I('bat') + '</span></div>' +
+        '<svg class="co-bowtie" viewBox="-50 -20 100 40" aria-hidden="true"><defs><linearGradient id="coGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe38a"/><stop offset=".5" stop-color="#d9a92c"/><stop offset="1" stop-color="#a87814"/></linearGradient></defs><path d="M-46 -8 L-16 -8 L-12 -17 L12 -17 L16 -8 L46 -8 L40 8 L16 8 L12 17 L-12 17 L-16 8 L-40 8 Z" fill="url(#coGold)" stroke="#e8e8e8" stroke-width="2.4"/></svg>' +
+        '<h4>Silverado RST 1500</h4><p class="co-brand">CHEVROLET</p>' +
+        '<div class="co-chips"><span data-c="lock"></span><span>' + I('fuel') + '78%</span><span data-c="mode"></span><span>' + I('ev') + '312 mi</span></div>' +
+        '<div class="co-stage">' + truckTopSVG() +
+          '<button class="co-act" data-a="locked" style="left:22px;top:6px"></button>' +
+          '<button class="co-act" data-a="running" style="right:22px;top:6px"></button>' +
+          '<button class="co-act" data-a="climate" style="left:16px;top:150px"></button>' +
+          '<button class="co-act" data-a="panic" style="right:16px;top:144px"></button>' +
+          '<button class="co-act" data-a="gate" style="left:50%;margin-left:-40px;top:232px"></button></div>' +
+        '<p class="co-upd">Last updated 2 min ago<br><a>Vehicle parked at: 1200 S Main St</a></p>' +
+        '<h5>Quick Modes</h5><div class="co-modes">' + MODES.map(function(m){ return '<button data-m="' + m[0] + '">' + I(m[1]) + '<span>' + m[0] + '</span></button>'; }).join('') + '</div>' +
+        '<div class="co-dock">' + DOCK.map(function(d){ return '<button data-d="' + d[0] + '">' + I(d[1]) + '<span>' + d[2] + '</span></button>'; }).join('') + '</div>' +
+        '<div class="co-sheet"><div class="co-sheet-h"><b>Rear camera</b><button data-d="camclose">Done</button></div><div class="cam">' + camSVG('H') + '<span>HITCH</span></div></div>' +
+        '<div class="co-toast"></div>' +
+      '</div></div></div></section>';
+    var app = host.querySelector('.co-app'), toastEl = host.querySelector('.co-toast'), sync = host.querySelector('.co-sync span'), syncDot = host.querySelector('.co-sync'), tT = 0, sT = 0;
+    function say(txt){ toastEl.textContent = txt; toastEl.classList.add('on'); clearTimeout(tT); tT = setTimeout(function(){ toastEl.classList.remove('on'); }, 1600); }
+    function synced(txt){ if (!ck) return; sync.textContent = 'Cockpit: ' + txt; syncDot.classList.add('on'); clearTimeout(sT); sT = setTimeout(function(){ syncDot.classList.remove('on'); }, 2200); }
+    var ACT = { locked:[['unlock', 'Unlock'], ['lock', 'Lock']], running:[['play', 'Remote Start'], ['power', 'Stop Engine']], climate:[['wind', 'Climate Start'], ['wind', 'Climate On']], panic:[['warn', 'Panic'], ['warn', 'Stop Panic']], gate:[['truck', 'Tailgate'], ['truck', 'Close Tailgate']] };
+    function render(){
+      host.querySelector('[data-c=lock]').innerHTML = I(st.locked ? 'lock' : 'unlock') + (st.locked ? 'Locked' : 'Unlocked');
+      host.querySelector('[data-c=mode]').innerHTML = '<svg class="i" viewBox="0 0 24 24" style="color:#5fd39a"><path d="M4 16a8 8 0 0 1 16 0M12 16l4-5"/></svg>' + st.mode;
+      [].forEach.call(host.querySelectorAll('.co-act'), function(b){
+        var k = b.dataset.a, on = k === 'locked' ? !st.locked : st[k], a = ACT[k][on ? 1 : 0];
+        b.innerHTML = '<span class="ring">' + I(a[0]) + '</span><span class="t">' + a[1] + '</span>';
+        b.classList.toggle('on', !!on); b.classList.toggle('bad', k === 'panic' && st.panic);
+      });
+      [].forEach.call(host.querySelectorAll('.co-modes button'), function(b){ b.classList.toggle('on', b.dataset.m === st.mode); });
+      [].forEach.call(host.querySelectorAll('.co-dock button'), function(b){ var d = b.dataset.d; b.classList.toggle('on', d === 'head' ? st.head : d === 'bed' ? st.bed : d === 'gate' ? st.gate : d === 'speak' ? !!st.speak : false); });
+      app.classList.toggle('head-on', st.head); app.classList.toggle('bed-on', st.bed); app.classList.toggle('gate-open', st.gate); app.classList.toggle('panic-on', st.panic);
+    }
+    host.addEventListener('click', function(e){
+      var b = e.target.closest('[data-a],[data-m],[data-d]'); if (!b) return;
+      var d = b.dataset;
+      if (d.a){
+        if (d.a === 'locked'){ st.locked = !st.locked; say(st.locked ? 'Doors locked' : 'Doors unlocked');
+          if (ck) ck.update(function(c){ c.locked = st.locked; c.screen = 'home'; c.popup = null; }); synced(st.locked ? 'doors locked' : 'doors unlocked'); }
+        else if (d.a === 'running'){ st.running = !st.running; say(st.running ? 'Engine started · 10 min' : 'Engine off'); synced(st.running ? 'remote start' : 'engine off'); if (ck) ck.toast(I('power') + (st.running ? 'Remote start from phone' : 'Engine off')); }
+        else if (d.a === 'climate'){ st.climate = !st.climate; say(st.climate ? 'Cabin to 72°' : 'Climate off');
+          if (ck) ck.update(function(c){ c.off = !st.climate; if (st.climate){ c.fan = 4; c.tl = 72; c.tr = 72; c.ac = true; } c.screen = 'climate'; }); synced(st.climate ? 'climate on, 72°' : 'climate off'); }
+        else if (d.a === 'panic'){ st.panic = !st.panic; say(st.panic ? 'Panic alarm on' : 'Panic alarm off');
+          if (ck) ck.update(function(c){ c.hazard = st.panic; }); synced(st.panic ? 'hazard lights flashing' : 'hazard off'); }
+        else if (d.a === 'gate'){ st.gate = !st.gate; say(st.gate ? 'Tailgate open' : 'Tailgate closed');
+          if (ck && st.gate) ck.update(function(c){ c.screen = 'music'; if (c.sound !== 'outside') c.popup = 'tailgate'; }); synced(st.gate ? 'tailgate open — Outside Mode suggested' : 'tailgate closed'); }
+      } else if (d.m){
+        st.mode = st.mode === d.m ? 'Normal' : d.m; say(st.mode === 'Normal' ? 'Normal mode' : st.mode + ' on');
+        if (ck && (d.m === 'Tow Mode' || d.m === 'Off-Road' || st.mode === 'Normal')) ck.update(function(c){
+          var m = st.mode === 'Tow Mode' ? 'Tow' : st.mode === 'Off-Road' ? 'Off-Road' : 'Normal';
+          c.drive = m; c.mode = m === 'Tow' ? 'TOW MODE' : m; c.left = m === 'Tow' ? 'trailer' : null; c.screen = 'drive'; });
+        if (d.m === 'Tow Mode' || d.m === 'Off-Road' || st.mode === 'Normal') synced(st.mode === 'Tow Mode' ? 'tow mode' : st.mode === 'Off-Road' ? 'off-road mode' : 'normal mode');
+      } else if (d.d){
+        if (d.d === 'head'){ st.head = !st.head; say('Head lights ' + (st.head ? 'on' : 'off')); }
+        else if (d.d === 'bed'){ st.bed = !st.bed; say('Bed lights ' + (st.bed ? 'on' : 'off')); }
+        else if (d.d === 'gate'){ st.gate = !st.gate; say(st.gate ? 'Tailgate open' : 'Tailgate closed');
+          if (ck && st.gate) ck.update(function(c){ c.screen = 'music'; if (c.sound !== 'outside') c.popup = 'tailgate'; }); synced(st.gate ? 'tailgate open — Outside Mode suggested' : 'tailgate closed'); }
+        else if (d.d === 'speak'){ st.speak = !st.speak; say('Outside speakers ' + (st.speak ? 'on' : 'off'));
+          if (ck) ck.update(function(c){ c.sound = st.speak ? 'outside' : 'cabin'; c.screen = 'music'; }); synced(st.speak ? 'outside speakers' : 'cabin audio'); }
+        else if (d.d === 'cam'){ app.classList.add('sheet-on'); }
+        else if (d.d === 'camclose'){ app.classList.remove('sheet-on'); }
+      }
+      render();
+    });
+    var scr = host.querySelector('.co-scr');
+    function fit(){ app.style.transform = 'scale(' + (scr.clientWidth / 390).toFixed(4) + ')'; }
+    fit(); addEventListener('resize', fit);
+    render();
+  };
+
   /* ---------------- mount ---------------- */
   window.LLCockpit = function(host, api){
     var RM = api.RM;
     var CTX = [
-      { tab:'Everyday', kick:'01 · Everyday', h:['Six places', 'that never move.'],
-        p:'The six primary destinations stay fixed on the home screen, and the same six icons sit in the bottom bar on every page — nothing to hunt for while moving.',
-        set:{ screen:'home', left:null, right:'nav', mode:'Normal', gear:'D', speed:62, chip:null, milestone:false, popup:null, panel:null, drive:'Normal', trailerCard:false } },
-      { tab:'Tow', kick:'02 · Hitching up', h:['A trailer,', 'recognized.'],
-        p:'When a trailer is detected, Drive Mode offers its profile, and the cluster switches to tow mode: trailer status, stability, and a wider turn path for the next exit.',
-        set:{ screen:'drive', left:'trailer', right:'nav', mode:'TOW MODE', gear:'D', speed:80, chip:null, drive:'Tow', trailerCard:true } },
+      { tab:'Hitch up', kick:'01 · Before the drive', h:['A trailer,', 'recognized.'],
+        p:'Mark connects the trailer. The towing interface comes up on its own — connection status, tire pressure, tow mode — so he can check everything and go.',
+        set:{ screen:'drive', left:'trailer', right:'nav', mode:'TOW MODE', gear:'P', speed:0, chip:null, milestone:false, popup:null, panel:null, drive:'Tow', trailerCard:true } },
+      { tab:'Head out', kick:'02 · During the drive', h:['Six places', 'that never move.'],
+        p:'Navigation to the lake house, music for the family. The same six destinations sit in the bottom bar on every screen, so nothing has to be hunted for while moving.',
+        set:{ screen:'music', left:'trailer', right:'nav', mode:'TOW MODE', gear:'D', speed:62, chip:null, popup:null, panel:null, trailerCard:false } },
       { tab:'Siren', kick:'03 · A siren behind', h:['Say what', 'to do next.'],
-        p:'An ambulance 500 m behind: the alert names the action — pull over to the right shoulder when safe — while the cameras show the lanes beside the trailer.',
-        set:{ screen:'camera', left:'power', right:'emergency', mode:'TOW MODE', gear:'D', speed:78, chip:null } },
+        p:'The family is talking and music is playing — a siren is easy to miss. The alert names the action: pull over to the right shoulder when safe, with the cameras showing the lanes beside the trailer.',
+        set:{ screen:'camera', left:'power', right:'emergency', mode:'TOW MODE', gear:'D', speed:78, chip:null, popup:null } },
       { tab:'Crosswind', kick:'04 · Crosswind', h:['Explain', 'the assist.'],
         p:'A strong gust: the cluster warns, and the center display shows which systems are helping — chassis control and steering assist — instead of acting silently.',
-        set:{ screen:'stability', left:'power', right:'nav', mode:'TOW MODE', gear:'D', speed:78, chip:'wind' } },
-      { tab:'Long haul', kick:'05 · Long haul', h:['Show the cost', 'of a rest.'],
-        p:'Hours in, a recovery plan offers a rest area five minutes ahead and states the detour up front: +3 min, fuel included. Accept it to compare stops.',
-        set:{ screen:'map', left:'trailer', right:'nav', mode:'TOW MODE', gear:'D', speed:60, chip:null, popup:'recovery', panel:null } },
-      { tab:'Arrive', kick:'06 · Arrival', h:['Arrive,', 'then go quiet.'],
-        p:'Parked: tire pressures and the trip summary on the cluster, and a small milestone on the home screen.',
-        set:{ screen:'home', left:'psi', right:'trip', mode:'Normal', gear:'P', speed:0, chip:null, milestone:true, popup:null, panel:null } }
+        set:{ screen:'stability', left:'power', right:'nav', mode:'TOW MODE', gear:'D', speed:78, chip:'wind', popup:null } },
+      { tab:'Fatigue', kick:'05 · Signs of fatigue', h:['Show the cost', 'of a rest.'],
+        p:'Later in the trip, signs of fatigue. Instead of only continuing the route, the system offers a recovery route to a rest area with fuel five minutes ahead, and states the detour up front: +3 min.',
+        set:{ screen:'map', nav:'huron', left:'trailer', right:'nav', mode:'TOW MODE', gear:'D', speed:60, chip:null, popup:'recovery', panel:null } },
+      { tab:'Lake house', kick:'06 · Arriving at the lake house', h:['Take the music', 'outside.'],
+        p:'Parked, the family unloads bikes and gear. With the tailgate open, the system suggests Outside Mode so the music plays for the activity by the lake.',
+        set:{ screen:'music', left:'psi', right:'trip', mode:'Normal', gear:'P', speed:0, chip:null, milestone:false, popup:'tailgate', panel:null, sound:'cabin' } }
     ];
-    var st = { screen:'home', left:null, right:'nav', mode:'Normal', gear:'D', speed:62, chip:null, milestone:false, popup:null, panel:null, stop:-1,
+    var st = { nav:'exit', screen:'home', left:null, right:'nav', mode:'Normal', gear:'D', speed:62, chip:null, milestone:false, popup:null, panel:null, stop:-1,
       drive:'Normal', wd:'AUTO', trailerCard:false, lane:true, acc:true, hazard:false, view:0, vol:14, muted:false, playing:true, sound:'cabin', locked:true,
       fan:3, ac:true, auto:false, off:false, recirc:false, fdef:false, rdef:false, seatL:false, seatR:false, tl:72, tr:75 };
     var shownSpeed = st.speed, ctx = -1, lastScreen = '', toastT = 0;
@@ -218,7 +336,7 @@
         '<div class="pb"></div>' +
         '<p class="ck-hint">Try it — tap the screen, the buttons below it, or the wheel controls</p>' +
       '</div></div>' +
-      '<div class="ck-foot"><i class="ck-meter"></i><span>Scroll to drive through six moments</span><span>Figma concept by Lucia Liao &amp; Ashita Nichanametla, rebuilt in code · proposed behavior, not deployed capability</span></div>' +
+      '<div class="ck-foot"><i class="ck-meter"></i><span>Scroll to ride along with Mark · six moments</span><span>Figma concept by Lucia Liao &amp; Ashita Nichanametla, rebuilt in code · proposed behavior, not deployed capability</span></div>' +
     '</div></div>';
 
     var sec = host.querySelector('.ck'), area = host.querySelector('.ck-area'), canvas = host.querySelector('.ck-canvas');
@@ -275,13 +393,19 @@
     function navKey(s){ return s === 'stability' ? 'map' : s; }
     function mapView(extra){
       return '<div class="mp">' + CITY +
-        '<div class="mp-turn">' + I('turn') + '<div><b>1.1 mi</b><small>Take Exit 45B</small></div></div>' +
-        '<div class="mp-speed"><div class="cl-limit">SPEED<br>LIMIT<b>70</b></div><b>' + Math.round(st.speed) + '<small>mph</small></b></div>' +
-        '<div class="mp-eta"><div>' + (st.panel === 'chosen' ? '3:12' : '2:47') + '<small>arrival</small></div><div>' + (st.panel === 'chosen' ? '81' : '56') + '<small>min</small></div><div>60<small>mi</small></div></div>' +
+        (st.nav === 'huron'
+          ? '<div class="mp-turn">' + I('turn') + '<div><b>In 0.5 mi</b><small>W Huron St</small></div></div>'
+          : '<div class="mp-turn">' + I('turn') + '<div><b>1.1 mi</b><small>Take Exit 45B</small></div></div>') +
+        '<div class="mp-speed"><div class="cl-limit">SPEED<br>LIMIT<b>' + (st.nav === 'huron' ? 55 : 70) + '</b></div><b>' + Math.round(st.speed) + '<small>mph</small></b></div>' +
+        (st.nav === 'huron'
+          ? '<div class="mp-eta"><div>' + (st.panel === 'chosen' ? '4:50' : '4:47') + '<small>arrival</small></div><div>' + (st.panel === 'chosen' ? '3h 48' : '3h 45') + '<small>min</small></div><div>1.4<small>mi</small></div></div>'
+          : '<div class="mp-eta"><div>2:47<small>arrival</small></div><div>56<small>min</small></div><div>60<small>mi</small></div></div>') +
         '<div class="mp-zoom"><span>' + I('minus') + '</span><span>' + I('plus') + '</span><span>' + I('target') + '</span><span>' + I('layers') + '</span></div>' +
         '<div class="mp-puck">' + I('play') + '</div>' + (extra || '') + '</div>';
     }
-    var STOPS = [['Lakeview Travel Center', '5 min', '+3 min detour', '●○○', true], ['Pine Ridge Rest Area', '16 min', '+9 min detour', '●●●'], ['North Creek Service Plaza', '20 min', '+8 min detour', '●●○']];
+    var STOPS = [['Lakeview Travel Center', '5 min', '+3 min detour', '●○○', true, ['wc', 'food', 'fuel', 'ev'], 'paw'],
+                 ['Pine Ridge Rest Area', '16 min', '+9 min detour', '●●●', false, ['wc', 'fuel'], 'nopaw'],
+                 ['North Creek Service Plaza', '20 min', '+8 min detour', '●●○', false, ['wc'], 'paw']];
     function screenHTML(){
       var s = st.screen;
       if (s === 'home'){
@@ -322,8 +446,10 @@
       }
       if (s === 'map'){
         var extra = '';
-        if (st.popup === 'recovery') extra = '<div class="pop"><h5>' + I('warn') + '<span>Coordinated Recovery Plan<br>Switch to recovery route?</span></h5><p>Rest area ahead in: <b>5 min</b><br>Fuel stop included<br><b>Detour +3 min</b><br>Fuel on arrival: <b>34 mi</b></p><div class="row"><button class="tb pri" data-act="accept">Accept Route</button><button class="tb" data-act="more">More Option</button></div></div>';
-        if (st.panel === 'stops' || st.panel === 'chosen') extra = '<div class="stops"><h5>Choose a Recovery Stop</h5>' + STOPS.map(function(o, i){ return '<button class="stop' + (o[4] ? ' rec' : '') + (st.stop === i ? ' sel' : '') + '" data-stop="' + i + '">' + (o[4] ? '<small>Recommended</small>' : '') + '<b>' + o[0] + '</b><br>' + o[1] + ' · ' + o[2] + '<br>Crowd: ' + o[3] + '</button>'; }).join('') + '<button class="tb stay" data-act="stay">Stay On Current Route ›</button></div>';
+        if (st.popup === 'recovery') extra = '<div class="pop"><h5>' + I('rest') + '<span>Coordinated Recovery Plan<br>Switch to recovery route?</span></h5><p>Rest area ahead in: <b>5 min</b><br>Fuel stop included<br><b>Detour +3 min</b><br>Fuel on arrival: <b>34 mi</b></p><div class="row"><button class="tb pri" data-act="accept">Accept Route</button><button class="tb" data-act="more">More Option</button></div></div>';
+        if (st.panel === 'stops' || st.panel === 'chosen') extra = '<div class="stops"><h5>Choose a Recovery Stop</h5>' + STOPS.map(function(o, i){ return '<button class="stop' + (o[4] ? ' rec' : '') + (st.stop === i ? ' sel' : '') + '" data-stop="' + i + '">' + (o[4] ? '<small>Recommended</small>' : '') +
+          '<span class="st-top"><b>' + o[0] + '</b><span class="st-am">' + o[5].map(function(a){ return I(a); }).join('') + '</span></span>' +
+          '<span class="st-body">' + o[1] + '<br>' + o[2] + '<br>Crowd: ' + o[3] + '</span><span class="st-pet' + (o[6] === 'nopaw' ? ' no' : '') + '">' + I(o[6]) + '</span><span class="st-go">' + I('chev') + '</span></button>'; }).join('') + '<button class="tb stay" data-act="stay">Stay On Current Route ›</button></div>';
         return mapView(extra);
       }
       if (s === 'camera'){
@@ -336,7 +462,8 @@
           '<div class="sp-r">' + mapView('') + '</div>';
       }
       if (s === 'music'){
-        return '<div class="mu">' + wavesSVG() +
+        var tg = st.popup === 'tailgate' ? '<div class="pop tg"><h5><img src="assets/gm/truck.png" alt="" style="width:54px;margin:-4px 0"><span>Tailgate open: Switch to<br>Outside Mode?</span></h5><p style="margin-top:6px">Optimized audio for tailgating</p><div class="row"><button class="tb pri" data-act="outside">Activate</button><button class="tb" data-act="dismiss">Dismiss</button></div></div>' : '';
+        return '<div class="mu">' + wavesSVG() + tg +
           '<div class="mu-l"><div class="pn"><h6>UP NEXT</h6>' + [['Blinding Lights', 'The Weeknd'], ['Save Your Tears', 'The Weeknd'], ['Starboy', 'The Weeknd']].map(function(t){ return '<div class="mu-song"><span class="disc"></span><div>' + t[0] + '<small>' + t[1] + '</small></div></div>'; }).join('') + '</div>' +
           '<div class="pn"><h6>MEDIA SOURCE</h6><div class="mu-src"><span class="on">Spotify Music</span><span>SiriusXM</span><span>FM Radio</span><span>Bluetooth</span><span>USB</span></div></div></div>' +
           '<div class="mu-c"><div class="mu-art' + (st.playing && !RM ? ' spin' : '') + '"></div><h4>Blinding Lights</h4><div class="mut">The Weeknd</div><div class="mu-chips">SOURCE: SPOTIFY · ' + st.sound.toUpperCase() + ' · IMMERSIVE</div>' +
@@ -419,6 +546,8 @@
       else if (a === 'stay'){ st.panel = null; st.stop = -1; render(); showToast(I('map') + 'Staying on current route'); }
       else if (a === 'profile'){ st.trailerCard = false; st.screen = 'drive'; st.drive = 'Tow'; st.mode = 'TOW MODE'; st.left = 'trailer'; render(); showToast(I('trailer') + 'Weekend Camper profile loaded'); }
       else if (a === 'skip'){ st.trailerCard = false; render(); }
+      else if (a === 'outside'){ st.sound = 'outside'; st.popup = null; render(); showToast(I('speak') + 'Outside Mode on'); }
+      else if (a === 'dismiss'){ st.popup = null; render(); }
       else if (a) climate(a);
     });
     /* rollers and knobs turn with the wheel or a vertical drag */
@@ -450,6 +579,7 @@
       var s = CTX[i].set;
       for (var k in s) st[k] = s[k];
       st.view = 0; st.stop = -1; st.hazard = false;
+      if (!s.nav) st.nav = 'exit';
       if (i === 2) st.hazard = false;
       render();
     }
@@ -490,5 +620,6 @@
         ticksEls.forEach(function(l){ l.style.opacity = +l.dataset.t <= lit ? 1 : .28; });
       }
     });
+    return { state:st, update:function(fn){ fn(st); render(); }, toast:showToast };
   };
 })();
