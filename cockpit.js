@@ -526,6 +526,94 @@
         '<div class="qc-foot"><span>' + I(st.locked ? 'lock' : 'unlock') + (st.locked ? 'Locked' : 'Unlocked') + '</span><span>' + I('fuel') + 'Fuel 78%</span><span>' + I('ev') + 'Range 312 mi</span><span>' + I('trailer') + st.tprof + '</span></div></div>';
     }
 
+    /* ---- Drive Mode: each mode gets its own controls and read-outs ---- */
+    st.dm = { lock:false, ride:1, hdc:false, hdcV:3, terrain:'Mud', ecoClim:true, coach:true, stopstart:true, haul:true, grade:true };
+    var RIDE = ['Low', 'Normal', 'High'];
+    var DM_DEFAULT = { Normal:{ wd:'AUTO', ride:1 }, 'Off-Road':{ wd:'4WDHigh', ride:2 }, Eco:{ wd:'2WD', ride:0 }, Tow:{ wd:'AUTO', ride:1 } };
+    function dmTog(k, label, sub){ var on = !!st.dm[k];
+      return '<div class="dm-row"><span>' + label + (sub ? '<small>' + sub + '</small>' : '') + '</span><button class="sw-tg' + (on ? ' on' : '') + '" data-dm="' + k + '" aria-pressed="' + on + '" aria-label="' + label + '"><i></i></button></div>'; }
+    function dmStep(label, val, k){ return '<div class="dm-ride"><span class="mut" style="font-size:10px">' + label + '</span><button data-dm="' + k + '-" aria-label="Lower ' + label + '">−</button><span>' + val + '</span><button data-dm="' + k + '+" aria-label="Raise ' + label + '">+</button></div>'; }
+    function wdChassis(){
+      var w = st.wd, front = w !== '2WD', auto = w === 'AUTO', low = w === '4WDLow', lock = st.dm.lock;
+      var fc = front ? (auto ? 'rgba(110,160,255,.45)' : '#6ea0ff') : '#3a4252', dash = auto ? ' stroke-dasharray="4 4"' : '';
+      return '<svg viewBox="0 0 120 240" aria-hidden="true"><g fill="none" stroke="#c9d0db" stroke-width="1.3"><rect x="22" y="8" width="76" height="224" rx="16"/><rect x="48" y="80" width="24" height="40" rx="4"/></g>' +
+        '<path d="M60 52v28M30 52h60" stroke="' + fc + '" stroke-width="2.4"' + dash + '/>' +
+        '<path d="M60 120v66M30 186h60" stroke="#6ea0ff" stroke-width="2.4"/>' +
+        (lock ? '<g transform="translate(60 186)"><rect x="-9" y="-9" width="18" height="18" rx="4" fill="#f2c14e"/><path d="M-4 0h8v5h-8zM-2.5 0v-2.5a2.5 2.5 0 0 1 5 0V0" fill="none" stroke="#1b1f27" stroke-width="1.4"/></g>' : '<circle cx="60" cy="186" r="5" fill="#2a303d" stroke="#6ea0ff" stroke-width="1.6"/>') +
+        (low ? '<text x="60" y="104" text-anchor="middle" font-size="10" fill="#AAC5F0" font-family="Nunito Sans,sans-serif">LOW</text>' : '') +
+        '<g fill="' + (front ? '#d8dde5' : '#6b7486') + '"><rect x="12" y="34" width="16" height="36" rx="5"/><rect x="92" y="34" width="16" height="36" rx="5"/></g><g fill="#d8dde5"><rect x="12" y="168" width="16" height="36" rx="5"/><rect x="92" y="168" width="16" height="36" rx="5"/></g></svg>';
+    }
+    var WD_NOTE = { AUTO:'Rear priority · front engages on slip', '2WD':'Rear-wheel drive · best economy', '4WDHigh':'Front + rear turning together', '4WDLow':'Low range · crawl speed, max torque' };
+    function inclin(kind, deg){
+      var body = kind === 'pitch'
+        ? '<path d="M-40 6v-10l6-8h20v8h30l10 4v6z" fill="#c9d3e3"/><circle cx="-26" cy="8" r="6" fill="#1b1f27" stroke="#c9d3e3" stroke-width="2"/><circle cx="20" cy="8" r="6" fill="#1b1f27" stroke="#c9d3e3" stroke-width="2"/>'
+        : '<path d="M-22 8v-14l6-12h32l6 12v14z" fill="#c9d3e3"/><rect x="-14" y="-16" width="28" height="9" rx="2" fill="#1b1f27"/><rect x="-27" y="4" width="9" height="12" rx="2" fill="#1b1f27"/><rect x="18" y="4" width="9" height="12" rx="2" fill="#1b1f27"/>';
+      var ticks = '';
+      for (var a = -40; a <= 40; a += 10){ var r = (a - 90) * Math.PI / 180, r2 = a % 20 ? 47 : 43; ticks += '<line x1="' + (52 * Math.cos(r)).toFixed(1) + '" y1="' + (52 * Math.sin(r)).toFixed(1) + '" x2="' + (r2 * Math.cos(r)).toFixed(1) + '" y2="' + (r2 * Math.sin(r)).toFixed(1) + '"/>'; }
+      var warn = Math.abs(deg) >= 25;
+      return '<div class="dm-inc"><svg viewBox="-60 -58 120 84" aria-hidden="true"><g stroke="#8b98b0" stroke-width="1">' + ticks + '</g>' +
+        '<line x1="-56" y1="16" x2="56" y2="16" stroke="#3a4252" stroke-dasharray="3 4"/><g transform="rotate(' + deg + ')">' + body + '<line x1="0" y1="-24" x2="0" y2="-40" stroke="' + (warn ? '#f2c14e' : '#AAC5F0') + '" stroke-width="2"/></g></svg>' +
+        '<b' + (warn ? ' class="w"' : '') + '>' + Math.abs(deg) + '°</b><span class="mut">' + (kind === 'pitch' ? 'Pitch · nose ' + (deg < 0 ? 'up' : 'down') : 'Roll · ' + (deg < 0 ? 'left' : 'right')) + '</span></div>';
+    }
+    function driveModeHTML(){
+      var m = st.drive, dm = st.dm, sub = '', card = '', right = '';
+      var modes = '<div class="dm-modes pn">' + [['Normal', 'truck'], ['Off-Road', 'offroad'], ['Eco', 'eco'], ['Tow', 'trailer']].map(function(x){ return '<button class="tb' + (m === x[0] ? ' on' : '') + '" data-drive="' + x[0] + '">' + I(x[1]) + x[0] + '</button>'; }).join('') + '</div>';
+      var wd = '<div class="dm-wd">' + [['AUTO', ''], ['4WD', 'High'], ['4WD', 'Low'], ['2WD', '']].map(function(w){ var k = w[0] + w[1]; return '<button class="tb' + (st.wd === k ? ' on' : '') + '" data-wd="' + k + '">' + w[0] + (w[1] ? '<small>' + w[1] + '</small>' : '') + '</button>'; }).join('') + '</div>';
+      function fuel(extra){ return '<div class="dm-energy pn"><div class="row"><span class="mut">Range</span><b>' + ({ Eco:330, Tow:214, 'Off-Road':268 }[m] || 312) + ' mi</b></div><div class="bar"><i style="width:78%"></i></div><div class="row"><span class="mut">Fuel 78%</span><span class="mut">' + (extra || m + ' mode') + '</span></div></div>'; }
+
+      if (m === 'Normal'){
+        sub = '<div class="dm-sub pn">' + dmTog('lock', 'Rear Differential Lock', dm.lock ? 'Locked · low speed only' : 'Open') + dmStep('Ride Height', RIDE[dm.ride], 'ride') + '</div>';
+        card = fuel();
+        right = wd + '<div class="dm-cap mut">' + WD_NOTE[st.wd] + '</div><div class="dm-chassis">' + wdChassis() + '<span style="left:30px;top:30px">35 psi</span><span style="right:30px;top:30px">35 psi</span><span style="left:30px;top:180px">35 psi</span><span style="right:30px;top:180px">35 psi</span></div>';
+      }
+      else if (m === 'Off-Road'){
+        sub = '<div class="dm-sub pn">' + dmTog('lock', 'Rear Diff Lock', dm.lock ? 'Locked' : 'Open') + dmTog('hdc', 'Hill Descent Control', dm.hdc ? 'Holding ' + dm.hdcV + ' mph' : 'Off') + dmStep('Ride Height', RIDE[dm.ride], 'ride') + '</div>';
+        card = '<div class="dm-terr pn"><span class="mut">Terrain</span><div>' + ['Mud', 'Sand', 'Rock', 'Snow'].map(function(t){ return '<button class="tb' + (dm.terrain === t ? ' on' : '') + '" data-dm="ter:' + t + '">' + t + '</button>'; }).join('') + '</div></div>';
+        var trac = { Mud:[92, 88, 71, 81], Sand:[85, 83, 79, 80], Rock:[96, 70, 90, 94], Snow:[68, 72, 64, 70] }[dm.terrain];
+        right = wd + '<div class="dm-incs">' + inclin('pitch', -8) + inclin('roll', 4) + '</div>' +
+          '<div class="dm-read"><div><b>1,284</b><span>ft altitude</span></div><div><b>NW</b><span>heading</span></div><div><b>8° L</b><span>steering</span></div></div>' +
+          '<div class="dm-trac"><span class="mut">Wheel traction</span>' + ['FL', 'FR', 'RL', 'RR'].map(function(n, i){ var v = trac[i]; return '<div><em>' + n + '</em><i><u style="width:' + v + '%' + (v < 75 ? ';background:#f2c14e' : '') + '"></u></i><small>' + v + '%</small></div>'; }).join('') + '</div>';
+      }
+      else if (m === 'Eco'){
+        sub = '<div class="dm-sub pn">' + dmTog('ecoClim', 'Climate Eco', dm.ecoClim ? 'Fan and A/C eased' : 'Full comfort') + dmTog('stopstart', 'Auto Stop/Start', dm.stopstart ? 'Engine rests at stops' : 'Off') + dmTog('coach', 'Efficiency Coaching', dm.coach ? 'Tips on this screen' : 'Off') + '</div>';
+        card = fuel('+' + (6 + (dm.ecoClim ? 6 : 0) + (dm.stopstart ? 6 : 0)) + ' mi from Eco');
+        var mpg = 24.6, ang = -120 + (mpg - 10) / 20 * 240, R = 44;
+        var arc = function(a0, a1){ var p0 = (a0 - 90) * Math.PI / 180, p1 = (a1 - 90) * Math.PI / 180; return 'M' + (R * Math.cos(p0)).toFixed(1) + ' ' + (R * Math.sin(p0)).toFixed(1) + 'A' + R + ' ' + R + ' 0 ' + (a1 - a0 > 180 ? 1 : 0) + ' 1 ' + (R * Math.cos(p1)).toFixed(1) + ' ' + (R * Math.sin(p1)).toFixed(1); };
+        var trips = [19.2, 21.4, 20.1, 22.8, 23.5, 22.2, 24.6];
+        right = wd + '<div class="dm-eco"><div class="dm-mpg"><svg viewBox="-54 -54 108 88" aria-hidden="true"><defs><linearGradient id="dmEco"><stop offset="0" stop-color="#596880"/><stop offset="1" stop-color="#5fd39a"/></linearGradient></defs><path d="' + arc(-120, 120) + '" fill="none" stroke="#2a303d" stroke-width="7" stroke-linecap="round"/><path d="' + arc(-120, ang) + '" fill="none" stroke="url(#dmEco)" stroke-width="7" stroke-linecap="round"/></svg>' +
+          '<b>' + mpg + '</b><span class="mut">mpg now</span></div>' +
+          '<div class="dm-cyl"><span class="mut">Dynamic Fuel Mgmt</span><div>' + [1, 0, 0, 1, 1, 0, 0, 1].map(function(c){ return '<i class="' + (c ? 'on' : '') + '"></i>'; }).join('') + '</div><b>4 of 8</b><span class="mut">cylinders firing</span></div></div>' +
+          '<div class="dm-trips"><span class="mut">Last 7 trips · mpg</span><div>' + trips.map(function(v, i){ return '<i style="height:' + ((v - 16) / 10 * 100).toFixed(0) + '%" class="' + (i === 6 ? 'now' : '') + '"><small>' + v + '</small></i>'; }).join('') + '</div></div>' +
+          (dm.coach ? '<div class="dm-tip">' + I('eco') + '<span>Exit in 1.1 mi. Lift now and coast to the ramp.</span></div>' : '');
+      }
+      else {
+        var g = st.trl.gain, ok = st.trl.brake === 'ok', okc = ok ? '#5fd39a' : '#f2c14e';
+        sub = '<div class="dm-sub pn">' + dmTog('haul', 'Tow/Haul Shift', dm.haul ? 'Holds gears longer' : 'Off') + dmTog('grade', 'Grade Braking', dm.grade ? 'Downshifts on descents' : 'Off') + dmStep('Brake Gain', g.toFixed(1), 'gain') + '</div>';
+        card = '<button class="dm-tcard pn" data-vgo="trailer"><span class="ic">' + I('trailer') + '</span><span class="tx"><b>' + st.tprof + '</b><small>' + (st.tprof === 'Weekend Camper' ? '4,850 lbs · Electric brake' : 'Single axle · Bikes &amp; gear') + '</small></span><em class="' + (ok ? 'ok' : 'wn') + '">' + (ok ? 'Ready' : 'Check brake') + '</em>' + I('chev') + '</button>';
+        right = wd + '<div class="dm-rig"><svg viewBox="0 0 280 124" aria-hidden="true">' +
+            '<g fill="none" stroke="#c9d0db" stroke-width="1.3"><rect x="8" y="32" width="96" height="60" rx="12"/><path d="M36 32v60M70 36v52"/><rect x="138" y="20" width="134" height="84" rx="8"/></g>' +
+            '<path d="M104 62h34" stroke="' + okc + '" stroke-width="2.4"/><circle cx="110" cy="62" r="4" fill="' + okc + '"/>' +
+            '<g fill="#d8dde5"><rect x="18" y="24" width="18" height="8" rx="3"/><rect x="18" y="92" width="18" height="8" rx="3"/><rect x="76" y="24" width="18" height="8" rx="3"/><rect x="76" y="92" width="18" height="8" rx="3"/>' +
+            '<rect x="186" y="12" width="18" height="8" rx="3"/><rect x="210" y="12" width="18" height="8" rx="3"/><rect x="186" y="104" width="18" height="8" rx="3"/><rect x="210" y="104" width="18" height="8" rx="3"/></g>' +
+            '<g font-size="9" fill="#d5dbe5" font-family="Nunito Sans,sans-serif" text-anchor="middle"><text x="195" y="8">42</text><text x="219" y="8">41</text><text x="195" y="122">43</text><text x="219" y="122">42</text></g>' +
+            '<text x="205" y="66" text-anchor="middle" font-size="10" fill="#8f9aab" font-family="Nunito Sans,sans-serif">' + (st.tprof === 'Weekend Camper' ? '4,850 lb' : 'Utility') + '</text></svg></div>' +
+          '<div class="dm-read four"><div><b>' + g.toFixed(1) + '</b><span>brake gain</span></div><div><b>41–43</b><span>trailer psi</span></div><div><b' + (ok ? '' : ' class="w"') + '>' + (ok ? 'OK' : 'Check') + '</b><span>lights &amp; brake</span></div><div><b>128</b><span>mi this tow</span></div></div>' +
+          '<div class="dm-tip neutral">' + I('ok') + '<span>Sway control armed · wider turns on map</span></div>' +
+          '<button class="tb dm-hitch" data-nav="camera">' + I('cam') + 'Hitch &amp; trailer view</button>';
+      }
+      if (st.trailerCard && (m === 'Normal' || m === 'Tow')) card = '<div class="dm-trailer pn"><b>Trailer detected</b><span style="font-size:30px;color:#d8dee8;display:flex">' + I('trailer') + '</span><button class="tb" data-act="profile">view profile</button><a data-act="skip">Skip for now</a></div>';
+      return '<div class="dm-l" data-m="' + m + '">' + modes + sub + card + '</div><div class="dm-r pn" data-m="' + m + '">' + right + '</div>';
+    }
+    host.addEventListener('click', function(e){
+      var t = e.target.closest('[data-dm]'); if (!t || !host.contains(t)) return;
+      var k = t.dataset.dm, dm = st.dm, msg;
+      if (k.indexOf('ter:') === 0){ dm.terrain = k.slice(4); msg = I('mount') + dm.terrain + ' terrain'; }
+      else if (k === 'ride-' || k === 'ride+'){ dm.ride = Math.max(0, Math.min(2, dm.ride + (k === 'ride+' ? 1 : -1))); msg = I('car') + 'Ride height ' + RIDE[dm.ride]; }
+      else if (k === 'gain-' || k === 'gain+'){ st.trl.gain = Math.max(0, Math.min(10, st.trl.gain + (k === 'gain+' ? .5 : -.5))); msg = I('trailer') + 'Brake gain ' + st.trl.gain.toFixed(1); }
+      else { dm[k] = !dm[k]; msg = I(k === 'lock' ? (dm.lock ? 'lock' : 'unlock') : 'ok') + t.getAttribute('aria-label') + (dm[k] ? ' on' : ' off'); }
+      render(); showToast(msg);
+    });
+
     function trailerHTML(){
       var t = st.trl, ok = t.brake === 'ok';
       var items = [['Trailer Connected', 'Secure'], ['7-Pin Connection', 'Secure'], ['Turn Signals', 'OK'], ['Taillights', 'OK'], ['Brake Lights', 'OK'], ['Trailer Brake', ok ? 'OK' : 'Needs Adjustment']];
@@ -656,12 +744,7 @@
         var seg = '<div class="seg" style="--i:' + ['mode', 'controls', 'trailer'].indexOf(st.vtab) + '"><i></i>' + [['mode', 'Drive Mode'], ['controls', 'Quick Controls'], ['trailer', 'Trailer']].map(function(v){ return '<button data-vtab="' + v[0] + '" class="' + (st.vtab === v[0] ? 'on' : '') + '">' + v[1] + (v[0] === 'trailer' && st.trl.brake === 'adjust' ? '<em class="dot"></em>' : '') + '</button>'; }).join('') + '</div>';
         if (st.vtab === 'controls') return seg + controlsHTML();
         if (st.vtab === 'trailer') return seg + trailerHTML();
-        return seg + '<div class="dm-l"><div class="dm-modes pn">' + [['Normal', 'truck'], ['Off-Road', 'offroad'], ['Eco', 'eco'], ['Tow', 'trailer']].map(function(m){ return '<button class="tb' + (st.drive === m[0] ? ' on' : '') + '" data-drive="' + m[0] + '">' + I(m[1]) + m[0] + '</button>'; }).join('') + '</div>' +
-          '<div class="dm-sub pn"><label>Rear Differential Lock</label><div class="dm-lock">' + I('unlock') + '<i></i>' + I('lock') + '</div><div class="dm-ride"><span class="mut" style="font-size:10px">Ride Height</span><button>−</button><span>Normal</span><button>+</button></div></div>' +
-          (st.trailerCard ? '<div class="dm-trailer pn"><b>Trailer detected</b><span style="font-size:30px;color:#d8dee8;display:flex">' + I('trailer') + '</span><button class="tb" data-act="profile">view profile</button><a data-act="skip">Skip for now</a></div>'
-            : '<div class="dm-energy pn"><div class="row"><span class="mut">Range</span><b>312 mi</b></div><div class="bar"><i style="width:78%"></i></div><div class="row"><span class="mut">Fuel 78%</span><span class="mut">' + st.drive + ' mode</span></div></div>') + '</div>' +
-          '<div class="dm-r pn"><div class="dm-wd">' + [['AUTO', ''], ['4WD', 'High'], ['4WD', 'Low'], ['2WD', '']].map(function(w){ var k = w[0] + w[1]; return '<button class="tb' + (st.wd === k ? ' on' : '') + '" data-wd="' + k + '">' + w[0] + (w[1] ? '<small>' + w[1] + '</small>' : '') + '</button>'; }).join('') + '</div>' +
-          '<div class="mut" style="font-size:11px;margin-top:10px">Rear Priority</div><div class="dm-chassis">' + chassisSVG(214) + '<span style="left:30px;top:30px">35 psi</span><span style="right:30px;top:30px">35 psi</span><span style="left:30px;top:190px">35 psi</span><span style="right:30px;top:190px">35 psi</span></div></div>';
+        return seg + driveModeHTML();
       }
       if (s === 'phone') return phoneHTML();
       if (s === 'settings') return settingsHTML();
@@ -751,7 +834,7 @@
       if (t.parentNode.classList && t.parentNode.classList.contains('ck-tabs')){ goCtx(tabs.indexOf(t)); return; }
       if (d.toast){ showToast(I('info') + d.toast + ' — not part of this concept'); return; }
       if (d.nav){ st.screen = d.nav; if (d.nav !== 'map'){ st.popup = null; } render(); return; }
-      if (d.drive){ st.drive = d.drive; st.mode = d.drive === 'Tow' ? 'TOW MODE' : d.drive; st.left = d.drive === 'Tow' ? 'trailer' : null; render(); showToast(I('car') + d.drive + ' mode'); return; }
+      if (d.drive){ if (st.drive !== d.drive){ st.wd = DM_DEFAULT[d.drive].wd; st.dm.ride = DM_DEFAULT[d.drive].ride; } st.drive = d.drive; st.mode = d.drive === 'Tow' ? 'TOW MODE' : d.drive; st.left = d.drive === 'Tow' ? 'trailer' : null; render(); showToast(I('car') + d.drive + ' mode'); return; }
       if (d.wd){ st.wd = d.wd; render(); return; }
       if (d.sound){ st.sound = d.sound; render(); return; }
       if (d.stop){ st.stop = +d.stop; st.panel = 'chosen'; render(); showToast(I('ok') + 'Route updated · ' + STOPS[+d.stop][2]); return; }
